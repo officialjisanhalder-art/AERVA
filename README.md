@@ -206,4 +206,4 @@ The application will start on your configured port (default `:3000`).
 
 Engineered with passion for public health infrastructure, emergency logistics, and civic healthcare innovation.
 
-Developed by **Jisan Halder** ([@officialjisanhalder-art](https://github.com/officialjisanhalder-art))
+Developed by **Jisan Halder** ([@officialjisanhalder-art](https://github.com/officialjisanhalder-art)) • [official.jisanhalder@gmail.com](mailto:official.jisanhalder@gmail.com)
