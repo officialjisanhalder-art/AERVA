@@ -22,14 +22,14 @@
 ## 📌 Table of Contents
 1. [The Crisis: Why NearER Exists](#-the-crisis-why-nearer-exists)
 2. [Ecosystem Architecture](#-ecosystem-architecture)
-3. [SerpApi Hackathon Integrations](#-serpapi-hackathon-integrations)
+3. [SerpApi & Real-Time Google Data Integrations](#-serpapi--real-time-google-data-integrations)
 4. [Core Features & Modules](#-core-features--modules)
 5. [Tech Stack](#-tech-stack)
 6. [Database & Realtime Sync](#-database--realtime-sync)
-7. [Screenshots & Visuals](#-screenshots--visuals)
-8. [Getting Started & Local Development](#-getting-started--local-development)
-9. [Environment Variables](#-environment-variables)
-10. [Submission & Team Credits](#-submission--team-credits)
+7. [Getting Started & Local Development](#-getting-started--local-development)
+8. [Environment Variables](#-environment-variables)
+9. [Live Deployments](#-live-deployments)
+10. [License & Authors](#-license--authors)
 
 ---
 
@@ -80,7 +80,7 @@ flowchart TD
 
 ---
 
-## ⚡ SerpApi Hackathon Integrations
+## ⚡ SerpApi & Real-Time Google Data Integrations
 
 NearER leverages **SerpApi** as a mission-critical data backbone across three distinct Google engines:
 
@@ -190,7 +190,7 @@ SERPAPI_API_KEY=your-serpapi-key
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+The application will start on your configured port (default `:3000`).
 
 ---
 
@@ -202,8 +202,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 📄 License & Hackathon Submission
+## 📄 License & Authors
 
-Built for the **SerpApi Hackathon 2026** with passion for public health infrastructure, emergency logistics, and civic innovation.
+Engineered with passion for public health infrastructure, emergency logistics, and civic healthcare innovation.
 
 Developed by **Jisan Halder** ([@officialjisanhalder-art](https://github.com/officialjisanhalder-art))
