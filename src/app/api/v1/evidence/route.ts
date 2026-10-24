@@ -1,35 +1,46 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
-import { nodusClient } from "@/lib/services/nodusService";
-import { googlePlacesService } from "@/lib/services/googlePlacesService";
-import { agent37Coordinator } from "@/lib/services/agent37Service";
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs = 2500, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), timeoutMs)),
+  ]);
+}
 
 export async function GET(req: NextRequest) {
   try {
     let recentLogs: any[] = [];
-    let hospitalsCount = 0;
+    let hospitalsCount = 12;
     let recentCases: any[] = [];
 
     if (isSupabaseConfigured && supabase) {
       try {
-        const { data: logs } = await supabase
-          .from("integration_event_logs")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(25);
-        if (logs) recentLogs = logs;
+        const logsPromise = Promise.resolve(
+          supabase
+            .from("integration_event_logs")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(25)
+        ).then((res) => (res as any)?.data || []);
 
-        const { count } = await supabase
-          .from("hospitals")
-          .select("*", { count: "exact", head: true });
-        hospitalsCount = count || 0;
+        const countPromise = Promise.resolve(
+          supabase
+            .from("hospitals")
+            .select("*", { count: "exact", head: true })
+        ).then((res) => (res as any)?.count || 12);
 
-        const { data: cases } = await supabase
-          .from("emergency_requests")
-          .select("case_id, status, emergency_type, patient_name, selected_hospital_id, created_at, updated_at")
-          .order("created_at", { ascending: false })
-          .limit(10);
-        if (cases) recentCases = cases;
+        const casesPromise = Promise.resolve(
+          supabase
+            .from("emergency_requests")
+            .select("case_id, status, emergency_type, patient_name, selected_hospital_id, created_at, updated_at")
+            .order("created_at", { ascending: false })
+            .limit(10)
+        ).then((res) => (res as any)?.data || []);
+
+        recentLogs = await withTimeout(logsPromise, 1500, []);
+        hospitalsCount = await withTimeout(countPromise, 1500, 12);
+        recentCases = await withTimeout(casesPromise, 1500, []);
       } catch (dbErr) {
         console.warn("[Evidence API] Supabase query warning:", dbErr);
       }
@@ -48,7 +59,7 @@ export async function GET(req: NextRequest) {
         supabase_connected: isSupabaseConfigured,
       },
       stats: {
-        hospitals_registered: hospitalsCount || 12,
+        hospitals_registered: hospitalsCount,
         active_cases_tracked: recentCases.length,
         total_integration_logs: recentLogs.length,
       },
