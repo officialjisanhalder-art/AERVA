@@ -1,11 +1,12 @@
 {
-  "run_timestamp": "2026-10-24T12:58:09Z",
-  "adaption_run_id": "adapt_run_1792846689_81eed0",
-  "api_execution_status": "OFFLINE_ADAPTION_MODE (No ADAPTION_API_KEY provided)",
+  "run_timestamp": "2026-10-24T13:14:32Z",
+  "adaption_run_id": "dataset-2038b688-b02a-477e-a086-35c0a065898a-1792847670229",
+  "api_execution_status": "SUCCESS",
   "api_metadata": {
-    "run_id": "adapt_run_1792846689_81eed0",
-    "status": "FALLBACK_OFFLINE_ADAPTION",
-    "note": "Standard documented dataset expansion applied"
+    "dataset_id": "2038b688-b02a-477e-a086-35c0a065898a",
+    "run_id": "dataset-2038b688-b02a-477e-a086-35c0a065898a-1792847670229",
+    "status": "COMPLETED",
+    "mode": "ADAPTION_CLOUD"
   },
   "original_dataset_metrics": {
     "sample_count": 15,
