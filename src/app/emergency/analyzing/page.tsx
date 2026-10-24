@@ -36,14 +36,12 @@ function AnalyzingContent() {
   useEffect(() => {
     async function fetchFirstAid() {
       try {
-        const res = await fetch(`/api/serp/emergency?q=${type}`);
+        const res = await fetch(`/api/v1/emergency/guidance?type=${type}`);
         const data = await res.json();
-        if (data.answer_box?.snippet) {
-          setFirstAidData(data.answer_box.snippet);
-        } else if (data.knowledge_graph?.description) {
-          setFirstAidData(data.knowledge_graph.description);
-        } else if (data.organic_results?.length > 0) {
-          setFirstAidData(data.organic_results[0].snippet);
+        if (data.immediate_action) {
+          setFirstAidData(`${data.immediate_action} ${data.instructions?.[0] || ""}`);
+        } else if (data.summary) {
+          setFirstAidData(data.summary);
         }
       } catch (e) {
         console.error(e);
@@ -105,7 +103,7 @@ function AnalyzingContent() {
             </div>
             <div>
               <div className="text-[10px] font-black uppercase tracking-wider text-blue-300 mb-1">
-                Live Google First-Aid Tips (SerpApi)
+                AERVA Clinical Protocol — Pre-Arrival Guidance
               </div>
               <p className="text-sm text-slate-200 leading-snug font-medium">
                 {firstAidData}

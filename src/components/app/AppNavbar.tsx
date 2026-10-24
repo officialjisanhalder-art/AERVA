@@ -45,6 +45,14 @@ export function AppNavbar({ title, backTo }: { title?: string; backTo?: string }
       </div>
 
       <div className="flex items-center gap-2">
+        <Link
+          href="/evidence"
+          title="AERVA AI Evidence & Audit Console"
+          className="text-xs font-bold text-[#0052FF] bg-blue-50 border border-blue-200 hover:bg-blue-100 px-2.5 py-1.5 rounded-xl transition-all shadow-2xs hidden sm:flex items-center gap-1"
+        >
+          <span>Evidence</span>
+        </Link>
+
         {/* Language Switcher Button */}
         <button
           onClick={() => setLang(lang === "en" ? "hi" : "en")}

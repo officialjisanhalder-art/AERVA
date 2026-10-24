@@ -36,8 +36,8 @@ export default function TrafficControlPortal() {
   useEffect(() => {
     async function fetchTraffic() {
       try {
-        // Fetch directions from Kolkata (default) to the hospital location or a demo destination
-        const res = await fetch(`/api/serp/traffic?startLat=22.5726&startLng=88.3639&endLat=22.5804&endLng=88.4173&type=driving`);
+        // Fetch directions using AERVA green corridor routing service
+        const res = await fetch(`/api/v1/traffic?startLat=22.5726&startLng=88.3639&endLat=22.5804&endLng=88.4173&type=driving`);
         const data = await res.json();
         
         if (data.directions && data.directions.length > 0) {

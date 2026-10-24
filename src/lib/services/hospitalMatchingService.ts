@@ -1,9 +1,12 @@
 import { HospitalRecord } from "./hospitalService";
+import { UnifiedHospitalResult, VerificationClassification } from "./googlePlacesService";
 
 export interface MatchScoreResult {
-  hospital: HospitalRecord;
+  hospital: HospitalRecord | (UnifiedHospitalResult & { capabilities: string[] });
   totalScore: number; // 0 to 100
   isRecommended: boolean;
+  isEligibleForDispatch: boolean;
+  verificationStatus: VerificationClassification;
   reasons: {
     passed: string[];
     warnings: string[];
@@ -14,99 +17,198 @@ export interface MatchScoreResult {
     icuBedsOpen: number;
     bloodAvailable: boolean;
     etaMinutes: number;
+    dataFreshnessStatus: VerificationClassification;
   };
 }
 
 // Map emergency types to required capabilities
-const EMERGENCY_REQUIREMENTS: Record<string, { specialty: string; requiresICU: boolean; defaultBlood?: string }> = {
-  cardiac: { specialty: "Cardiology", requiresICU: true, defaultBlood: "O+" },
-  stroke: { specialty: "Neurology", requiresICU: true },
-  trauma: { specialty: "Trauma", requiresICU: true, defaultBlood: "O-" },
-  burns: { specialty: "Burn Care", requiresICU: true },
-  bleeding: { specialty: "Severe Bleeding", requiresICU: true, defaultBlood: "O+" },
-  respiratory: { specialty: "Respiratory", requiresICU: false },
-  general: { specialty: "General Emergency", requiresICU: false },
+export const EMERGENCY_REQUIREMENTS: Record<
+  string,
+  { specialty: string; requiresICU: boolean; defaultBlood?: string; requiredKeywords: string[] }
+> = {
+  cardiac: {
+    specialty: "Cardiology",
+    requiresICU: true,
+    defaultBlood: "O+",
+    requiredKeywords: ["cardiology", "cardiac", "cath lab"],
+  },
+  stroke: {
+    specialty: "Neurology",
+    requiresICU: true,
+    requiredKeywords: ["neurology", "neuro", "stroke"],
+  },
+  trauma: {
+    specialty: "Trauma",
+    requiresICU: true,
+    defaultBlood: "O-",
+    requiredKeywords: ["trauma", "orthopedics", "surgery"],
+  },
+  burns: {
+    specialty: "Burn Care",
+    requiresICU: true,
+    requiredKeywords: ["burn", "critical care", "plastic surgery"],
+  },
+  bleeding: {
+    specialty: "Severe Bleeding",
+    requiresICU: true,
+    defaultBlood: "O+",
+    requiredKeywords: ["bleeding", "trauma", "blood bank"],
+  },
+  respiratory: {
+    specialty: "Respiratory",
+    requiresICU: false,
+    requiredKeywords: ["respiratory", "pulmonology", "ventilator"],
+  },
+  general: {
+    specialty: "General Emergency",
+    requiresICU: false,
+    requiredKeywords: ["general", "emergency", "physician"],
+  },
 };
 
 export const hospitalMatchingService = {
   scoreHospital(
-    hospital: HospitalRecord,
+    hospital: any,
     emergencyType: string,
-    preferredBloodGroup = "O+"
+    preferredBloodGroup = "O+",
+    requiredResourceList?: string[]
   ): MatchScoreResult {
     let score = 0;
     const passed: string[] = [];
     const warnings: string[] = [];
 
     const req = EMERGENCY_REQUIREMENTS[emergencyType.toLowerCase()] || EMERGENCY_REQUIREMENTS.general;
+    const verificationStatus: VerificationClassification =
+      hospital.verification_status ||
+      (hospital.is_verified ? "AERVA_VERIFIED_CURRENT" : "UNVERIFIED");
 
-    // 1. Specialty / Capability Match (35 pts)
-    const hasSpecialty = hospital.capabilities.some(
-      (c) => c.toLowerCase().includes(req.specialty.toLowerCase()) || c.toLowerCase().includes("trauma")
-    );
-    if (hasSpecialty) {
-      score += 35;
-      passed.push(`Specialist on duty: ${req.specialty}`);
-    } else {
-      score += 10; // general emergency fallback
-      warnings.push(`No dedicated ${req.specialty} department on-site`);
+    // CRITICAL CLINICAL SAFETY RULE:
+    // If UNVERIFIED, the hospital has no confirmed AERVA telemetry.
+    // It remains discoverable, but CANNOT be recommended or confirmed capable.
+    if (verificationStatus === "UNVERIFIED") {
+      const eta = hospital.eta_minutes ?? hospital.etaMinutes ?? 15;
+      return {
+        hospital,
+        totalScore: Math.min(30, Math.max(10, 40 - Math.round(eta))),
+        isRecommended: false,
+        isEligibleForDispatch: false,
+        verificationStatus: "UNVERIFIED",
+        reasons: {
+          passed: ["Google Places public facility listing confirmed"],
+          warnings: [
+            "Unverified facility — no authorized AERVA live telemetry",
+            "ER and ICU bed numbers are UNKNOWN (never fabricated)",
+            "Manual phone verification required before direct admission",
+          ],
+        },
+        metrics: {
+          capabilityMatch: false,
+          erBedsOpen: 0,
+          icuBedsOpen: 0,
+          bloodAvailable: false,
+          etaMinutes: eta,
+          dataFreshnessStatus: "UNVERIFIED",
+        },
+      };
     }
 
-    // 2. ER Bed Availability (25 pts)
-    const erBeds = hospital.capacity.er_beds_available;
-    if (erBeds > 3) {
+    const capabilities: string[] = hospital.capabilities || [];
+    const capacity = hospital.capacity || {
+      er_status: "OPEN",
+      er_beds_available: 0,
+      icu_beds_available: 0,
+    };
+
+    // 1. Specialty / Capability Match (30 pts)
+    const hasSpecialty = capabilities.some((c: string) => {
+      const lower = c.toLowerCase();
+      return (
+        lower.includes(req.specialty.toLowerCase()) ||
+        req.requiredKeywords.some((kw) => lower.includes(kw))
+      );
+    });
+
+    if (hasSpecialty) {
+      score += 30;
+      passed.push(`Specialist & Department Verified: ${req.specialty}`);
+    } else {
+      score += 10;
+      warnings.push(`No dedicated ${req.specialty} department registered`);
+    }
+
+    // 2. ER Operational Status & Bed Availability (25 pts)
+    const erStatus = capacity.er_status || "OPEN";
+    const erBeds = capacity.er_beds_available ?? 0;
+
+    if (erStatus === "FULL" || erStatus === "DIVERTING") {
+      warnings.push(`ER intake status is ${erStatus} — triage diversion in effect`);
+      score = Math.max(0, score - 20);
+    } else if (erBeds >= 3) {
       score += 25;
       passed.push(`Immediate ER intake (${erBeds} open beds)`);
     } else if (erBeds > 0) {
       score += 15;
       passed.push(`Limited ER intake (${erBeds} beds available)`);
     } else {
-      warnings.push("ER capacity at maximum, possible triage hold");
+      warnings.push("ER at zero open beds, potential triage delay");
     }
 
-    // 3. ICU Availability (20 pts)
-    const icuBeds = hospital.capacity.icu_beds_available;
+    // 3. ICU & Critical Equipment (20 pts)
+    const icuBeds = capacity.icu_beds_available ?? 0;
     if (icuBeds >= 2) {
       score += 20;
-      passed.push(`Critical ICU beds reserved (${icuBeds} ready)`);
+      passed.push(`Critical ICU capability confirmed (${icuBeds} open)`);
     } else if (icuBeds === 1) {
       score += 12;
       passed.push(`1 ICU bed open`);
     } else if (req.requiresICU) {
-      warnings.push("No ICU beds currently available");
+      warnings.push("No ICU beds currently available on site");
     } else {
       score += 10;
     }
 
-    // 4. Blood Availability (10 pts)
-    const bloodMatch = hospital.blood_inventory.find(
-      (b) => b.blood_group === preferredBloodGroup && b.availability_status === "AVAILABLE"
+    // 4. Blood Inventory Match (10 pts)
+    const bloodInventory = hospital.blood_inventory || [];
+    const bloodMatch = bloodInventory.find(
+      (b: any) =>
+        b.blood_group === preferredBloodGroup &&
+        (b.availability_status === "AVAILABLE" || b.status === "AVAILABLE")
     );
     if (bloodMatch) {
       score += 10;
-      passed.push(`Blood bank: ${preferredBloodGroup} in stock`);
-    } else {
-      score += 4;
-      warnings.push(`Blood group ${preferredBloodGroup} limited / verification pending`);
-    }
-
-    // 5. Travel Time / ETA (10 pts)
-    const eta = hospital.etaMinutes ?? 15;
-    if (eta <= 10) {
-      score += 10;
-      passed.push(`Rapid transit ETA: ~${eta} mins`);
-    } else if (eta <= 20) {
-      score += 7;
-      passed.push(`Transit ETA: ~${eta} mins`);
+      passed.push(`Blood bank: ${preferredBloodGroup} confirmed available`);
     } else {
       score += 3;
-      warnings.push(`Transit time: ~${eta} mins (consider closer triage)`);
+      warnings.push(`Blood group ${preferredBloodGroup} not in active bank stock`);
     }
+
+    // 5. Travel Time / ETA (15 pts)
+    const eta = hospital.eta_minutes ?? hospital.etaMinutes ?? 15;
+    if (eta <= 10) {
+      score += 15;
+      passed.push(`Rapid transit: ~${eta} mins`);
+    } else if (eta <= 20) {
+      score += 10;
+      passed.push(`Transit ETA: ~${eta} mins`);
+    } else {
+      score += 4;
+      warnings.push(`Transit time ~${eta} mins — consider closer triage`);
+    }
+
+    // 6. Data Freshness Adjustment
+    if (verificationStatus === "AERVA_VERIFIED_OUTDATED") {
+      score = Math.max(0, score - 10);
+      warnings.push("Hospital telemetry stale (>15 mins) — telemetry re-verification pending");
+    }
+
+    const isRecommended = score >= 70 && erBeds > 0 && erStatus === "OPEN";
 
     return {
       hospital,
-      totalScore: Math.min(score, 100),
-      isRecommended: score >= 75,
+      totalScore: Math.min(100, Math.max(0, score)),
+      isRecommended,
+      isEligibleForDispatch: erBeds > 0 && erStatus === "OPEN",
+      verificationStatus,
       reasons: { passed, warnings },
       metrics: {
         capabilityMatch: hasSpecialty,
@@ -114,26 +216,30 @@ export const hospitalMatchingService = {
         icuBedsOpen: icuBeds,
         bloodAvailable: Boolean(bloodMatch),
         etaMinutes: eta,
+        dataFreshnessStatus: verificationStatus,
       },
     };
   },
 
-  // Rank a list of hospitals and return the best match
   findBestMatch(
-    hospitals: HospitalRecord[],
+    hospitals: any[],
     emergencyType: string,
-    preferredBloodGroup = "O+"
+    preferredBloodGroup = "O+",
+    requiredResourceList?: string[]
   ): { bestMatch: MatchScoreResult | null; allRanked: MatchScoreResult[] } {
-    if (hospitals.length === 0) {
+    if (!hospitals || hospitals.length === 0) {
       return { bestMatch: null, allRanked: [] };
     }
 
     const scored = hospitals.map((h) =>
-      this.scoreHospital(h, emergencyType, preferredBloodGroup)
+      this.scoreHospital(h, emergencyType, preferredBloodGroup, requiredResourceList)
     );
 
-    // Sort by highest score first, then by lowest ETA
+    // Sort: Verified recommended first, then highest score, then lowest ETA
     scored.sort((a, b) => {
+      if (a.isRecommended !== b.isRecommended) {
+        return a.isRecommended ? -1 : 1;
+      }
       if (b.totalScore !== a.totalScore) {
         return b.totalScore - a.totalScore;
       }

@@ -37,7 +37,8 @@ import {
   RefreshCw,
   Compass,
   Ambulance,
-  Car
+  Car,
+  Volume2,
 } from "lucide-react";
 import { useLang } from "@/lib/language-context";
 import { t } from "@/lib/i18n";
@@ -762,7 +763,10 @@ function EmergencyTriageContent() {
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                       <span className="font-bold text-xs text-emerald-900">
-                        {lang === "hi" ? "वॉयस नोट सहेजा गया" : "Voice Note Attached"} ({formatDuration(recordTimer)})
+                        {lang === "hi" ? "AERVA सेंस वॉयस नोट सहेजा गया" : "AERVA Sense Audio Captured"} ({formatDuration(recordTimer)})
+                      </span>
+                      <span className="text-[9px] font-black uppercase text-blue-700 bg-blue-100 px-1.5 py-0.5 rounded">
+                        ElevenLabs Scribe
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -781,6 +785,36 @@ function EmergencyTriageContent() {
                       </button>
                       <button 
                         type="button"
+                        onClick={async () => {
+                          if (realTranscript) {
+                            try {
+                              const res = await fetch("/api/v1/voice/speak", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ text: `Emergency verified: ${realTranscript}. Triage coordinators are alerting receiving bays.` }),
+                              });
+                              if (res.ok) {
+                                const blob = await res.blob();
+                                const url = URL.createObjectURL(blob);
+                                const a = new Audio(url);
+                                a.play();
+                              } else {
+                                const utter = new SpeechSynthesisUtterance(realTranscript);
+                                window.speechSynthesis.speak(utter);
+                              }
+                            } catch {
+                              const utter = new SpeechSynthesisUtterance(realTranscript);
+                              window.speechSynthesis.speak(utter);
+                            }
+                          }
+                        }}
+                        className="text-xs font-bold text-emerald-700 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1 cursor-pointer"
+                        title="Listen to synthesized spoken feedback"
+                      >
+                        <Volume2 className="w-3 h-3" /> Readback
+                      </button>
+                      <button 
+                        type="button"
                         onClick={deleteRecording} 
                         className="text-gray-400 hover:text-red-500 p-1 cursor-pointer"
                       >
@@ -788,11 +822,18 @@ function EmergencyTriageContent() {
                       </button>
                     </div>
                   </div>
-                  {realTranscript && (
-                    <div className="bg-white border border-gray-200 rounded-xl p-2.5 text-xs text-gray-700 italic">
-                      &ldquo;{realTranscript}&rdquo;
-                    </div>
-                  )}
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-500 mb-1">
+                      Review & Correct Transcript (AERVA Sense):
+                    </label>
+                    <textarea
+                      value={realTranscript}
+                      onChange={(e) => setRealTranscript(e.target.value)}
+                      rows={2}
+                      className="w-full bg-white border border-gray-200 rounded-xl p-2.5 text-xs text-gray-800 font-medium focus:outline-none focus:border-[#0052FF]"
+                      placeholder="Review or edit what was transcribed..."
+                    />
+                  </div>
                 </div>
               )}
 

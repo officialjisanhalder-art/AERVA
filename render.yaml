@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: aerva-platform
+    env: node
+    plan: starter
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/v1/evidence
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NODUS_API_KEY
+        sync: false
+      - key: NODUS_MODEL
+        value: nodus/gpt-oss-120b
+      - key: NODUS_BASE_URL
+        value: https://inference.nodus-compute.ai/v1
+      - key: AGENT37_API_KEY
+        sync: false
+      - key: AGENT37_INSTANCE_URL
+        sync: false
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: ELEVENLABS_API_KEY
+        sync: false

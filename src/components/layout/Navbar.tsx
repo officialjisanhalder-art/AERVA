@@ -16,6 +16,7 @@ const navLinks = [
   { name: "Operator Desk", key: "nav.operatorDesk", href: "/reach/login" },
   { name: "For Hospitals", key: "nav.forHospitals", href: "/partner" },
   { name: "Traffic Towers", key: "nav.trafficTowers", href: "/traffic" },
+  { name: "AI Evidence", key: "nav.evidence", href: "/evidence" },
 ];
 
 export function Navbar() {

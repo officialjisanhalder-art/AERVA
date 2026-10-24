@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:integration": "npx tsx tests/run_aerva_tests.ts"
   },
   "dependencies": {
     "@google/genai": "^2.23.0",
@@ -25,7 +26,6 @@
     "qrcode": "^1.5.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "serpapi": "^2.2.1",
     "tailwind-merge": "^3.7.0",
     "three": "^0.186.0"
   },

@@ -13,6 +13,7 @@ export const strings: Record<string, Record<Lang, string>> = {
   "nav.patientPassport": { en: "Patient Passport", hi: "मेरी प्रोफाइल" },
   "nav.emergencyCare": { en: "Emergency Care", hi: "आपातकालीन सेवा" },
   "nav.trafficTowers": { en: "Traffic Towers", hi: "ट्रैफिक टावर्स" },
+  "nav.evidence": { en: "AI Evidence", hi: "AI साक्ष्य एवं ऑडिट" },
   "nav.getStarted": { en: "Get Started", hi: "शुरू करें" },
 
   // Hero Section
