@@ -6,7 +6,7 @@ services:
     region: oregon
     buildCommand: npm install && npm run build
     startCommand: npm run start
-    healthCheckPath: /api/v1/evidence
+    healthCheckPath: /health
     envVars:
       - key: NODE_ENV
         value: production
@@ -16,6 +16,12 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: ADAPTION_API_KEY
+        sync: false
+      - key: ADAPTION_BASE_URL
+        value: https://api.prod.adaptionlabs.ai
       - key: NODUS_API_KEY
         sync: false
       - key: NODUS_MODEL
@@ -26,7 +32,7 @@ services:
         sync: false
       - key: AGENT37_INSTANCE_URL
         sync: false
-      - key: GOOGLE_PLACES_API_KEY
-        sync: false
       - key: ELEVENLABS_API_KEY
         sync: false
+      - key: RESOURCE_FRESHNESS_MINUTES
+        value: "60"
