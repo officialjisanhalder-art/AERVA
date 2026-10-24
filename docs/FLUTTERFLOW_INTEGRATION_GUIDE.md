@@ -51,16 +51,20 @@ In the FlutterFlow Project Settings, navigate to **API Calls** and configure the
 
 ### Call 2: `AERVA_DiscoverNearbyHospitals` (Google Places API New)
 - **Method**: `GET`
-- **Endpoint**: `https://<YOUR-RENDER-APP-DOMAIN>/api/v1/places/nearby?lat=[latitude]&lng=[longitude]&radius=20000`
+- **Endpoint**: `https://<YOUR-RENDER-APP-DOMAIN>/api/hospitals/nearby?lat=[latitude]&lng=[longitude]&radius=5000&limit=20`
 - **Headers**:
   - `Content-Type`: `application/json`
 - **Response JSON Paths**:
-  - `$.hospitals` (List<JSON>)
-  - `$.hospitals[:].name` (String)
-  - `$.hospitals[:].verification_status` (String: `AERVA_VERIFIED_CURRENT`, `AERVA_VERIFIED_OUTDATED`, `UNVERIFIED`)
-  - `$.hospitals[:].distance_km` (Double)
-  - `$.hospitals[:].eta_minutes` (Integer)
-  - `$.hospitals[:].capacity.er_beds_available` (Integer or Null)
+  - `$.results` (List<JSON>)
+  - `$.results[:].placeId` (String)
+  - `$.results[:].name` (String)
+  - `$.results[:].verificationStatus` (String: `aerva_verified`, `unverified`)
+  - `$.results[:].availabilityStatus` (String: `reported_current`, `unknown_or_stale`, `unknown`)
+  - `$.results[:].resources.generalBeds` (Integer or Null)
+  - `$.results[:].resources.icuBeds` (Integer or Null)
+  - `$.results[:].resources.ventilators` (Integer or Null)
+  - `$.results[:].notice` (String: Clinical safety warning)
+  - Note: Legacy `/api/v1/places/nearby` also continues to be supported.
 
 ---
 

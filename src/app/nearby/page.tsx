@@ -32,13 +32,12 @@ export default function NearbyPage() {
     async function fetchNearby() {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/v1/places/nearby?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=20000`);
+        const res = await fetch(`/api/hospitals/nearby?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=20000`);
         const data = await res.json();
-        if (data.hospitals) {
-          setHospitals(data.hospitals);
-          if (data.google_attribution) setAttribution(data.google_attribution);
-        } else {
-          setHospitals([]);
+        const list = data.results || data.hospitals || [];
+        setHospitals(list);
+        if (data.google_attribution || data.googleAttributionRequired) {
+          setAttribution("Google Places API (New) & AERVA Healthcare Registry");
         }
       } catch (err) {
         console.error("Failed to fetch nearby places:", err);

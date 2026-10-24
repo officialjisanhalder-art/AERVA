@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:integration": "npx tsx tests/run_aerva_tests.ts"
+    "test:integration": "npx tsx tests/run_aerva_tests.ts",
+    "test:discovery": "npx tsx tests/test_hospital_discovery_api.ts",
+    "test": "npx tsx tests/run_aerva_tests.ts && npx tsx tests/test_hospital_discovery_api.ts"
   },
   "dependencies": {
     "@google/genai": "^2.23.0",
