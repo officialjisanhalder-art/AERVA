@@ -18,7 +18,7 @@ export interface EmergencyProfileData {
   profileCompletionPercentage: number;
 }
 
-const LOCAL_PROFILE_KEY = "nearer_patient_passport_profile";
+const LOCAL_PROFILE_KEY = "aerva_patient_passport_profile";
 
 // Calculate completeness % strictly based on optional filled fields
 export function calculateProfileCompleteness(profile: Partial<EmergencyProfileData>): number {

@@ -33,7 +33,7 @@ export function DecisionEngineSection() {
             </span>
           </motion.h2>
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="text-gray-400 max-w-xl mx-auto text-lg">
-            NearER analyses multiple real-time factors simultaneously to recommend the most suitable emergency destination.
+            AERVA analyses multiple real-time factors simultaneously to recommend the most suitable emergency destination.
           </motion.p>
         </div>
 

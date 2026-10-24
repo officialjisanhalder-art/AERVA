@@ -100,7 +100,7 @@ export default function PatientPortalPage() {
   // Generate real verifiable QR code for medical passport
   useEffect(() => {
     if (profile) {
-      const origin = typeof window !== "undefined" ? window.location.origin : "https://nearer.app";
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
       const passportUrl = `${origin}/pass?caseId=${encodeURIComponent(profile.healthId || "HID-9842")}&patient=${encodeURIComponent(profile.fullName || "Patient")}&blood=${encodeURIComponent(profile.bloodGroup || "O+")}&allergies=${encodeURIComponent(profile.allergies.map(a => a.name).join(",") || "None")}`;
 
       QRCode.toDataURL(passportUrl, {
@@ -1096,7 +1096,7 @@ export default function PatientPortalPage() {
                   <Clock className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                   <div className="font-bold text-gray-600 text-sm">No Emergency Visits Recorded</div>
                   <p className="text-xs text-gray-400 max-w-sm mx-auto mt-1">
-                    Whenever you use NearER to reach an ER, your completed case, assigned bed, and attending doctor will be recorded here.
+                    Whenever you use AERVA to reach an ER, your completed case, assigned bed, and attending doctor will be recorded here.
                   </p>
                 </div>
               ) : (
@@ -1351,7 +1351,7 @@ export default function PatientPortalPage() {
           <div className="flex items-center gap-2 pl-2">
             <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
             <span className="text-xs font-bold text-gray-700 hidden sm:inline">
-              NearER Medical Passport is ready for regular use & emergency auto-fill
+              AERVA Medical Passport is ready for regular use & emergency auto-fill
             </span>
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1447,7 +1447,7 @@ export default function PatientPortalPage() {
                       if (!passportQrDataUrl) return;
                       const a = document.createElement("a");
                       a.href = passportQrDataUrl;
-                      a.download = `NearER-Passport-QR-${profile.healthId}.png`;
+                      a.download = `AERVA-Passport-QR-${profile.healthId}.png`;
                       document.body.appendChild(a);
                       a.click();
                       document.body.removeChild(a);

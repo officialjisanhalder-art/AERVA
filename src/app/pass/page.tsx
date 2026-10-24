@@ -69,7 +69,7 @@ function PassContent() {
 
   // Generate scannable QR data URL for this pass
   useEffect(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://nearer.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
     const passUrl = `${origin}/pass?caseId=${encodeURIComponent(activeCaseId)}&patient=${encodeURIComponent(patientName)}&blood=${encodeURIComponent(bloodGroup)}&hospital=${encodeURIComponent(hospitalName)}`;
 
     QRCode.toDataURL(passUrl, {
@@ -96,7 +96,7 @@ function PassContent() {
     if (!qrDataUrl) return;
     const a = document.createElement("a");
     a.href = qrDataUrl;
-    a.download = `NearER-Pass-${activeCaseId}.png`;
+    a.download = `AERVA-Pass-${activeCaseId}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -171,7 +171,7 @@ function PassContent() {
             </Link>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-black tracking-widest text-[#0052FF] uppercase">NearER Emergency</span>
+                <span className="text-xs font-black tracking-widest text-[#0052FF] uppercase">AERVA Emergency</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               </div>
               <h1 className="text-sm font-bold text-gray-300">Live Triage Admission Pass</h1>
@@ -213,7 +213,7 @@ function PassContent() {
                   </span>
                 </div>
                 <h2 className="text-base font-black text-white mt-1">
-                  NearER Instant Triage Admission System
+                  AERVA Instant Triage Admission System
                 </h2>
               </div>
             </div>
@@ -335,7 +335,7 @@ function PassContent() {
               <span className={`w-2.5 h-2.5 rounded-full ${admitted ? "bg-emerald-500" : "bg-blue-500 animate-ping"}`} />
               {admitted ? "Triage Handover Completed" : "Waiting for ER Admission Handover"}
             </span>
-            <span className="font-mono text-[11px] text-gray-400">NearER Engine v2.4</span>
+            <span className="font-mono text-[11px] text-gray-400">AERVA Engine v2.4</span>
           </div>
         </div>
 

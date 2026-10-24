@@ -252,7 +252,7 @@ export default function EmergencyLocationPage() {
 
         {/* Helper Note */}
         <div className="bg-blue-50/70 border border-blue-100/80 rounded-2xl p-4 text-xs text-blue-900 leading-relaxed">
-          <span className="font-bold text-[#0052FF]">NearER Emergency Protocol:</span> We locate hospitals, real-time ER/ICU capacity, and on-duty specialists around your coordinates to eliminate waiting room delays.
+          <span className="font-bold text-[#0052FF]">AERVA Emergency Protocol:</span> We locate hospitals, real-time ER/ICU capacity, and on-duty specialists around your coordinates to eliminate waiting room delays.
         </div>
       </main>
 

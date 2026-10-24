@@ -81,7 +81,7 @@ export default function PortfolioPage() {
                   <span className="text-xs text-slate-500 font-medium">National / Institutional Hackathon</span>
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mt-1">
-                  Creator of NearER — Intelligent Emergency Healthcare & Hospital Routing Platform
+                  Creator of AERVA — Intelligent Emergency Healthcare & Hospital Routing Platform
                 </h3>
                 <p className="text-sm text-slate-700 mt-1 leading-relaxed">
                   Engineered 4 interconnected portals (Patient App, Driver Dispatch, Hospital Dashboard, Control Booth) & a multi-criteria Decision Engine that optimizes emergency hospital routing based on live resource availability.
@@ -153,7 +153,7 @@ export default function PortfolioPage() {
 
           <div className="space-y-10">
 
-            {/* Project 1: NearER */}
+            {/* Project 1: AERVA */}
             <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-5">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                 <div>
@@ -161,7 +161,7 @@ export default function PortfolioPage() {
                     <span className="text-xs font-bold px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded uppercase">🥈 2nd Prize Winner</span>
                     <span className="text-xs font-semibold text-blue-600">Healthcare Emergency Platform</span>
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mt-1">1. NearER — Intelligent Emergency Care Platform</h3>
+                  <h3 className="text-2xl font-bold text-slate-900 mt-1">1. AERVA — Intelligent Emergency Care Platform</h3>
                 </div>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed">
@@ -169,8 +169,8 @@ export default function PortfolioPage() {
               </p>
               <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 p-2">
                 <Image 
-                  src="/portfolio_assets/visual_nearer.png" 
-                  alt="NearER Visual" 
+                  src="/portfolio_assets/visual_aerva.png" 
+                  alt="AERVA Visual" 
                   width={1200} 
                   height={675}
                   className="w-full h-auto rounded-lg object-cover"

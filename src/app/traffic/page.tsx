@@ -112,7 +112,7 @@ export default function TrafficControlPortal() {
               href="/"
               className="text-xs font-bold bg-[#0052FF] text-white px-3.5 py-1.5 rounded-xl hover:bg-blue-600 transition-colors"
             >
-              ← NearER App
+              ← AERVA App
             </Link>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function TrafficControlPortal() {
             </div>
             <div>
               <div className="text-xs font-bold text-blue-300 uppercase tracking-widest">
-                Welcome to NearER Live ITMS Control Tower Feed (Demo)
+                Welcome to AERVA Live ITMS Control Tower Feed (Demo)
               </div>
               <p className="text-sm font-semibold text-slate-200 mt-0.5">
                 Hospital emergency departments broadcast telemetry directly to this tower. Signals along the transit corridor switch to Priority Green.

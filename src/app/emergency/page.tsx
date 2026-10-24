@@ -516,7 +516,7 @@ function EmergencyTriageContent() {
                 <p className="text-[10px] text-gray-500 text-center mt-3 font-semibold">
                   ⚡ {lang === "hi" 
                     ? "नीचे आपातकालीन विवरण भरें — नियरईआर निर्णय इंजन सबसे उपयुक्त अस्पताल तुरंत चुनेगा।" 
-                    : "Fill details below — NearER Decision Engine will automatically route to the optimal hospital."}
+                    : "Fill details below — AERVA Decision Engine will automatically route to the optimal hospital."}
                 </p>
               </motion.div>
             )}

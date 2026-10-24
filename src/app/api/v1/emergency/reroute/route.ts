@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERReroutingService } from "@/lib/routing/rerouting-service";
+import { AERVAReroutingService } from "@/lib/routing/rerouting-service";
 import { RerouteRequest } from "@/lib/routing/types";
 
 export async function POST(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const rerouteResult = await NearERReroutingService.applyReroute(body);
+    const rerouteResult = await AERVAReroutingService.applyReroute(body);
 
     return NextResponse.json(rerouteResult, {
       status: 200,
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error("[NearER Reroute API] Error applying reroute:", error);
+    console.error("[AERVA Reroute API] Error applying reroute:", error);
     return NextResponse.json(
       {
         error: "Failed to apply reroute",

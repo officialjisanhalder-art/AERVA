@@ -1,209 +1,99 @@
-# NearER — Intelligent Emergency Response & Hospital Routing Ecosystem
+# AERVA — AI-Powered Emergency Healthcare Discovery & Coordination Platform
 
 <div align="center">
 
-![NearER Full Logo](public/nearer-full-logo.png)
+![AERVA Full Logo](public/aerva-full-logo.png)
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-nearer--app.vercel.app-0052FF?style=for-the-badge&logo=vercel&logoColor=white)](https://nearer-app.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-aerva--app.vercel.app-0052FF?style=for-the-badge&logo=vercel&logoColor=white)](https://aerva-app.vercel.app)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.3.5%20Turbopack-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![SerpApi Powered](https://img.shields.io/badge/SerpApi-Google%20Ecosystem-F59E0B?style=for-the-badge&logo=google&logoColor=white)](https://serpapi.com/)
+[![Nodus Compute](https://img.shields.io/badge/Nodus%20Compute-AI%20Inference-8B5CF6?style=for-the-badge&logo=openai&logoColor=white)](https://nodus-compute.ai)
+[![Agent37](https://img.shields.io/badge/Agent37-Autonomous%20Coordinator-10B981?style=for-the-badge&logo=probot&logoColor=white)](https://www.agent37.com)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-AERVA%20Sense%20Voice-F59E0B?style=for-the-badge&logo=audio&logoColor=white)](https://elevenlabs.io)
+[![Google Places New](https://img.shields.io/badge/Google%20Places%20(New)-Discovery%20API-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white)](https://developers.google.com/maps)
+[![Adaption Labs](https://img.shields.io/badge/Adaption%20Labs-Adaptive%20Data-6366F1?style=for-the-badge&logo=databricks&logoColor=white)](https://adaptionlabs.ai)
 [![Supabase](https://img.shields.io/badge/Supabase-Realtime%20%26%20Postgres-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Google Gemini](https://img.shields.io/badge/Google%20Gemini-AI%20Triage-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-**Every second counts. NearER eliminates emergency room guesswork by interconnecting patients, live hospital capacity, real-time Google traffic, and rural voice relays into a single unified emergency response network.**
+**Every second counts. AERVA eliminates emergency room guesswork by interconnecting patients, live hospital capacity, verified Google Places discovery, Nodus Compute inference, Agent37 autonomous orchestration, and ElevenLabs voice triage into a single unified emergency healthcare network.**
 
-[Explore Live Web App](https://nearer-app.vercel.app) • [Hospital Partner Portal](https://nearer-app.vercel.app/partner) • [NearER Reach (Rural SOS)](https://nearer-app.vercel.app/reach) • [Nearby Emergency Locator](https://nearer-app.vercel.app/nearby)
+[Explore Live Web App](https://aerva-app.vercel.app) • [Hospital Partner Portal](https://aerva-app.vercel.app/partner) • [AERVA Reach (Rural SOS)](https://aerva-app.vercel.app/reach) • [Nearby Emergency Locator](https://aerva-app.vercel.app/nearby) • [AI Evidence Console](https://aerva-app.vercel.app/evidence)
 
 </div>
 
 ---
 
-## 📌 Table of Contents
-1. [The Crisis: Why NearER Exists](#-the-crisis-why-nearer-exists)
-2. [Ecosystem Architecture](#-ecosystem-architecture)
-3. [SerpApi & Real-Time Google Data Integrations](#-serpapi--real-time-google-data-integrations)
-4. [Core Features & Modules](#-core-features--modules)
-5. [Tech Stack](#-tech-stack)
-6. [Database & Realtime Sync](#-database--realtime-sync)
-7. [Getting Started & Local Development](#-getting-started--local-development)
-8. [Environment Variables](#-environment-variables)
-9. [Live Deployments](#-live-deployments)
-10. [License & Authors](#-license--authors)
+## 📌 Architecture & Integration Overview
 
----
-
-## 🚨 The Crisis: Why NearER Exists
-
-In medical emergencies, the nearest hospital is not always the best hospital. Critical minutes are lost when patients or ambulances arrive at facilities that:
-- Have **zero available ER or ICU beds**
-- Lack specialized departments (e.g., active Cath Lab for cardiac arrest, Burn Units, or CT/MRI for stroke triage)
-- Are separated by **unforeseen traffic congestion** or road blocks
-- Lack pre-arrival triage data, leaving doctors unprepared until the patient reaches the doors
-
-**NearER solves this end-to-end** by matching patients to facilities based on real-time availability, live traffic conditions, and AI triage, while extending emergency coverage to rural communities through voice relay bridges.
-
----
-
-## 🏗 Ecosystem Architecture
-
-NearER connects four synchronized stakeholders in real time:
-
-```mermaid
-flowchart TD
-    subgraph Citizens ["1. Citizen & Ambulance Layer"]
-        A[Mobile APK / Web Client] --> B[Voice SOS / AI Intake]
-        B --> C[Geolocation & Vital Triage]
-    end
-
-    subgraph DecisionEngine ["2. Intelligent Routing Engine"]
-        C --> D{NearER Decision Engine}
-        E[SerpApi Google Local] -->|Live Facility Data| D
-        F[SerpApi Google Maps] -->|Live Traffic & ETA| D
-        G[Supabase Realtime] -->|Live ER / ICU Beds| D
-        H[Google Gemini AI] -->|Triage & Voice Synthesis| D
-    end
-
-    subgraph Providers ["3. Hospital Partner Layer"]
-        D --> I[Optimal Hospital Matched]
-        I --> J[ER Dashboard Notification]
-        J --> K[Bed Reservation & Green Corridor]
-        J --> L[Two-Way Realtime Audio/Chat]
-    end
-
-    subgraph Rural ["4. NearER Reach (Rural Layer)"]
-        M[Feature Phone / Low-Bandwidth Voice] --> N[NearER Relay Operator]
-        N --> D
-        N --> O[Primary Health Center Escalation]
-    end
+```
+Patient Voice / Text Input (AERVA Sense)
+       │
+       ▼
+Speech Transcription (ElevenLabs Scribe)
+       │
+       ▼
+Nodus Compute AI Inference (Structured Medical Requirements & Symptoms)
+       │
+       ▼
+Agent37 Emergency Coordination Agent (6 Authenticated AERVA Tools)
+       │
+       ▼
+Google Places API (New) + AERVA Authorized Hospital Registry
+       │
+       ▼
+Suitability Decision Engine (ER/ICU Beds, Freshness & Operational Status)
+       │
+       ▼
+Patient Confirmation Safety Gate
+       │
+       ▼
+Hospital Dashboard Real-time Acknowledgement (Supabase Realtime)
 ```
 
 ---
 
-## ⚡ SerpApi & Real-Time Google Data Integrations
+## 🚀 Key Modules & AI Stack
 
-NearER leverages **SerpApi** as a mission-critical data backbone across three distinct Google engines:
+1. **Nodus Compute (`/api/v1/ai/interpret`)**:
+   - OpenAI-compatible inference at `https://inference.nodus-compute.ai/v1`.
+   - Strict clinical JSON schema validation.
+   - Live model catalog discovery and `Nodus-Request-Id` tracking.
+   - Non-diagnostic triage parsing (symptoms, required hospital resources, critical flags).
 
-### 1. 🏥 Real-Time Hospital Discovery (`Google Local API`)
-- **Route:** `/api/serp/nearby` & `/nearby`
-- Fetches verified medical centers, trauma hospitals, and specialized clinics with live ratings, verified addresses, and operational status.
-- Dynamically correlates public Google Local profiles with NearER's real-time bed capacity database.
+2. **Agent37 Coordination Agent (`/api/v1/agent/coordinate`)**:
+   - Autonomous emergency coordination agent executing 6 authenticated tools:
+     - `search_nearby_hospitals`
+     - `get_verified_hospital_record`
+     - `get_hospital_resources`
+     - `filter_hospitals_by_requirements`
+     - `prepare_emergency_request`
+     - `get_emergency_request_status`
+   - Strict patient confirmation required prior to case dispatch.
 
-### 2. 🚦 Live Emergency Route & Congestion Optimization (`Google Maps Directions API`)
-- **Route:** `/api/serp/traffic` & `/traffic`
-- Computes exact driving distances and live transit durations accounting for current traffic conditions.
-- Powers the **Green Corridor Alert System**, helping ambulance drivers choose the fastest feasible transit path rather than just geographic proximity.
+3. **Google Places API (New) Discovery (`/api/v1/places/nearby`)**:
+   - Zero SerpApi dependency.
+   - Place ID correlation with authorized hospital database.
+   - 3-tier classification: `AERVA Verified — Current Data`, `AERVA Verified — Outdated Data`, and `Unverified`.
+   - Zero-fabrication guarantee: unverified hospitals never display mock bed numbers.
 
-### 3. 🩺 AI-Powered First-Aid & Medical Knowledge Card (`Google Search Knowledge Graph`)
-- **Route:** `/api/serp/emergency` & `/emergency/analyzing`
-- As the AI models analyze incoming voice intake and patient vitals, SerpApi queries the verified Google Knowledge Graph for verified first-aid guidance (e.g., CPR rhythm steps, stroke FAST protocol, severe bleeding pressure tactics).
-- Instantly displays clinical advisories to the caller while dispatch and matching happen in the background.
+4. **ElevenLabs Voice Triage (`/api/v1/voice/transcribe` & `/api/v1/voice/speak`)**:
+   - Speech-to-text with review and inline transcript editing.
+   - Synthesized voice readback for bystander reassurance.
+   - Graceful fallback to typed complaint.
 
----
+5. **Adaption Adaptive Data Integration**:
+   - Multilingual emergency dataset optimization across English, Hindi, and Hinglish.
+   - Dataset quality improvement and evaluation using Adaption Adaptive Data APIs.
+   - Nodus prompt & extraction evaluation benchmarks.
 
-## 🎯 Core Features & Modules
-
-### 🚑 1. Patient & Citizen Emergency Experience (`/emergency`)
-- **One-Tap Emergency Trigger:** Cardiac, Trauma, Pediatric, Respiratory, Burn, and Stroke profiles.
-- **Voice SOS Briefing:** High-clarity audio recording synthesized via Google Gemini for hands-free intake in panic situations.
-- **Digital Emergency Pass (`/pass/[caseId]`):** Real-time QR code pass showing ambulance coordinates, vital summary, assigned trauma ward, and attending physician.
-
-### 🏥 2. Hospital Partner Command Center (`/partner`)
-- **Real-Time Capacity Tracker:** Live telemetry for ER beds, ICU beds, ventilators, and surgical suites.
-- **Incoming Case Queue:** Instant notification stream when high-acuity cases are routed to the facility.
-- **Green Corridor Coordinator:** One-click traffic escalation beacon notifying traffic police and dispatch routes.
-- **Blood Bank & Capabilities Matrix:** Real-time unit availability (O-, A+, B+, etc.) and specialty flags (Cath Lab 24x7, Trauma Level 1).
-
-### 🌾 3. NearER Reach — Rural Voice Relay (`/reach`)
-- Designed for communities with feature phones or intermittent 2G connectivity.
-- Translates recorded vernacular voice distress calls into structured medical briefs.
-- Enables human relay operators to hand off patients from rural Primary Health Centers (PHCs) to tertiary urban hospitals with full audit logging.
-
-### 🗺️ 4. Turn-by-Turn Transit Navigation (`/navigation/[id]`)
-- Emergency driver navigation interface with dynamic ETA updates, reroute triggers, and direct hospital triage line integration.
+6. **Live Evidence & Presentation Console (`/evidence`)**:
+   - Interactive diagnostic probe runner.
+   - Live Nodus request IDs, Agent37 execution traces, and audit logs.
 
 ---
 
-## 🛠 Tech Stack
+## 🧪 Testing & Verification
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend** | [Next.js 16](https://nextjs.org/) (App Router, Turbopack), [React 19](https://react.dev/), [Tailwind CSS](https://tailwindcss.com/), Lucide Icons |
-| **3D & Visuals** | [Three.js](https://threejs.org/), [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber), [@react-three/drei](https://github.com/pmndrs/drei), Canvas 3D |
-| **APIs & Live Data** | [SerpApi](https://serpapi.com/) (Google Local, Google Maps, Google Search), [Google Gemini AI](https://ai.google.dev/) |
-| **Backend & Realtime** | [Supabase](https://supabase.com/) (PostgreSQL 15, Realtime Broadcast Channels, Row Level Security) |
-| **Hosting & Edge** | [Vercel](https://vercel.com/) (Edge Network, Serverless Lambdas) |
-| **Mobile** | Standalone Flutter / Android Client APK (`NearER_Patient_App.apk`) |
+Run the comprehensive integration test suite:
 
----
-
-## 🗄 Database & Realtime Sync
-
-The platform uses a relational PostgreSQL schema deployed on Supabase with WebSocket subscriptions:
-
-- `emergency_requests`: Active emergency tickets, voice recordings, vitals, matched hospital ID, status machine.
-- `hospitals`: Directory of regional healthcare institutions, geospatial coordinates, verification badges.
-- `hospital_capacity`: Real-time operational availability (ER beds, ICU beds, ventilators, OT rooms).
-- `blood_inventory`: Stock levels across all blood groups per partner institution.
-- `hospital_capabilities`: Verified clinical specialties (Cardiology, Trauma, Neuro, Pediatrics).
-- `rural_sos_cases`: NearER Reach feature-phone distress queues and operator assignments.
-
----
-
-## 🚀 Getting Started & Local Development
-
-### Prerequisites
-- Node.js `20.x` or higher
-- npm, pnpm, or yarn
-- Supabase project credentials
-- SerpApi API key
-- Google Gemini API key
-
-### 1. Clone the repository
 ```bash
-git clone https://github.com/officialjisanhalder-art/near-er.git
-cd near-er
+npm run test:integration
 ```
-
-### 2. Install dependencies
-> **Note:** Use `--legacy-peer-deps` to resolve `@react-three/fiber` peer requirements:
-```bash
-npm install --legacy-peer-deps
-```
-
-### 3. Configure environment variables
-Create a `.env.local` file in the root directory:
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-GEMINI_API_KEY=your-gemini-api-key
-SERPAPI_API_KEY=your-serpapi-key
-```
-
-### 4. Setup the database
-1. Log into your [Supabase Dashboard](https://supabase.com/dashboard).
-2. Open the **SQL Editor**.
-3. Run the complete migration script provided at [`supabase/full_schema_and_seed.sql`](supabase/full_schema_and_seed.sql).
-
-### 5. Launch the local development server
-```bash
-npm run dev
-```
-The application will start on your configured port (default `:3000`).
-
----
-
-## 🌐 Live Deployments
-
-- **Production URL:** [https://nearer-app.vercel.app](https://nearer-app.vercel.app)
-- **Emergency Gateway:** [https://nearer-emergency.vercel.app](https://nearer-emergency.vercel.app)
-- **Status:** 🟢 Live & Operational
-
----
-
-## 📄 License & Authors
-
-Engineered with passion for public health infrastructure, emergency logistics, and civic healthcare innovation.
-
-Developed by **Jisan Halder** ([@officialjisanhalder-art](https://github.com/officialjisanhalder-art)) • [official.jisanhalder@gmail.com](mailto:official.jisanhalder@gmail.com)

@@ -17,8 +17,8 @@ export function Footer() {
           
           <div className="flex items-center gap-2.5">
             <Image
-              src="/nearer-mark.png"
-              alt="NearER"
+              src="/aerva-mark.png"
+              alt="AERVA"
               width={34}
               height={22}
               className="h-7 w-auto object-contain"
@@ -37,7 +37,7 @@ export function Footer() {
         </div>
         
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} NearER Technologies. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AERVA Technologies. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Built with <Heart className="w-3 h-3 text-brand-red fill-current" /> for emergency intelligence
           </p>

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const steps = [
   { icon: AlertCircle, title: "Report Emergency", desc: "Select type & identify location." },
-  { icon: Server, title: "Analyze in Real Time", desc: "NearER checks hospital data." },
+  { icon: Server, title: "Analyze in Real Time", desc: "AERVA checks hospital data." },
   { icon: Building, title: "Get Best Hospital", desc: "Most appropriate destination." },
   { icon: MapPin, title: "Navigate", desc: "Route, traffic and ETA." },
   { icon: Share2, title: "Share & Notify", desc: "Share ETA and details." },

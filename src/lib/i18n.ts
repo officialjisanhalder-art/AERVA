@@ -1,4 +1,4 @@
-// NearER Master Bilingual Strings — English + Hindi
+// AERVA Master Bilingual Strings — English + Hindi
 // Usage: import { t } from "@/lib/i18n"; then t("key", lang)
 
 export type Lang = "en" | "hi";
@@ -7,7 +7,7 @@ export const strings: Record<string, Record<Lang, string>> = {
   // Nav
   "nav.home": { en: "Home", hi: "होम" },
   "nav.patientPortal": { en: "Patient Portal", hi: "मरीज़ पोर्टल" },
-  "nav.reach": { en: "NearER Reach", hi: "NearER रीच" },
+  "nav.reach": { en: "AERVA Reach", hi: "AERVA रीच" },
   "nav.operatorDesk": { en: "Operator Desk", hi: "ऑपरेटर डेस्क" },
   "nav.forHospitals": { en: "For Hospitals", hi: "अस्पतालों के लिए" },
   "nav.patientPassport": { en: "Patient Passport", hi: "मेरी प्रोफाइल" },
@@ -21,8 +21,8 @@ export const strings: Record<string, Record<Lang, string>> = {
   "hero.title1": { en: "Don’t just find the nearest hospital.", hi: "सिर्फ नजदीकी अस्पताल मत खोजिए।" },
   "hero.title2": { en: "Find the right one.", hi: "सही अस्पताल खोजिए।" },
   "hero.subtitle": { 
-    en: "In a medical emergency, the nearest clinic may not have an available ICU bed, on-duty cardiologist, or blood supply. NearER routes you instantly to the hospital that is fully ready to save your life.", 
-    hi: "आपात स्थिति में, नजदीकी क्लिनिक में ICU बेड, ड्यूटी पर हृदय रोग विशेषज्ञ या रक्त उपलब्ध नहीं हो सकता। NearER आपको तुरंत उस अस्पताल में भेजता है जो आपकी जान बचाने के लिए पूरी तरह तैयार है।" 
+    en: "In a medical emergency, the nearest clinic may not have an available ICU bed, on-duty cardiologist, or blood supply. AERVA routes you instantly to the hospital that is fully ready to save your life.", 
+    hi: "आपात स्थिति में, नजदीकी क्लिनिक में ICU बेड, ड्यूटी पर हृदय रोग विशेषज्ञ या रक्त उपलब्ध नहीं हो सकता। AERVA आपको तुरंत उस अस्पताल में भेजता है जो आपकी जान बचाने के लिए पूरी तरह तैयार है।" 
   },
   "hero.btn.emergency": { en: "Find Emergency Care", hi: "आपातकालीन सहायता खोजें" },
   "hero.btn.passport": { en: "Patient Passport", hi: "मरीज़ पासपोर्ट" },
@@ -70,8 +70,8 @@ export const strings: Record<string, Record<Lang, string>> = {
   "selection.step2": { en: "Patient Registration", hi: "मरीज़ पंजीकरण" },
   "selection.heading": { en: "What is the emergency?", hi: "आपातकाल क्या है?" },
   "selection.subheading": { 
-    en: "NearER matches specialized on-duty doctors and equipment based on this category", 
-    hi: "NearER इस श्रेणी के आधार पर ऑन-ड्यूटी डॉक्टर और उपकरण खोजता है" 
+    en: "AERVA matches specialized on-duty doctors and equipment based on this category", 
+    hi: "AERVA इस श्रेणी के आधार पर ऑन-ड्यूटी डॉक्टर और उपकरण खोजता है" 
   },
   "selection.proceedBtn": { en: "Proceed to Patient Registration", hi: "मरीज़ पंजीकरण पर आगे बढ़ें" },
   "selection.findBtn": { en: "Find Right Hospital", hi: "सही अस्पताल खोजें" },
@@ -117,7 +117,7 @@ export const strings: Record<string, Record<Lang, string>> = {
   "rec.erAvailable": { en: "ER Available", hi: "ER उपलब्ध" },
   "rec.icuAvailable": { en: "ICU Available", hi: "ICU उपलब्ध" },
   "rec.bloodAvailable": { en: "Blood Bank Available", hi: "ब्लड बैंक उपलब्ध" },
-  "rec.whyTitle": { en: "Why NearER selected this hospital", hi: "NearER ने यह अस्पताल क्यों चुना" },
+  "rec.whyTitle": { en: "Why AERVA selected this hospital", hi: "AERVA ने यह अस्पताल क्यों चुना" },
   "rec.sendSOS": { en: "SEND EMERGENCY REQUEST", hi: "आपातकालीन अनुरोध भेजें" },
   "rec.callFirst": { en: "Call hospital first to confirm availability", hi: "उपलब्धता की पुष्टि के लिए पहले अस्पताल को कॉल करें" },
   "rec.alternatives": { en: "Other suitable hospitals", hi: "अन्य उपयुक्त अस्पताल" },
@@ -129,8 +129,8 @@ export const strings: Record<string, Record<Lang, string>> = {
   "sos.confirm.note": { en: "No other hospital or public system will see this request.", hi: "कोई अन्य अस्पताल या सार्वजनिक प्रणाली यह अनुरोध नहीं देखेगी।" },
   "sos.confirm.accountability": { en: "Patient Care Accountability", hi: "मरीज़ देखभाल जवाबदेही" },
   "sos.confirm.accountability.body": {
-    en: "NearER tracks this case. If this hospital accepts you but delays proper treatment, the case will be flagged and reported in their reliability score.",
-    hi: "NearER इस केस को ट्रैक करता है। यदि यह अस्पताल आपको स्वीकार करके उचित उपचार में देरी करता है, तो उनकी विश्वसनीयता रेटिंग प्रभावित होगी।"
+    en: "AERVA tracks this case. If this hospital accepts you but delays proper treatment, the case will be flagged and reported in their reliability score.",
+    hi: "AERVA इस केस को ट्रैक करता है। यदि यह अस्पताल आपको स्वीकार करके उचित उपचार में देरी करता है, तो उनकी विश्वसनीयता रेटिंग प्रभावित होगी।"
   },
   "sos.confirm.send": { en: "Confirm & Send Alert", hi: "पुष्टि करें और अलर्ट भेजें" },
   "sos.confirm.cancel": { en: "Cancel", hi: "रद्द करें" },
@@ -178,7 +178,7 @@ export const strings: Record<string, Record<Lang, string>> = {
   "capacity.title": { en: "Capacity & Beds Management", hi: "क्षमता और बेड प्रबंधन" },
   "capacity.save": { en: "Save Updates", hi: "अपडेट सहेजें" },
   "capacity.saved": { en: "Live Capacity & Duty Doctor Saved", hi: "लाइव क्षमता और ड्यूटी डॉक्टर सहेजे गए" },
-  "capacity.broadcasted": { en: "Broadcasted across NearER triage network", hi: "NearER ट्राइएज नेटवर्क पर प्रसारित" },
+  "capacity.broadcasted": { en: "Broadcasted across AERVA triage network", hi: "AERVA ट्राइएज नेटवर्क पर प्रसारित" },
   "capacity.erBeds": { en: "ER Beds", hi: "ER बेड" },
   "capacity.icuBeds": { en: "ICU Beds", hi: "ICU बेड" },
   "capacity.ventilators": { en: "Ventilators", hi: "वेंटिलेटर" },
@@ -186,7 +186,7 @@ export const strings: Record<string, Record<Lang, string>> = {
 
   // Patient Health Passport & Portal
   "patient.portalTitle": { en: "Patient Health Passport", hi: "मरीज़ स्वास्थ्य पासपोर्ट" },
-  "patient.healthId": { en: "NEARER HEALTH ID", hi: "NearER स्वास्थ्य आईडी" },
+  "patient.healthId": { en: "AERVA HEALTH ID", hi: "AERVA स्वास्थ्य आईडी" },
   "patient.preVerified": { en: "Emergency Pre-Verified", hi: "आपातकालीन पूर्व-सत्यापित" },
   "patient.allergies": { en: "Allergies", hi: "एलर्जी" },
   "patient.prescriptions": { en: "Prescriptions & Reports", hi: "पर्चे और रिपोर्ट" },

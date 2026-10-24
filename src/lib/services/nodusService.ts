@@ -281,17 +281,21 @@ You MUST respond strictly with valid JSON conforming to this exact schema and no
   }) {
     if (isSupabaseConfigured && supabase) {
       try {
-        await supabase.from("integration_event_logs").insert({
-          service_name: params.serviceName,
-          event_type: params.eventType,
-          request_id: params.requestId,
-          case_id: params.caseId || null,
-          latency_ms: params.latencyMs,
-          status: params.status,
-          error_message: params.error || null,
-          payload: params.payload || {},
-          response_summary: params.responseSummary || {},
-        });
+        const insertPromise = Promise.resolve(
+          supabase.from("integration_event_logs").insert({
+            service_name: params.serviceName,
+            event_type: params.eventType,
+            request_id: params.requestId,
+            case_id: params.caseId || null,
+            latency_ms: params.latencyMs,
+            status: params.status,
+            error_message: params.error || null,
+            payload: params.payload || {},
+            response_summary: params.responseSummary || {},
+          })
+        );
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1200));
+        await Promise.race([insertPromise, timeoutPromise]);
       } catch (e) {
         console.warn("[NodusClient] DB log warning:", e);
       }

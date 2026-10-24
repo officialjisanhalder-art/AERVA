@@ -1,18 +1,18 @@
 /**
- * NEARER ROUTING ENGINE — DYNAMIC REROUTING & ACTIVE MONITORING SERVICE
+ * AERVA ROUTING ENGINE — DYNAMIC REROUTING & ACTIVE MONITORING SERVICE
  * 
  * Hysteresis Rule: MIN_TIME_GAIN_FOR_OPTIONAL_REROUTE = 5 mins
  * Mandatory Reroute: Current hospital unavailable, closed, or rejected case
  */
 
 import { RecheckRequest, RecheckResponse, RerouteRequest, RerouteResponse, RerouteType } from "./types";
-import { NearERRoutingService } from "./routing-engine";
+import { AERVARoutingService } from "./routing-engine";
 import { routingAuditStore } from "./routing-audit-store";
 import { supabase, isSupabaseConfigured } from "../supabase/client";
 
 export const MIN_TIME_GAIN_FOR_OPTIONAL_REROUTE_MINS = 5;
 
-export class NearERReroutingService {
+export class AERVAReroutingService {
   /**
    * Recheck active route and evaluate if conditions warrant rerouting
    */
@@ -20,7 +20,7 @@ export class NearERReroutingService {
     const { case_id, current_hospital_id, patient_location, emergency_type, requirements } = request;
 
     // Run standard fresh routing analysis
-    const freshMatch = await NearERRoutingService.matchEmergency({
+    const freshMatch = await AERVARoutingService.matchEmergency({
       case_id,
       patient_location,
       emergency_type,
@@ -75,7 +75,7 @@ export class NearERReroutingService {
           reason_codes: ["CURRENT_HOSPITAL_UNAVAILABLE", ...bestAvailable.reason_codes],
           human_reasons: [
             "Current selected hospital has suspended ER intake",
-            "NearER verified active resuscitation bay at alternative hospital",
+            "AERVA verified active resuscitation bay at alternative hospital",
             ...bestAvailable.human_reasons,
           ],
         },
@@ -143,7 +143,7 @@ export class NearERReroutingService {
     const { case_id, old_hospital_id, new_hospital_id, reason, patient_location } = request;
 
     // Load hospital details
-    const all = await NearERRoutingService.matchEmergency({
+    const all = await AERVARoutingService.matchEmergency({
       case_id,
       patient_location: patient_location || { latitude: 22.5645, longitude: 88.4069 },
       emergency_type: "general",

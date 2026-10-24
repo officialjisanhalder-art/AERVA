@@ -103,7 +103,7 @@ export default function RelayOperatorDashboard() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-black tracking-tight text-white">
-                  NearER Reach • Relay Operator Desk
+                  AERVA Reach • Relay Operator Desk
                 </h1>
                 <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
                   LIVE RADAR

@@ -160,7 +160,7 @@ export default function NearbyHospitalsPage() {
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#0052FF] mb-1">
                     {selectedHospital.verified ? (
-                      <span className="flex items-center gap-1 text-[#059669]"><ShieldCheck className="w-3.5 h-3.5" /> NearER Verified</span>
+                      <span className="flex items-center gap-1 text-[#059669]"><ShieldCheck className="w-3.5 h-3.5" /> AERVA Verified</span>
                     ) : (
                       <span className="flex items-center gap-1 text-amber-500"><AlertTriangle className="w-3.5 h-3.5" /> Unverified Feed</span>
                     )}
@@ -300,7 +300,7 @@ export default function NearbyHospitalsPage() {
         {/* Guidance notice */}
         <div className="mt-6 p-4 rounded-2xl bg-blue-50 border border-blue-100 text-xs text-blue-900 leading-relaxed">
           <span className="font-bold text-[#0052FF]">
-            {lang === "hi" ? "NearER इंटेलिजेंट मिलान:" : "NearER Intelligent Matching:"}
+            {lang === "hi" ? "AERVA इंटेलिजेंट मिलान:" : "AERVA Intelligent Matching:"}
           </span>{" "}
           {lang === "hi"
             ? "निकटतम अस्पताल हमेशा सबसे अच्छा नहीं होता। डिसीजन इंजन विशेषज्ञता, लाइव क्षमता और ईटीए का विश्लेषण करता है।"

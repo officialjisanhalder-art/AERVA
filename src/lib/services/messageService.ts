@@ -11,7 +11,7 @@ export interface CaseMessage {
   voiceDuration?: number;
 }
 
-const LOCAL_MESSAGES_KEY = "nearer_case_messages";
+const LOCAL_MESSAGES_KEY = "aerva_case_messages";
 
 export const messageService = {
   async getMessages(caseId: string): Promise<CaseMessage[]> {

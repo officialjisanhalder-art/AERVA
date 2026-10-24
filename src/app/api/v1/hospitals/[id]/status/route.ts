@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERRoutingService } from "@/lib/routing/routing-engine";
+import { AERVARoutingService } from "@/lib/routing/routing-engine";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 import { AvailabilityStatus } from "@/lib/routing/types";
 
@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const all = await NearERRoutingService.loadAllHospitals();
+    const all = await AERVARoutingService.loadAllHospitals();
     const hospital = all.find((h) => h.id.toLowerCase() === id.toLowerCase());
 
     if (!hospital) {
@@ -52,7 +52,7 @@ export async function POST(
     const icuBeds: number | undefined = body.icu_beds_available;
 
     // Optional Partner Verification header
-    const partnerId = req.headers.get("x-nearer-partner-id") || body.partner_id;
+    const partnerId = req.headers.get("x-aerva-partner-id") || body.partner_id;
 
     // Persist to Supabase if configured
     if (isSupabaseConfigured && supabase) {
@@ -82,7 +82,7 @@ export async function POST(
       partner_id: partnerId || "ANONYMOUS_DESK",
       updated_status: newStatus,
       timestamp: new Date().toISOString(),
-      message: "Hospital operational status successfully broadcast to NearER Routing Engine",
+      message: "Hospital operational status successfully broadcast to AERVA Routing Engine",
     });
   } catch (error: any) {
     return NextResponse.json(

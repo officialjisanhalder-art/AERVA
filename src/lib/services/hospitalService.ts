@@ -239,6 +239,10 @@ export const DEMO_HOSPITALS_DATA: HospitalRecord[] = [
   },
 ];
 
+let cachedHospitals: HospitalRecord[] | null = null;
+let lastCacheTime = 0;
+const CACHE_TTL_MS = 30000; // 30s in-memory cache
+
 export const hospitalService = {
   // Query hospitals with distance & driving ETA from given lat/lng
   async getNearbyHospitals(
@@ -246,13 +250,23 @@ export const hospitalService = {
     longitude: number,
     maxRadiusKm = 50
   ): Promise<HospitalRecord[]> {
+    const now = Date.now();
     let hospitals: HospitalRecord[] = [];
 
-    if (isSupabaseConfigured && supabase) {
+    if (cachedHospitals && (now - lastCacheTime < CACHE_TTL_MS)) {
+      hospitals = [...cachedHospitals];
+    } else if (isSupabaseConfigured && supabase) {
       try {
-        const { data, error } = await supabase
-          .from("hospitals")
-          .select("*, hospital_capacity(*), hospital_capabilities(*), blood_inventory(*)");
+        const fetchPromise = Promise.resolve(
+          supabase
+            .from("hospitals")
+            .select("*, hospital_capacity(*), hospital_capabilities(*), blood_inventory(*)")
+        );
+        const timeoutPromise = new Promise<{ data: any; error: any }>((resolve) =>
+          setTimeout(() => resolve({ data: null, error: new Error("Supabase timeout") }), 1500)
+        );
+        const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
+
         if (!error && data && data.length > 0) {
           hospitals = data.map((h: any) => ({
             id: h.id,
@@ -283,6 +297,8 @@ export const hospitalService = {
             },
             blood_inventory: h.blood_inventory || [],
           }));
+          cachedHospitals = hospitals;
+          lastCacheTime = now;
         }
       } catch (e) {
         console.warn("Error fetching hospitals from Supabase, using seed data:", e);
@@ -291,6 +307,8 @@ export const hospitalService = {
 
     if (hospitals.length === 0) {
       hospitals = [...DEMO_HOSPITALS_DATA];
+      cachedHospitals = hospitals;
+      lastCacheTime = now;
     }
 
     // Attach distance and ETA to each hospital

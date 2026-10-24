@@ -1,0 +1,53 @@
+{
+  "run_timestamp": "2026-10-24T12:58:09Z",
+  "adaption_run_id": "adapt_run_1792846689_81eed0",
+  "api_execution_status": "OFFLINE_ADAPTION_MODE (No ADAPTION_API_KEY provided)",
+  "api_metadata": {
+    "run_id": "adapt_run_1792846689_81eed0",
+    "status": "FALLBACK_OFFLINE_ADAPTION",
+    "note": "Standard documented dataset expansion applied"
+  },
+  "original_dataset_metrics": {
+    "sample_count": 15,
+    "total_words": 389,
+    "unique_vocabulary": 259,
+    "type_token_ratio": 0.6658,
+    "language_distribution": {
+      "en": 5,
+      "hi": 5,
+      "hinglish": 5
+    }
+  },
+  "adapted_dataset_metrics": {
+    "sample_count": 27,
+    "total_words": 675,
+    "unique_vocabulary": 402,
+    "type_token_ratio": 0.5956,
+    "language_distribution": {
+      "en": 9,
+      "hi": 9,
+      "hinglish": 9
+    }
+  },
+  "nodus_benchmark_comparison": {
+    "original_set": {
+      "total_evaluated": 15,
+      "correct_identifications": 15,
+      "facility_routing_accuracy_pct": 100.0,
+      "avg_symptoms_captured": 4.0
+    },
+    "adapted_set": {
+      "total_evaluated": 27,
+      "correct_identifications": 25,
+      "facility_routing_accuracy_pct": 92.6,
+      "avg_symptoms_captured": 3.56
+    },
+    "delta_accuracy_pct": -7.4
+  },
+  "linguistic_improvements": [
+    "Expanded colloquial Hindi emergency vocabulary (e.g. 'जकड़न', 'लथपथ', 'लड़खड़ाना', 'दम घुटना')",
+    "Expanded urban Hinglish fragmented intake structures (e.g. 'hard chest heaviness', 'tedha lag raha', 'breathe nahi le paa rahe')",
+    "Preserved non-diagnostic labeling (NO clinical diagnoses; purely symptom and facility mapping)",
+    "Zero real patient PII ingested or transmitted"
+  ]
+}

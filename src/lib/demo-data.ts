@@ -240,7 +240,7 @@ export const EMERGENCIES = [
   { id: "other", title: "Other", icon: "HelpCircle", color: "#6B7280", requiredSpecialty: null },
 ];
 
-export const HOSPITAL_OVERRIDES_STORAGE_KEY = "nearer_hospital_overrides";
+export const HOSPITAL_OVERRIDES_STORAGE_KEY = "aerva_hospital_overrides";
 
 /**
  * Reads live hospital state including any updates made by hospital staff
@@ -320,7 +320,7 @@ export function saveHospitalCapacity(id: string, capacityUpdates: Partial<Hospit
       }
     };
     localStorage.setItem(HOSPITAL_OVERRIDES_STORAGE_KEY, JSON.stringify(overrides));
-    window.dispatchEvent(new Event("nearer_hospital_data_updated"));
+    window.dispatchEvent(new Event("aerva_hospital_data_updated"));
     window.dispatchEvent(new Event("storage"));
   } catch (e) {
     console.error("Failed to save hospital capacity", e);
@@ -341,7 +341,7 @@ export function saveDoctorInCharge(id: string, doctorUpdates: Partial<DoctorInCh
       }
     };
     localStorage.setItem(HOSPITAL_OVERRIDES_STORAGE_KEY, JSON.stringify(overrides));
-    window.dispatchEvent(new Event("nearer_hospital_data_updated"));
+    window.dispatchEvent(new Event("aerva_hospital_data_updated"));
     window.dispatchEvent(new Event("storage"));
   } catch (e) {
     console.error("Failed to save doctor in charge", e);

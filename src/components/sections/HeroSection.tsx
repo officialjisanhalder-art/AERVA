@@ -204,7 +204,7 @@ export function HeroSection() {
               {/* Founder Insight Callout */}
               <div className="p-3 bg-amber-50/80 border border-amber-200/80 rounded-xl mb-6">
                 <p className="text-[11px] font-semibold text-amber-900 leading-tight">
-                  <span className="font-bold">Why not nearest clinic (2 min)?</span> Clinic has 0 ICU beds and no cardiac team. NearER avoids a fatal secondary transfer.
+                  <span className="font-bold">Why not nearest clinic (2 min)?</span> Clinic has 0 ICU beds and no cardiac team. AERVA avoids a fatal secondary transfer.
                 </p>
               </div>
 

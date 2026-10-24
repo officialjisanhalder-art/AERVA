@@ -65,7 +65,7 @@ export interface RuralSosCase {
   updatedAt: string;
 }
 
-const LOCAL_RURAL_CASES_KEY = "nearer_reach_rural_cases";
+const LOCAL_RURAL_CASES_KEY = "aerva_reach_rural_cases";
 
 function generateRuralCaseId(): string {
   const num = Math.floor(10000 + Math.random() * 90000);
@@ -508,7 +508,7 @@ export const DEMO_OPERATORS: OperatorSession[] = [
     id: "op-1",
     badgeId: "OP-8821",
     name: "Priya Sharma",
-    email: "priya.sharma@nearer-reach.in",
+    email: "priya.sharma@aerva-reach.in",
     role: "Lead Relay Dispatcher",
     shift: "Day Command (08:00 - 20:00)",
   },
@@ -516,11 +516,11 @@ export const DEMO_OPERATORS: OperatorSession[] = [
     id: "op-2",
     badgeId: "OP-4410",
     name: "Rajesh Kumar",
-    email: "rajesh.kumar@nearer-reach.in",
+    email: "rajesh.kumar@aerva-reach.in",
     role: "Senior Trauma Coordinator",
     shift: "Night Emergency Watch",
   },
 ];
 
-const OPERATOR_SESSION_KEY = "nearer_relay_operator_session";
+const OPERATOR_SESSION_KEY = "aerva_relay_operator_session";
 

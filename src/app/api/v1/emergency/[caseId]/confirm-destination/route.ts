@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERRoutingService } from "@/lib/routing/routing-engine";
+import { AERVARoutingService } from "@/lib/routing/routing-engine";
 import { routingAuditStore } from "@/lib/routing/routing-audit-store";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase/client";
 
@@ -19,12 +19,12 @@ export async function POST(
       );
     }
 
-    const allHospitals = await NearERRoutingService.loadAllHospitals();
+    const allHospitals = await AERVARoutingService.loadAllHospitals();
     const hospital = allHospitals.find((h) => h.id === hospital_id || (hospital_id === "h2_amri" && h.id === "h2"));
 
     if (!hospital) {
       return NextResponse.json(
-        { error: `Hospital with ID '${hospital_id}' not found in NearER network.` },
+        { error: `Hospital with ID '${hospital_id}' not found in AERVA network.` },
         { status: 404 }
       );
     }

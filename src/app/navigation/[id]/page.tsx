@@ -80,7 +80,7 @@ export default function NavigationPage() {
       try {
         let hospital_overrides: any = undefined;
         try {
-          const raw = typeof window !== "undefined" ? localStorage.getItem("nearer_hospital_overrides") : null;
+          const raw = typeof window !== "undefined" ? localStorage.getItem("aerva_hospital_overrides") : null;
           if (raw) hospital_overrides = JSON.parse(raw);
         } catch {}
 
@@ -160,7 +160,7 @@ export default function NavigationPage() {
       // Navigate route
       router.push(`/navigation/${better.hospital_id}`);
     } catch (err) {
-      console.error("[NearER Reroute] Failed to apply:", err);
+      console.error("[AERVA Reroute] Failed to apply:", err);
     } finally {
       setIsApplyingReroute(false);
     }
@@ -174,7 +174,7 @@ export default function NavigationPage() {
   };
 
   useEffect(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://nearer.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
     const passUrl = `${origin}/pass?caseId=${encodeURIComponent(state.caseId || "NR-10482")}&patient=${encodeURIComponent(state.patientName || "Jisan Halder")}&blood=${encodeURIComponent(state.bloodGroup || "O+")}&hospital=${encodeURIComponent(hospital.name)}`;
 
     QRCode.toDataURL(passUrl, {
@@ -269,7 +269,7 @@ export default function NavigationPage() {
         >
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-              NEARER EMERGENCY ADMISSION PASS
+              AERVA EMERGENCY ADMISSION PASS
             </span>
             <span className="text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">
               ✓ ADMITTED
@@ -305,7 +305,7 @@ export default function NavigationPage() {
                 if (!qrDataUrl) return;
                 const a = document.createElement("a");
                 a.href = qrDataUrl;
-                a.download = `NearER-Pass-${state.caseId || "NR-10482"}.png`;
+                a.download = `AERVA-Pass-${state.caseId || "NR-10482"}.png`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -520,7 +520,7 @@ export default function NavigationPage() {
           <div className="flex items-center justify-between pb-4 border-b border-gray-100">
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
-                NearER Emergency Pass
+                AERVA Emergency Pass
               </span>
               <h3 suppressHydrationWarning className="text-xl font-black text-[#050B18]">
                 {state.patientName || "Patient"}
@@ -540,7 +540,7 @@ export default function NavigationPage() {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img 
                   src={qrDataUrl} 
-                  alt="NearER Emergency Pass QR" 
+                  alt="AERVA Emergency Pass QR" 
                   className="w-40 h-40 rounded-xl object-contain" 
                 />
               ) : (
@@ -561,7 +561,7 @@ export default function NavigationPage() {
                   if (!qrDataUrl) return;
                   const a = document.createElement("a");
                   a.href = qrDataUrl;
-                  a.download = `NearER-Pass-${state.caseId || "NR-10482"}.png`;
+                  a.download = `AERVA-Pass-${state.caseId || "NR-10482"}.png`;
                   document.body.appendChild(a);
                   a.click();
                   document.body.removeChild(a);

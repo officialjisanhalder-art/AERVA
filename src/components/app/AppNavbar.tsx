@@ -27,15 +27,15 @@ export function AppNavbar({ title, backTo }: { title?: string; backTo?: string }
         
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/nearer-mark.png"
-            alt="NearER"
+            src="/aerva-mark.png"
+            alt="AERVA"
             width={34}
             height={22}
             className="h-7 w-auto object-contain"
             priority
           />
           <span className="font-black text-[#050B18] tracking-tight hidden sm:block text-lg">
-            Near<span className="text-[#0052FF]">ER</span>
+            AER<span className="text-[#0052FF]">VA</span>
           </span>
         </Link>
       </div>

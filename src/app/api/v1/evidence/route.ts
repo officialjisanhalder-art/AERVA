@@ -56,7 +56,14 @@ export async function GET(req: NextRequest) {
         agent37_configured: Boolean(process.env.AGENT37_API_KEY),
         google_places_configured: Boolean(process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_MAPS_API_KEY),
         elevenlabs_configured: Boolean(process.env.ELEVENLABS_API_KEY),
+        adaption_configured: Boolean(process.env.ADAPTION_API_KEY),
         supabase_connected: isSupabaseConfigured,
+      },
+      adaption_status: {
+        documented_api: "https://docs.adaptionlabs.ai/",
+        sdk_available: true,
+        multilingual_dataset_samples: 27,
+        vocab_terms_expanded: 143,
       },
       stats: {
         hospitals_registered: hospitalsCount,

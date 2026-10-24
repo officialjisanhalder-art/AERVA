@@ -334,19 +334,23 @@ export class Agent37Coordinator {
   }) {
     if (isSupabaseConfigured && supabase) {
       try {
-        await supabase.from("integration_event_logs").insert({
-          service_name: "AGENT37",
-          event_type: "COORDINATION_EXECUTION",
-          execution_id: params.executionId,
-          case_id: params.caseId || null,
-          latency_ms: params.latencyMs,
-          status: params.status === "COMPLETED" ? "SUCCESS" : "FAILED",
-          error_message: params.error || null,
-          payload: {
-            tools_invoked: params.toolCallsCount,
-            recommended_hospital_id: params.recommendedHospitalId,
-          },
-        });
+        const insertPromise = Promise.resolve(
+          supabase.from("integration_event_logs").insert({
+            service_name: "AGENT37",
+            event_type: "COORDINATION_EXECUTION",
+            execution_id: params.executionId,
+            case_id: params.caseId || null,
+            latency_ms: params.latencyMs,
+            status: params.status === "COMPLETED" ? "SUCCESS" : "FAILED",
+            error_message: params.error || null,
+            payload: {
+              tools_invoked: params.toolCallsCount,
+              recommended_hospital_id: params.recommendedHospitalId,
+            },
+          })
+        );
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 1200));
+        await Promise.race([insertPromise, timeoutPromise]);
       } catch (e) {
         console.warn("[Agent37Coordinator] Log error:", e);
       }

@@ -558,7 +558,7 @@ export default function PartnerDashboard() {
             <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <div>
                 <h2 className="font-bold text-[#050B18]">Live Capacity Overview</h2>
-                <span className="text-xs text-gray-400 font-medium">Auto-synced with NearER Decision Engine</span>
+                <span className="text-xs text-gray-400 font-medium">Auto-synced with AERVA Decision Engine</span>
               </div>
               <Link href="/partner/capacity">
                 <button className="text-sm font-bold text-[#0052FF] hover:underline flex items-center gap-1">
@@ -1241,7 +1241,7 @@ export default function PartnerDashboard() {
                 </div>
                 <h2 className="text-xl font-black mt-1.5">{(selectedModalCase || state).patientName || patientProfile?.fullName || "Jisan Halder"}</h2>
                 <p className="text-xs text-blue-200">
-                  NearER Health ID: {patientProfile?.healthId || "HID-9842-108"} • {(selectedModalCase || state).patientAge || patientProfile?.age || "28"} Yrs • {(selectedModalCase || state).patientGender || patientProfile?.gender || "Male"} • Blood: <span className="font-bold text-white">{(selectedModalCase || state).bloodGroup || patientProfile?.bloodGroup || "O+"}</span>
+                  AERVA Health ID: {patientProfile?.healthId || "HID-9842-108"} • {(selectedModalCase || state).patientAge || patientProfile?.age || "28"} Yrs • {(selectedModalCase || state).patientGender || patientProfile?.gender || "Male"} • Blood: <span className="font-bold text-white">{(selectedModalCase || state).bloodGroup || patientProfile?.bloodGroup || "O+"}</span>
                 </p>
               </div>
               <button 
@@ -1577,7 +1577,7 @@ export default function PartnerDashboard() {
 
             {/* Modal Footer */}
             <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-xs text-gray-500">
-              <span>NearER High-Speed Admission Protocol</span>
+              <span>AERVA High-Speed Admission Protocol</span>
               <button 
                 onClick={() => {
                   setShowQrScanModal(false);

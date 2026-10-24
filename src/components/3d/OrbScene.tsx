@@ -90,7 +90,7 @@ function EngineOrb() {
 
         <Html center zIndexRange={[100, 0]}>
           <div className="flex flex-col items-center text-center pointer-events-none select-none">
-            <span className="text-white font-black text-sm tracking-[0.15em] drop-shadow-lg">NearER</span>
+            <span className="text-white font-black text-sm tracking-[0.15em] drop-shadow-lg">AERVA</span>
             <span className="text-[#00B2FF] text-[9px] uppercase tracking-[0.2em] font-semibold">Decision Engine</span>
           </div>
         </Html>

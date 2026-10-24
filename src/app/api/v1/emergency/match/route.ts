@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERRoutingService } from "@/lib/routing/routing-engine";
+import { AERVARoutingService } from "@/lib/routing/routing-engine";
 import { MatchRequest } from "@/lib/routing/types";
 
 export async function POST(req: NextRequest) {
@@ -21,17 +21,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const matchResult = await NearERRoutingService.matchEmergency(body);
+    const matchResult = await AERVARoutingService.matchEmergency(body);
 
     return NextResponse.json(matchResult, {
       status: 200,
       headers: {
-        "X-NearER-Routing-Engine": matchResult.engine_version,
+        "X-AERVA-Routing-Engine": matchResult.engine_version,
         "Cache-Control": "no-store",
       },
     });
   } catch (error: any) {
-    console.error("[NearER Match API] Error processing match:", error);
+    console.error("[AERVA Match API] Error processing match:", error);
     return NextResponse.json(
       {
         error: "Failed to process emergency match",

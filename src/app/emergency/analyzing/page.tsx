@@ -83,7 +83,7 @@ function AnalyzingContent() {
           transition={{ delay: 0.2 }}
           className="text-gray-400 text-sm"
         >
-          NearER is analysing nearby emergency-care options.
+          AERVA is analysing nearby emergency-care options.
         </motion.p>
       </div>
 

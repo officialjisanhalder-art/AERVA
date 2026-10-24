@@ -44,7 +44,7 @@ export default function EmergencyStatusPage() {
         }),
       })
         .then(() => updateState({ ambulanceDispatched: true }))
-        .catch((e) => console.warn("[NearER] Auto-dispatch fallback:", e));
+        .catch((e) => console.warn("[AERVA] Auto-dispatch fallback:", e));
     }
   }, [state.ambulanceRequired, state.ambulanceDispatched, state.caseId, hospital.id, state.patientName, state.location, state.emergencyId, updateState]);
 
@@ -233,7 +233,7 @@ export default function EmergencyStatusPage() {
                 </div>
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider text-blue-300">
-                    {lang === "hi" ? "आपातकालीन एम्बुलेंस बेड़ा" : "NearER ALS Fleet Transit"}
+                    {lang === "hi" ? "आपातकालीन एम्बुलेंस बेड़ा" : "AERVA ALS Fleet Transit"}
                   </span>
                   <div className="text-sm font-black text-white">AMB-101 • Mobile ICU</div>
                 </div>

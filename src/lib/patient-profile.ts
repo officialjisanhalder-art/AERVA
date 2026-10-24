@@ -103,7 +103,7 @@ export const DEFAULT_PATIENT_PROFILE: PatientProfile = {
   lastUpdated: "Just now"
 };
 
-const PROFILE_KEY = "nearer_patient_profile";
+const PROFILE_KEY = "aerva_patient_profile";
 
 export function getStoredPatientProfile(): PatientProfile {
   if (typeof window === "undefined") return DEFAULT_PATIENT_PROFILE;
@@ -124,7 +124,7 @@ export function savePatientProfile(profile: PatientProfile): void {
   try {
     const updated = { ...profile, lastUpdated: new Date().toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) };
     localStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
-    window.dispatchEvent(new Event("nearer_profile_updated"));
+    window.dispatchEvent(new Event("aerva_profile_updated"));
     window.dispatchEvent(new Event("storage"));
 
     if (isSupabaseConfigured && supabase) {
@@ -186,7 +186,7 @@ export function calculateProfileCompleteness(profile: PatientProfile): {
 
 export function generateEmergencyQrPayload(profile: PatientProfile): string {
   return JSON.stringify({
-    app: "NearER_Passport",
+    app: "AERVA_Passport",
     hid: profile.healthId,
     name: profile.fullName,
     bg: profile.bloodGroup,

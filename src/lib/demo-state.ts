@@ -70,7 +70,7 @@ export type EmergencyRequest = {
   ambulanceDispatched?: boolean;
 };
 
-const STORAGE_KEY = "nearer_demo_state";
+const STORAGE_KEY = "aerva_demo_state";
 
 const DEFAULT_STATE: EmergencyRequest = {
   caseId: "",
@@ -98,7 +98,7 @@ const DEFAULT_STATE: EmergencyRequest = {
   ambulanceDispatched: false,
 };
 
-const CASES_STORAGE_KEY = "nearer_demo_cases";
+const CASES_STORAGE_KEY = "aerva_demo_cases";
 let memoryCases: EmergencyRequest[] = [];
 const casesListeners = new Set<(cases: EmergencyRequest[]) => void>();
 
@@ -670,7 +670,7 @@ export function useEmergencyState() {
   };
 }
 
-const PARTNER_HOSPITAL_KEY = "nearer_partner_hospital_id";
+const PARTNER_HOSPITAL_KEY = "aerva_partner_hospital_id";
 
 export function usePartnerHospital() {
   const [hospitalId, setHospitalId] = useState<string>("h3");
@@ -686,10 +686,10 @@ export function usePartnerHospital() {
     };
 
     window.addEventListener("storage", handleUpdate);
-    window.addEventListener("nearer_hospital_changed", handleUpdate);
+    window.addEventListener("aerva_hospital_changed", handleUpdate);
     return () => {
       window.removeEventListener("storage", handleUpdate);
-      window.removeEventListener("nearer_hospital_changed", handleUpdate);
+      window.removeEventListener("aerva_hospital_changed", handleUpdate);
     };
   }, []);
 
@@ -697,7 +697,7 @@ export function usePartnerHospital() {
     setHospitalId(id);
     if (typeof window !== "undefined") {
       localStorage.setItem(PARTNER_HOSPITAL_KEY, id);
-      window.dispatchEvent(new Event("nearer_hospital_changed"));
+      window.dispatchEvent(new Event("aerva_hospital_changed"));
     }
   };
 
@@ -724,7 +724,7 @@ export function useHospitalData(targetHospitalId?: string) {
 
     refresh();
     window.addEventListener("storage", refresh);
-    window.addEventListener("nearer_hospital_data_updated", refresh);
+    window.addEventListener("aerva_hospital_data_updated", refresh);
 
     // Supabase Realtime Capacity Listener
     const unsubCapacity = realtimeSync.onCapacityUpdate((cap) => {
@@ -737,7 +737,7 @@ export function useHospitalData(targetHospitalId?: string) {
 
     return () => {
       window.removeEventListener("storage", refresh);
-      window.removeEventListener("nearer_hospital_data_updated", refresh);
+      window.removeEventListener("aerva_hospital_data_updated", refresh);
       unsubCapacity();
     };
   }, []);
@@ -775,7 +775,7 @@ export function useHospitalData(targetHospitalId?: string) {
             updated_at: new Date().toISOString(),
           })
           .then(({ error }) => {
-            if (error) console.warn("[NearER] Supabase capacity upsert warning:", error);
+            if (error) console.warn("[AERVA] Supabase capacity upsert warning:", error);
           });
       }
     }

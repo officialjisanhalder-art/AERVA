@@ -1,0 +1,642 @@
+[
+  {
+    "id": "SYN-EMERG-001",
+    "source": "original_seed",
+    "language": "en",
+    "description": "My 58-year-old father suddenly collapsed with crushing pain in his central chest radiating to left arm. Breathing heavily and sweating profusely near DLF Phase 2, Gurgaon.",
+    "reported_situation": "Acute substernal chest pressure with left arm radiation and diaphoresis",
+    "reported_symptoms": [
+      "severe chest pain",
+      "arm pain radiation",
+      "shortness of breath",
+      "profuse sweating"
+    ],
+    "possible_care_requirements": [
+      "Immediate emergency resuscitation",
+      "Continuous cardiac telemetry",
+      "12-lead ECG",
+      "Thrombolysis or Cath Lab availability"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU",
+      "Cardiac Care Unit"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-002",
+    "source": "original_seed",
+    "language": "en",
+    "description": "65-year-old woman is unable to move her right side, her face is drooping on the right, and her speech is completely slurred since 20 minutes ago.",
+    "reported_situation": "Acute unilateral hemiparesis, facial droop, and expressive speech impairment",
+    "reported_symptoms": [
+      "unilateral paralysis",
+      "facial drooping",
+      "slurred speech",
+      "sudden onset"
+    ],
+    "possible_care_requirements": [
+      "Urgent stroke protocol triage",
+      "Emergency non-contrast head CT/MRI",
+      "Neuro-resuscitation"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-003",
+    "source": "original_seed",
+    "language": "en",
+    "description": "Motorcycle accident on express highway. The rider has a deep gash on right thigh with active arterial pulsing bleeding and suspected femur fracture.",
+    "reported_situation": "High-velocity blunt and penetrating trauma with arterial hemorrhage and suspected lower extremity fracture",
+    "reported_symptoms": [
+      "severe hemorrhage",
+      "pulsing arterial bleed",
+      "severe leg deformity",
+      "shock risk"
+    ],
+    "possible_care_requirements": [
+      "Surgical trauma resuscitation",
+      "Emergency tourniquet / hemorrhage control",
+      "Massive transfusion protocol",
+      "Orthopedic surgery"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-004",
+    "source": "original_seed",
+    "language": "en",
+    "description": "Hot boiling oil spilled over a 30-year-old worker's chest and arms in a commercial kitchen. Extensive blistering and severe pain over approximately 20% body surface.",
+    "reported_situation": "Acute partial to full-thickness thermal burns over anterior trunk and upper extremities",
+    "reported_symptoms": [
+      "severe thermal burn",
+      "extensive blistering",
+      "extreme pain",
+      "fluid loss risk"
+    ],
+    "possible_care_requirements": [
+      "Burn shock resuscitation",
+      "Fluid resuscitation calculation",
+      "Sterile non-adherent dressing",
+      "Specialized burn intensive care"
+    ],
+    "hospital_facility_categories": [
+      "Burn Care",
+      "Critical Care",
+      "Plastic Surgery",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-005",
+    "source": "original_seed",
+    "language": "en",
+    "description": "Known asthma patient having a severe acute exacerbation. Lips are turning slightly blue, gasping for air, inhaler did not provide relief.",
+    "reported_situation": "Acute severe respiratory distress with peripheral cyanosis and poor response to beta-agonist",
+    "reported_symptoms": [
+      "severe breathlessness",
+      "gasping",
+      "cyanotic lips",
+      "refractory bronchospasm"
+    ],
+    "possible_care_requirements": [
+      "High-flow oxygenation",
+      "Continuous nebulization",
+      "Non-invasive or mechanical ventilation standby"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-006",
+    "source": "original_seed",
+    "language": "hi",
+    "description": "मेरे 58 वर्षीय पिता अचानक छाती में तेज दर्द और बाएं हाथ में खिंचाव के साथ गिर पड़े। बहुत पसीना आ रहा है और सांस फूल रही है।",
+    "reported_situation": "सीने में तीव्र दबाव, बाएं हाथ में दर्द का फैलाव एवं अत्यधिक पसीना",
+    "reported_symptoms": [
+      "छाती में तेज दर्द",
+      "हाथ में दर्द",
+      "सांस लेने में कठिनाई",
+      "अत्यधिक पसीना"
+    ],
+    "possible_care_requirements": [
+      "त्वरित कार्डियक ट्रायज",
+      "ईसीजी एवं कार्डियक मॉनिटरिंग",
+      "कैथ लैब उपलब्धता"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU",
+      "Cardiac Care Unit"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-007",
+    "source": "original_seed",
+    "language": "hi",
+    "description": "मेरी 65 वर्षीय माताजी के चेहरे का दायां हिस्सा लटक गया है, दाहिना हाथ-पैर काम नहीं कर रहा और बोली बिल्कुल अस्पष्ट हो गई है।",
+    "reported_situation": "अचानक एकतरफा पक्षाघात, चेहरे का पक्षाघात एवं वाणी विकार",
+    "reported_symptoms": [
+      "एकतरफा कमजोरी",
+      "चेहरे का लटकना",
+      "अस्पष्ट वाणी",
+      "अचानक शुरुआत"
+    ],
+    "possible_care_requirements": [
+      "एक्यूट स्ट्रोक पाथवे एक्टिवेशन",
+      "आपातकालीन मस्तिष्क सीटी स्कैन",
+      "न्यूरो-क्रिटिकल केयर"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-008",
+    "source": "original_seed",
+    "language": "hi",
+    "description": "हाईवे पर बाइक दुर्घटना हुई है। सवार की जांघ से बहुत तेज खून बह रहा है और पैर की हड्डी टूटने की आशंका है। होश खो रहा है।",
+    "reported_situation": "गंभीर सड़क दुर्घटना आघात, अत्यधिक रक्तस्राव एवं चेतना का ह्रास",
+    "reported_symptoms": [
+      "तीव्र रक्तस्राव",
+      "पैर की चोट",
+      "बेहोशी की स्थिति",
+      "शॉक का खतरा"
+    ],
+    "possible_care_requirements": [
+      "सर्जिकल ट्रॉमा रिससिटेशन",
+      "रक्तस्राव नियंत्रण",
+      "ब्लड ट्रांसफ्यूजन बैकअप",
+      "ऑर्थोपेडिक सर्जन"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-009",
+    "source": "original_seed",
+    "language": "hi",
+    "description": "रसोई में खौलता हुआ तेल 30 वर्षीय व्यक्ति के सीने और हाथों पर गिर गया है। त्वचा पर बड़े फफोले पड़ गए हैं और असहनीय जलन हो रही है।",
+    "reported_situation": "उबलते तेल से सीने एवं हाथों पर गंभीर थर्मल बर्न (जलना)",
+    "reported_symptoms": [
+      "त्वचा का जलना",
+      "फफोले",
+      "अत्यधिक जलन एवं दर्द",
+      "संक्रमण जोखिम"
+    ],
+    "possible_care_requirements": [
+      "बर्न आईसीयू देखभाल",
+      "फ्लूइड रिससिटेशन",
+      "स्टेरिलाइज्ड ड्रेसिंग"
+    ],
+    "hospital_facility_categories": [
+      "Burn Care",
+      "Critical Care",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-010",
+    "source": "original_seed",
+    "language": "hi",
+    "description": "दमा के मरीज को सांस का गंभीर दौरा पड़ा है। होंठ नीले पड़ने लगे हैं और इनहेलर से भी आराम नहीं मिल रहा है।",
+    "reported_situation": "तीव्र ब्रोंकोस्पाज्म, ऑक्सीजन की गंभीर कमी एवं सायनोसिस",
+    "reported_symptoms": [
+      "गंभीर सांस की रुकावट",
+      "नीले होंठ",
+      "इनहेलर अप्रभावी",
+      "गैस्पिंग"
+    ],
+    "possible_care_requirements": [
+      "हाई-फ्लो ऑक्सीजन",
+      "नेबुलाइजर थेरेपी",
+      "वेंटिलेटर सपोर्ट बैकअप"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-011",
+    "source": "original_seed",
+    "language": "hinglish",
+    "description": "Mere papa ko achanak chest me bohot tez dard ho raha hai jo left arm tak ja raha hai, saans lene me dikkat ho rahi hai aur bohot sweating ho rahi hai.",
+    "reported_situation": "Acute severe chest compression with arm radiation, dyspnea, and diaphoresis (Hinglish intake)",
+    "reported_symptoms": [
+      "chest me tez dard",
+      "left arm pain radiation",
+      "saans lene me problem",
+      "heavy sweating"
+    ],
+    "possible_care_requirements": [
+      "Urgent ECG and troponin testing",
+      "Cardiac critical care triage",
+      "Continuous telemetry monitoring"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU",
+      "Cardiac Care Unit"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-012",
+    "source": "original_seed",
+    "language": "hinglish",
+    "description": "Mummy ka face ek taraf se droop ho gaya hai aur right side bilkul hil nahi raha, bolne me ladkhada rahi hain aur samajh nahi aa raha kya ho gaya.",
+    "reported_situation": "Acute neurological deficit, facial asymmetry, and aphasia (Hinglish intake)",
+    "reported_symptoms": [
+      "face drooping",
+      "right side body weakness",
+      "speech slurring",
+      "loss of coordination"
+    ],
+    "possible_care_requirements": [
+      "Immediate stroke team evaluation",
+      "Stat non-contrast CT/MRI head",
+      "Neuro-intervention availability"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-013",
+    "source": "original_seed",
+    "language": "hinglish",
+    "description": "Highway pe bike ka accident hua hai, rider ke leg se continuous heavy blood nikal raha hai aur wo behosh hone laga hai. Jaldi ambulance bhejo.",
+    "reported_situation": "High-impact road trauma with massive peripheral hemorrhage and altered consciousness (Hinglish intake)",
+    "reported_symptoms": [
+      "heavy bleeding from leg",
+      "loss of consciousness",
+      "road traffic trauma",
+      "hypovolemic risk"
+    ],
+    "possible_care_requirements": [
+      "Trauma resuscitation team",
+      "Direct pressure/hemostasis",
+      "Type and crossmatch blood unit",
+      "Emergency orthopedics"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-014",
+    "source": "original_seed",
+    "language": "hinglish",
+    "description": "Kitchen me ubalta hua mustard oil gir gaya hai, chest aur dono haatho ki skin chhil gayi hai, bohot zyada jalan aur rona macha hua hai.",
+    "reported_situation": "Extensive thermal scalding burns over anterior thorax and bilateral arms (Hinglish intake)",
+    "reported_symptoms": [
+      "severe scalding burn",
+      "skin blistering",
+      "intense pain",
+      "fluid exudation"
+    ],
+    "possible_care_requirements": [
+      "Specialized burn triage",
+      "Wound stabilization and analgesia",
+      "Fluid resuscitation support"
+    ],
+    "hospital_facility_categories": [
+      "Burn Care",
+      "Critical Care",
+      "ICU"
+    ]
+  },
+  {
+    "id": "SYN-EMERG-015",
+    "source": "original_seed",
+    "language": "hinglish",
+    "description": "Asthma patient ko severe attack aaya hai, saans lene ke liye struggle kar rahe hain, lips blue dikh rahe hain aur inhaler kaam nahi kar raha.",
+    "reported_situation": "Severe acute respiratory distress with central cyanosis refractory to bronchodilators (Hinglish intake)",
+    "reported_symptoms": [
+      "severe breathlessness",
+      "gasping for breath",
+      "blue lips",
+      "inhaler failure"
+    ],
+    "possible_care_requirements": [
+      "Urgent airway support and oxygenation",
+      "Continuous bronchodilator delivery",
+      "ICU ventilator readiness"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-001",
+    "source": "adaption_adaptive_expansion",
+    "language": "en",
+    "dialect_style": "Telephonic Bystander Call (Fragmented)",
+    "description": "Urgent! Man on floor near Cyber Hub gate 4, holding his chest and crying in pain, left shoulder numbness. We need cardiac ambulance now!",
+    "reported_situation": "Witnessed collapse with severe retrosternal pain radiating to left shoulder",
+    "reported_symptoms": [
+      "chest pain",
+      "left shoulder numbness",
+      "acute distress"
+    ],
+    "possible_care_requirements": [
+      "Emergency resuscitation",
+      "ECG telemetry",
+      "Cath Lab standby"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-002",
+    "source": "adaption_adaptive_expansion",
+    "language": "hi",
+    "dialect_style": "Northern Regional Hindi (Dehati / Conversational)",
+    "description": "भैया जल्दी एम्बुलेंस भिजवाओ, बाबूजी की छाती में भारी जकड़न हो रही है, बायां हाथ सुन्न पड़ रहा है और पसीने से पूरे लथपथ हैं।",
+    "reported_situation": "सीने में भारी जकड़न, बाएं हाथ का सुन्न पड़ना एवं अत्यधिक पसीना (क्षेत्रीय बोलचाल)",
+    "reported_symptoms": [
+      "छाती में भारी जकड़न",
+      "बायां हाथ सुन्न",
+      "पसीना आना"
+    ],
+    "possible_care_requirements": [
+      "त्वरित ईसीजी",
+      "कार्डियक आईसीयू बैकअप"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-003",
+    "source": "adaption_adaptive_expansion",
+    "language": "hinglish",
+    "dialect_style": "Urban Delhi-NCR Casual Hinglish",
+    "description": "Bhai papa ko bahut hard chest heaviness ho rahi hai, breathe nahi le paa rahe theek se aur left shoulder radiate kar raha hai pain. Sector 43 me hain.",
+    "reported_situation": "Severe chest heaviness with arm radiation and dyspnea (Urban Hinglish)",
+    "reported_symptoms": [
+      "chest heaviness",
+      "breathing difficulty",
+      "shoulder radiating pain"
+    ],
+    "possible_care_requirements": [
+      "Cardiac resuscitation",
+      "Troponin / ECG protocol"
+    ],
+    "hospital_facility_categories": [
+      "Cardiology",
+      "Cath Lab 24x7",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-004",
+    "source": "adaption_adaptive_expansion",
+    "language": "en",
+    "dialect_style": "Elderly Family Caregiver English",
+    "description": "Grandmother woke up from nap and cannot speak words properly. Her right hand dropped her teacup and right facial corner is sagging.",
+    "reported_situation": "Sudden onset right-sided focal neurological deficit with motor loss and dysarthria",
+    "reported_symptoms": [
+      "motor weakness",
+      "facial sag",
+      "speech breakdown"
+    ],
+    "possible_care_requirements": [
+      "Stroke protocol admission",
+      "Immediate non-contrast neuroimaging"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-005",
+    "source": "adaption_adaptive_expansion",
+    "language": "hi",
+    "dialect_style": "Hindi Voice Transcript Relay",
+    "description": "दादीजी की जीभ लड़खड़ा रही है, कुछ बोल नहीं पा रही हैं और सीधे हाथ में बिल्कुल जान नहीं बची है। 15 मिनट पहले ठीक थीं।",
+    "reported_situation": "अचानक वाणी लोप एवं दाहिने हाथ की दुर्बलता (स्ट्रोक लक्षण)",
+    "reported_symptoms": [
+      "जीभ लड़खड़ाना",
+      "हाथ में कमजोरी",
+      "अचानक शुरुआत"
+    ],
+    "possible_care_requirements": [
+      "स्ट्रोक यूनिट ट्रायज",
+      "सीटी स्कैन हेड"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-006",
+    "source": "adaption_adaptive_expansion",
+    "language": "hinglish",
+    "dialect_style": "Hinglish Mobile SOS Brief",
+    "description": "Mummy ka bolna achanak band sa ho gaya, muh tedha lag raha hai aur right arm bilkul drop ho gaya. Stroke lag raha hai emergency bed chahiye.",
+    "reported_situation": "Suspected acute ischemic event with facial asymmetry and arm drift (Hinglish)",
+    "reported_symptoms": [
+      "inability to speak",
+      "facial asymmetry",
+      "arm drop"
+    ],
+    "possible_care_requirements": [
+      "Immediate CT/MRI neuroimaging",
+      "Stroke intervention unit"
+    ],
+    "hospital_facility_categories": [
+      "Neurology",
+      "Stroke Unit",
+      "CT/MRI Scan",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-007",
+    "source": "adaption_adaptive_expansion",
+    "language": "en",
+    "dialect_style": "High-Stress First Responder Dispatch",
+    "description": "Two-vehicle collision at intersection. Unconscious driver pinned in vehicle with massive blood spurting from leg, pulse is rapid and thready.",
+    "reported_situation": "Severe vehicular blunt polytrauma with catastrophic arterial hemorrhage and hemodynamic instability",
+    "reported_symptoms": [
+      "unconscious",
+      "massive arterial spurting",
+      "thready pulse"
+    ],
+    "possible_care_requirements": [
+      "Level-1 Trauma team",
+      "Surgical hemostasis",
+      "Immediate blood crossmatch"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-008",
+    "source": "adaption_adaptive_expansion",
+    "language": "hi",
+    "dialect_style": "Hindi Highway Emergency Call",
+    "description": "गाड़ी पलट गई है, चालक स्टेयरिंग में फंसा है और पैर से लगातार खून की धार बह रही है। सांस धीमी चल रही है।",
+    "reported_situation": "सड़क दुर्घटना, वाहन में फंसे होने से गंभीर रक्तस्राव एवं चेतना में गिरावट",
+    "reported_symptoms": [
+      "अत्यधिक रक्तस्राव",
+      "धीमी सांस",
+      "गंभीर चोट"
+    ],
+    "possible_care_requirements": [
+      "ट्रॉमा रिससिटेशन",
+      "सर्जरी कक्ष",
+      "ब्लड यूनिट्स"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-009",
+    "source": "adaption_adaptive_expansion",
+    "language": "hinglish",
+    "dialect_style": "Hinglish Bystander Relay",
+    "description": "Car collision me driver ka leg crush ho gaya hai, excessive bleeding ho rahi hai aur BP drop ho raha lagta hai. Trauma hospital suggest karo.",
+    "reported_situation": "Crush injury to lower extremity with rapid blood loss and shock (Hinglish)",
+    "reported_symptoms": [
+      "crush trauma",
+      "excessive bleeding",
+      "signs of shock"
+    ],
+    "possible_care_requirements": [
+      "Emergency orthopedic trauma surgery",
+      "Blood transfusion ready"
+    ],
+    "hospital_facility_categories": [
+      "Trauma Center",
+      "Emergency Surgery",
+      "Blood Bank",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-010",
+    "source": "adaption_adaptive_expansion",
+    "language": "en",
+    "dialect_style": "Pediatric/Young Adult Acute Wheeze",
+    "description": "19-year-old having sudden suffocating attack, high-pitched stridor wheeze, unable to speak full sentences, oxygen saturation dropping.",
+    "reported_situation": "Acute severe refractory bronchospasm with impending ventilatory fatigue",
+    "reported_symptoms": [
+      "stridor wheezing",
+      "inability to speak full sentences",
+      "oxygen desaturation"
+    ],
+    "possible_care_requirements": [
+      "Emergency airway management",
+      "Intensive respiratory care",
+      "Ventilator bed reservation"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-011",
+    "source": "adaption_adaptive_expansion",
+    "language": "hi",
+    "dialect_style": "Hindi Respiratory Emergency",
+    "description": "मरीज का दम घुट रहा है, सीटी जैसी आवाज आ रही है और चेहरा नीला पड़ रहा है। तुरंत ऑक्सीजन सिलेंडर और वेंटिलेटर चाहिए।",
+    "reported_situation": "गंभीर श्वास अवरोध, सायनोसिस एवं श्वास विफलता का खतरा",
+    "reported_symptoms": [
+      "दम घुटना",
+      "सीटी जैसी सांस",
+      "नीला चेहरा"
+    ],
+    "possible_care_requirements": [
+      "ऑक्सीजन थैरेपी",
+      "वेंटिलेटर सपोर्ट"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  },
+  {
+    "id": "ADAPT-EMERG-012",
+    "source": "adaption_adaptive_expansion",
+    "language": "hinglish",
+    "dialect_style": "Hinglish Urgent Care Request",
+    "description": "Bohot severe suffocation ho rahi hai, pump lene par bhi saans nahi aa rahi, haath-pair thande pad rahe hain. Aisa hospital jaha ICU ventilator ho.",
+    "reported_situation": "Acute bronchospastic respiratory distress refractory to inhaler (Hinglish)",
+    "reported_symptoms": [
+      "suffocation",
+      "refractory to inhaler",
+      "cold extremities"
+    ],
+    "possible_care_requirements": [
+      "Emergency continuous nebulization",
+      "ICU invasive/non-invasive ventilation"
+    ],
+    "hospital_facility_categories": [
+      "Respiratory",
+      "Pulmonology",
+      "Ventilator Support",
+      "ICU"
+    ]
+  }
+]

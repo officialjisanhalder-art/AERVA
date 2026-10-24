@@ -1,5 +1,5 @@
 /**
- * NEARER ROUTING ENGINE — AUDIT LOGGER & PERSISTENCE
+ * AERVA ROUTING ENGINE — AUDIT LOGGER & PERSISTENCE
  * Logs routing_decisions, routing_candidates, and route_change_events
  */
 

@@ -17,13 +17,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
 
   useEffect(() => {
-    const stored = localStorage.getItem("nearer_lang") as Lang | null;
+    const stored = localStorage.getItem("aerva_lang") as Lang | null;
     if (stored === "hi" || stored === "en") setLangState(stored);
   }, []);
 
   const setLang = (l: Lang) => {
     setLangState(l);
-    localStorage.setItem("nearer_lang", l);
+    localStorage.setItem("aerva_lang", l);
   };
 
   return (

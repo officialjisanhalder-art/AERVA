@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERReroutingService } from "@/lib/routing/rerouting-service";
+import { AERVAReroutingService } from "@/lib/routing/rerouting-service";
 import { RecheckRequest } from "@/lib/routing/types";
 
 export async function POST(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const evaluation = await NearERReroutingService.evaluateRoute(body);
+    const evaluation = await AERVAReroutingService.evaluateRoute(body);
 
     return NextResponse.json(evaluation, {
       status: 200,
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error: any) {
-    console.error("[NearER Recheck API] Error evaluating route:", error);
+    console.error("[AERVA Recheck API] Error evaluating route:", error);
     return NextResponse.json(
       {
         error: "Failed to evaluate route",

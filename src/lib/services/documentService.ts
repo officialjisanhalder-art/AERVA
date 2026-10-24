@@ -13,7 +13,7 @@ export interface MedicalDocument {
   clinic?: string;
 }
 
-const LOCAL_DOCUMENTS_KEY = "nearer_medical_documents";
+const LOCAL_DOCUMENTS_KEY = "aerva_medical_documents";
 
 const DEFAULT_DOCUMENTS: MedicalDocument[] = [
   {

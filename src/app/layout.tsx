@@ -17,12 +17,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "NearER - Real-Time Emergency Intelligence",
+  title: "AERVA - Real-Time Emergency Intelligence",
   description: "Don't just find the nearest hospital. Find the right one.",
   icons: {
-    icon: "/nearer-icon-square.png",
-    shortcut: "/nearer-icon-square.png",
-    apple: "/nearer-icon-square.png",
+    icon: "/aerva-icon-square.png",
+    shortcut: "/aerva-icon-square.png",
+    apple: "/aerva-icon-square.png",
   },
 };
 

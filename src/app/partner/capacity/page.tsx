@@ -104,7 +104,7 @@ export default function CapacityPage() {
             {t("capacity.title", lang)}
           </h1>
           <p className="text-sm text-gray-500 font-medium mt-0.5">
-            Changes immediately alter the NearER routing algorithm weights & patient admissions.
+            Changes immediately alter the AERVA routing algorithm weights & patient admissions.
           </p>
         </div>
 
@@ -169,7 +169,7 @@ export default function CapacityPage() {
             Live Bed & Equipment Inventory
           </h2>
           <span className="text-xs text-gray-500 font-medium">
-            Increases or decreases recalculate NearER triage scores immediately
+            Increases or decreases recalculate AERVA triage scores immediately
           </span>
         </div>
 
@@ -235,7 +235,7 @@ export default function CapacityPage() {
                 </span>
               </div>
               <p className="text-xs text-gray-500 font-medium mt-0.5">
-                Displayed to incoming emergency cases and verified by NearER Decision Engine.
+                Displayed to incoming emergency cases and verified by AERVA Decision Engine.
               </p>
             </div>
           </div>
@@ -393,7 +393,7 @@ export default function CapacityPage() {
             className="bg-[#0052FF] hover:bg-blue-600 active:scale-95 text-white px-8 py-3 rounded-2xl font-black text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 cursor-pointer"
           >
             <CheckCircle2 className="w-4 h-4" />
-            Save & Publish Live to NearER
+            Save & Publish Live to AERVA
           </button>
         </div>
       </section>

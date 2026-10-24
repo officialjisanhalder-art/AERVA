@@ -1,6 +1,6 @@
 /**
  * AERVA — GOOGLE PLACES API (NEW) + HOSPITAL DATABASE INTEGRATION
- * Integrates Google Places API (New) searchNearby with NearER verified database records.
+ * Integrates Google Places API (New) searchNearby with AERVA verified database records.
  * Complies with Google Maps Platform attribution and zero-fabrication clinical safety rules.
  */
 

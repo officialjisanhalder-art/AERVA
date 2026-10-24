@@ -148,7 +148,7 @@ function HospitalIllustration() {
       {/* Bottom badge */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[#0052FF] text-white text-xs font-bold px-5 py-2.5 rounded-full flex items-center gap-2 shadow-[0_0_24px_rgba(0,82,255,0.35)] whitespace-nowrap">
         <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
-        NearER Partner Portal
+        AERVA Partner Portal
       </div>
     </div>
   );
@@ -192,7 +192,7 @@ export function HospitalPartnerSection() {
               <span className="text-[#0052FF]">Better emergency coordination.</span>
             </h2>
             <p className="text-gray-500 text-lg leading-relaxed mb-10">
-              The NearER Partner Portal lets hospitals update live capacity in real time, so patients are always routed where they can be treated immediately.
+              The AERVA Partner Portal lets hospitals update live capacity in real time, so patients are always routed where they can be treated immediately.
             </p>
 
             {/* Dashboard card */}

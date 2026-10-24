@@ -37,7 +37,7 @@ export interface EmergencyCase {
   completedAt?: string;
 }
 
-const LOCAL_ACTIVE_CASE_KEY = "nearer_active_emergency_case";
+const LOCAL_ACTIVE_CASE_KEY = "aerva_active_emergency_case";
 
 export function generateCaseId(): string {
   const num = Math.floor(10000 + Math.random() * 90000);

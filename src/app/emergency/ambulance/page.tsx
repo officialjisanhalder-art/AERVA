@@ -218,7 +218,7 @@ function AmbulanceTrackerContent() {
               className="w-full bg-white text-[#0052FF] hover:bg-blue-50 py-3.5 rounded-2xl font-black text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Truck className="w-4 h-4" />
-              {isRequesting ? "Dispatching Nearest Unit..." : "Request NearER ALS Ambulance Now"}
+              {isRequesting ? "Dispatching Nearest Unit..." : "Request AERVA ALS Ambulance Now"}
             </button>
           </div>
         )}

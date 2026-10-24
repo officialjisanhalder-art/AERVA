@@ -127,7 +127,7 @@ export default function PartnerAmbulancePage() {
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-xs font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
-              NearER Fleet Operations Hub
+              AERVA Fleet Operations Hub
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-[#050B18] tracking-tight">

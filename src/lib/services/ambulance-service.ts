@@ -1,5 +1,5 @@
 /**
- * NearER Ambulance Fleet & Telemetry Service
+ * AERVA Ambulance Fleet & Telemetry Service
  * Real-time fleet management, emergency dispatch, and live patient tracking.
  */
 
@@ -274,7 +274,7 @@ class AmbulanceFleetService {
   private loadFromStorage() {
     if (typeof window !== "undefined") {
       try {
-        const saved = localStorage.getItem("nearer_ambulance_fleet");
+        const saved = localStorage.getItem("aerva_ambulance_fleet");
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
@@ -289,8 +289,8 @@ class AmbulanceFleetService {
   private saveToStorage() {
     if (typeof window !== "undefined") {
       try {
-        localStorage.setItem("nearer_ambulance_fleet", JSON.stringify(this.fleet));
-        window.dispatchEvent(new Event("nearer_ambulance_fleet_updated"));
+        localStorage.setItem("aerva_ambulance_fleet", JSON.stringify(this.fleet));
+        window.dispatchEvent(new Event("aerva_ambulance_fleet_updated"));
       } catch (_) {}
     }
   }

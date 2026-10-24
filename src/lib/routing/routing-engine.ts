@@ -1,6 +1,6 @@
 /**
- * NEARER ROUTING ENGINE — CORE SUITABILITY & GEOFENCING SERVICE
- * Engine Version: NEARER_ROUTER_V1
+ * AERVA ROUTING ENGINE — CORE SUITABILITY & GEOFENCING SERVICE
+ * Engine Version: AERVA_ROUTER_V1
  * 
  * Commercial Firewall: commercial_weight = 0 (No paid status can influence routing)
  */
@@ -20,7 +20,7 @@ import { DEMO_HOSPITALS_DATA, HospitalRecord } from "../services/hospitalService
 import { calculateDistanceKm, estimateDrivingEtaMinutes } from "../services/locationService";
 import { supabase, isSupabaseConfigured } from "../supabase/client";
 
-export const ROUTING_ENGINE_VERSION = "NEARER_ROUTER_V1";
+export const ROUTING_ENGINE_VERSION = "AERVA_ROUTER_V1";
 
 // Adaptive geofence expansion stages
 const GEOFENCE_STAGES_KM = [5, 10, 25, 50, 100];
@@ -110,7 +110,7 @@ interface UnifiedHospital {
   publicReviewSummary: string;
 }
 
-export class NearERRoutingService {
+export class AERVARoutingService {
   /**
    * Main Hospital Matching Pipeline
    * 1. Validate Location

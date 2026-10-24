@@ -18,8 +18,8 @@ export interface EmergencyVisitHistory {
   patientGender?: string;
 }
 
-const PATIENT_HISTORY_STORAGE_KEY = "nearer_patient_emergency_history";
-const HOSPITAL_ADMISSIONS_STORAGE_KEY = "nearer_hospital_admissions_log";
+const PATIENT_HISTORY_STORAGE_KEY = "aerva_patient_emergency_history";
+const HOSPITAL_ADMISSIONS_STORAGE_KEY = "aerva_hospital_admissions_log";
 
 const INITIAL_PATIENT_HISTORY: EmergencyVisitHistory[] = [
   {

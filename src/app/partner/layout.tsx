@@ -37,8 +37,8 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
         <div className="p-6 pb-4">
           <Link href="/partner/dashboard" className="flex items-center gap-2.5">
             <Image
-              src="/nearer-mark.png"
-              alt="NearER"
+              src="/aerva-mark.png"
+              alt="AERVA"
               width={34}
               height={22}
               className="h-7 w-auto object-contain"

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { NearERRoutingService } from "@/lib/routing/routing-engine";
+import { AERVARoutingService } from "@/lib/routing/routing-engine";
 import { calculateDistanceKm, estimateDrivingEtaMinutes } from "@/lib/services/locationService";
 
 export async function GET(req: NextRequest) {
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const allHospitals = await NearERRoutingService.loadAllHospitals();
+    const allHospitals = await AERVARoutingService.loadAllHospitals();
 
     const candidates = allHospitals
       .map((h) => {
@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
       }
     );
   } catch (error: any) {
-    console.error("[NearER Nearby Hospitals API] Error:", error);
+    console.error("[AERVA Nearby Hospitals API] Error:", error);
     return NextResponse.json(
       { error: "Failed to retrieve nearby hospitals", details: error?.message || "Internal error" },
       { status: 500 }

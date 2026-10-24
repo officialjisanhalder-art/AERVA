@@ -39,7 +39,7 @@ const PRESET_RURAL_SCENARIOS = [
   },
 ];
 
-export default function NearERReachPage() {
+export default function AERVAReachPage() {
   const [callerNumber, setCallerNumber] = useState("+91 98120 44921");
   const [language, setLanguage] = useState("Hindi (hi-IN)");
   const [activeStep, setActiveStep] = useState<"IDLE" | "CALLING" | "LOC_PROMPT" | "EMG_PROMPT" | "PROCESSING" | "SUBMITTED">("IDLE");
@@ -156,7 +156,7 @@ export default function NearERReachPage() {
           <div>
             <div className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-black uppercase tracking-wider mb-2">
               <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-600" />
-              <span>NearER Reach • Basic Phone / Keypad Module</span>
+              <span>AERVA Reach • Basic Phone / Keypad Module</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-[#050B18]">
               Call. Speak. Connect.
@@ -206,7 +206,7 @@ export default function NearERReachPage() {
               </div>
               <div>
                 <p className="text-xs font-bold text-gray-400">Toll-Free Rural Gateway</p>
-                <p className="text-sm font-black text-white tracking-wider">1800-NEARER-SOS (1800-632737)</p>
+                <p className="text-sm font-black text-white tracking-wider">1800-AERVA-SOS (1800-632737)</p>
               </div>
             </div>
             <div className="text-right">
@@ -270,7 +270,7 @@ export default function NearERReachPage() {
                 <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600 animate-bounce">
                   <PhoneCall className="w-10 h-10" />
                 </div>
-                <h3 className="text-xl font-black text-[#050B18]">Connecting to NearER IVR Gateway...</h3>
+                <h3 className="text-xl font-black text-[#050B18]">Connecting to AERVA IVR Gateway...</h3>
                 <p className="text-xs font-bold text-gray-400 mt-1">Audio stream initializing in {language}</p>
               </div>
             )}
@@ -361,7 +361,7 @@ export default function NearERReachPage() {
                     onClick={handleSubmitSos}
                     className="px-8 py-4 bg-[#0052FF] hover:bg-blue-600 text-white font-black text-sm rounded-2xl shadow-lg shadow-blue-500/25 transition-all flex items-center gap-2 cursor-pointer"
                   >
-                    <span>Dispatch to NearER Reach Network</span>
+                    <span>Dispatch to AERVA Reach Network</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
@@ -387,7 +387,7 @@ export default function NearERReachPage() {
                     <h3 className="text-lg font-black">Rural Emergency SOS Dispatched!</h3>
                   </div>
                   <p className="text-xs font-semibold text-emerald-800">
-                    Case has been registered on the NearER Reach Relay network. Hospital alerted and operator assigned.
+                    Case has been registered on the AERVA Reach Relay network. Hospital alerted and operator assigned.
                   </p>
                 </div>
 

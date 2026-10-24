@@ -15,7 +15,7 @@ const sources = [
 
 const steps = [
   { icon: AlertCircle, num: "01", title: "Report Emergency", desc: "Select the emergency type. Your location is identified automatically." },
-  { icon: Server, num: "02", title: "Analyze in Real Time", desc: "NearER checks live hospital capacity, specialists and blood availability." },
+  { icon: Server, num: "02", title: "Analyze in Real Time", desc: "AERVA checks live hospital capacity, specialists and blood availability." },
   { icon: Building, num: "03", title: "Get Best Hospital", desc: "The most appropriate destination is recommended instantly." },
   { icon: MapPin, num: "04", title: "Navigate", desc: "Get the fastest route with live traffic and accurate ETA." },
   { icon: Share2, num: "05", title: "Share & Notify", desc: "Share your ETA and hospital details with your emergency contact." },

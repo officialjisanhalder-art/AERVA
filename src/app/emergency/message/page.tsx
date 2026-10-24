@@ -132,8 +132,8 @@ export default function PatientMessagePage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mr-1">
             <Image
-              src="/nearer-mark.png"
-              alt="NearER"
+              src="/aerva-mark.png"
+              alt="AERVA"
               width={28}
               height={18}
               className="h-6 w-auto object-contain"

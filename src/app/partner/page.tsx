@@ -33,13 +33,13 @@ export default function PartnerLogin() {
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 sm:p-6">
       <Link href="/" className="flex items-center gap-3 mb-8">
         <Image
-          src="/nearer-mark.png"
-          alt="NearER"
+          src="/aerva-mark.png"
+          alt="AERVA"
           width={40}
           height={26}
           className="h-9 w-auto object-contain"
         />
-        <span className="font-black text-[#050B18] tracking-tight text-2xl">Near<span className="text-[#0052FF]">ER</span></span>
+        <span className="font-black text-[#050B18] tracking-tight text-2xl">AER<span className="text-[#0052FF]">VA</span></span>
         <span className="text-[#0052FF] font-bold text-xs bg-blue-50 px-2.5 py-1 rounded-lg ml-1 border border-blue-100">
           HOSPITAL NETWORK
         </span>
@@ -147,7 +147,7 @@ export default function PartnerLogin() {
 
           <div className="mt-6 pt-5 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <span className="flex items-center gap-1.5 text-emerald-600 font-bold">
-              <ShieldCheck className="w-4 h-4" /> NearER Partner Hospital Federation
+              <ShieldCheck className="w-4 h-4" /> AERVA Partner Hospital Federation
             </span>
             <span className="text-gray-400">
               Select any hospital station above to test dual-sided hospital triage in real time.

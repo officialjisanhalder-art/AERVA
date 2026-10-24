@@ -12,7 +12,7 @@ import { t } from "@/lib/i18n";
 const navLinks = [
   { name: "Home", key: "nav.home", href: "/" },
   { name: "Patient Portal", key: "nav.patientPortal", href: "/patient" },
-  { name: "NearER Reach", key: "nav.reach", href: "/reach" },
+  { name: "AERVA Reach", key: "nav.reach", href: "/reach" },
   { name: "Operator Desk", key: "nav.operatorDesk", href: "/reach/login" },
   { name: "For Hospitals", key: "nav.forHospitals", href: "/partner" },
   { name: "Traffic Towers", key: "nav.trafficTowers", href: "/traffic" },
@@ -45,15 +45,15 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
             <Image
-              src="/nearer-mark.png"
-              alt="NearER"
+              src="/aerva-mark.png"
+              alt="AERVA"
               width={38}
               height={24}
               className="h-8 w-auto object-contain"
               priority
             />
             <span className="font-black text-xl tracking-tight text-[#050B18]">
-              Near<span className="text-[#0052FF]">ER</span>
+              AER<span className="text-[#0052FF]">VA</span>
             </span>
           </Link>
 

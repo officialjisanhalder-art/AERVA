@@ -31,10 +31,10 @@ function RecommendationContent() {
   useEffect(() => {
     const handleUpdate = () => setDataVersion(v => v + 1);
     window.addEventListener("storage", handleUpdate);
-    window.addEventListener("nearer_hospital_data_updated", handleUpdate);
+    window.addEventListener("aerva_hospital_data_updated", handleUpdate);
     return () => {
       window.removeEventListener("storage", handleUpdate);
-      window.removeEventListener("nearer_hospital_data_updated", handleUpdate);
+      window.removeEventListener("aerva_hospital_data_updated", handleUpdate);
     };
   }, []);
 
@@ -43,7 +43,7 @@ function RecommendationContent() {
   const fallbackData = findBestHospitals(typeId, !mounted);
   const emergency = fallbackData.emergency;
 
-  // Fetch from NearER Routing Engine API
+  // Fetch from AERVA Routing Engine API
   useEffect(() => {
     let isCancelled = false;
     setIsLoadingRouting(true);
@@ -53,7 +53,7 @@ function RecommendationContent() {
 
     let hospital_overrides: any = undefined;
     try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem("nearer_hospital_overrides") : null;
+      const raw = typeof window !== "undefined" ? localStorage.getItem("aerva_hospital_overrides") : null;
       if (raw) hospital_overrides = JSON.parse(raw);
     } catch {}
 
@@ -79,7 +79,7 @@ function RecommendationContent() {
         }
       })
       .catch((err) => {
-        console.warn("[NearER Routing] API fallback engaged:", err);
+        console.warn("[AERVA Routing] API fallback engaged:", err);
       })
       .finally(() => {
         if (!isCancelled) setIsLoadingRouting(false);
@@ -214,7 +214,7 @@ function RecommendationContent() {
         body: JSON.stringify({ hospital_id: selectedHospital.id }),
       });
     } catch (e) {
-      console.warn("[NearER] Could not record destination lock:", e);
+      console.warn("[AERVA] Could not record destination lock:", e);
     }
 
     // If ambulance is requested, dispatch with the captured patient location
@@ -238,7 +238,7 @@ function RecommendationContent() {
         });
         updateState({ ambulanceDispatched: true });
       } catch (err) {
-        console.warn("[NearER Ambulance] Dispatch call warning:", err);
+        console.warn("[AERVA Ambulance] Dispatch call warning:", err);
       }
     }
 
@@ -367,7 +367,7 @@ function RecommendationContent() {
             <div className="bg-blue-50/70 border border-blue-100 rounded-2xl p-4 mb-6">
               <h3 className="text-xs font-black text-[#0052FF] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4" />
-                {lang === "hi" ? "NearER ने यह अस्पताल क्यों चुना" : "Why NearER Routing Engine Selected This Hospital"}
+                {lang === "hi" ? "AERVA ने यह अस्पताल क्यों चुना" : "Why AERVA Routing Engine Selected This Hospital"}
               </h3>
               <ul className="space-y-2 text-xs sm:text-sm font-medium text-gray-700">
                 {bestMatch.humanReasons && bestMatch.humanReasons.length > 0 ? (

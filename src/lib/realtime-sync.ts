@@ -69,7 +69,7 @@ class RealtimeSyncManager {
 
     try {
       // 1. Live Emergency Channel
-      this.emergencyChannel = supabase.channel("nearer_live_emergency", {
+      this.emergencyChannel = supabase.channel("aerva_live_emergency", {
         config: { broadcast: { self: true } },
       });
 
@@ -82,7 +82,7 @@ class RealtimeSyncManager {
         .subscribe();
 
       // 2. Live Capacity Channel
-      this.capacityChannel = supabase.channel("nearer_hospital_capacity", {
+      this.capacityChannel = supabase.channel("aerva_hospital_capacity", {
         config: { broadcast: { self: true } },
       });
 
@@ -95,7 +95,7 @@ class RealtimeSyncManager {
         .subscribe();
 
       // 3. PostgreSQL Database Changes Channel
-      this.dbChangesChannel = supabase.channel("nearer_db_emergency_changes");
+      this.dbChangesChannel = supabase.channel("aerva_db_emergency_changes");
       this.dbChangesChannel
         .on(
           "postgres_changes",
@@ -235,7 +235,7 @@ class RealtimeSyncManager {
     this.chatListeners.get(caseId)!.add(listener);
 
     if (isSupabaseConfigured && supabase && !this.chatChannels.has(caseId)) {
-      const ch = supabase.channel(`nearer_chat_${caseId}`, {
+      const ch = supabase.channel(`aerva_chat_${caseId}`, {
         config: { broadcast: { self: true } },
       });
       ch.on("broadcast", { event: "new_message" }, (p) => {
@@ -258,7 +258,7 @@ class RealtimeSyncManager {
   // Broadcast a chat message
   public async broadcastMessage(msg: RealtimeMessagePayload) {
     this.init();
-    const ch = this.chatChannels.get(msg.caseId) || (isSupabaseConfigured && supabase ? supabase.channel(`nearer_chat_${msg.caseId}`) : null);
+    const ch = this.chatChannels.get(msg.caseId) || (isSupabaseConfigured && supabase ? supabase.channel(`aerva_chat_${msg.caseId}`) : null);
     if (ch) {
       await ch.send({
         type: "broadcast",

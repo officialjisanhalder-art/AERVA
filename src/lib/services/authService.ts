@@ -7,7 +7,7 @@ export interface UserProfile {
   mobile: string;
 }
 
-const LOCAL_USER_KEY = "nearer_auth_user";
+const LOCAL_USER_KEY = "aerva_auth_user";
 
 export const authService = {
   // Check if user is logged in
@@ -118,7 +118,7 @@ export const authService = {
     // Local fallback login
     const demoUser: UserProfile = {
       id: "usr_demo_patient",
-      email: email || "patient@nearer.in",
+      email: email || "patient@aerva.in",
       fullName: "Rahul Verma",
       mobile: "+91 98765 43210",
     };

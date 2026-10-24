@@ -1,7 +1,7 @@
 "use client";
 
-const ALARM_CHANNEL_NAME = "nearer_cross_tab_alarm_sync";
-const SILENCE_STORAGE_KEY = "nearer_alarm_silenced_timestamp";
+const ALARM_CHANNEL_NAME = "aerva_cross_tab_alarm_sync";
+const SILENCE_STORAGE_KEY = "aerva_alarm_silenced_timestamp";
 
 class AlarmCoordinator {
   private channel: BroadcastChannel | null = null;
@@ -73,7 +73,7 @@ class AlarmCoordinator {
     this.isLocallyPlaying = false;
     if (typeof window === "undefined") return;
     try {
-      const audio = (window as any).__nearer_alarm_audio as HTMLAudioElement | undefined;
+      const audio = (window as any).__aerva_alarm_audio as HTMLAudioElement | undefined;
       if (audio) {
         audio.pause();
         audio.currentTime = 0;
@@ -92,12 +92,12 @@ class AlarmCoordinator {
 
   public getAudio(): HTMLAudioElement | null {
     if (typeof window === "undefined") return null;
-    if (!(window as any).__nearer_alarm_audio) {
+    if (!(window as any).__aerva_alarm_audio) {
       const audio = new Audio("/emergency-alarm.mp3");
       audio.loop = true;
-      (window as any).__nearer_alarm_audio = audio;
+      (window as any).__aerva_alarm_audio = audio;
     }
-    return (window as any).__nearer_alarm_audio;
+    return (window as any).__aerva_alarm_audio;
   }
 }
 

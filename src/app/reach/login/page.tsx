@@ -38,7 +38,7 @@ export default function RelayOperatorLoginPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 py-1 px-3 rounded-full bg-blue-950/80 border border-blue-800/80 text-blue-400 text-xs font-black uppercase tracking-wider mb-4">
             <Radio className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
-            <span>NearER Reach Command</span>
+            <span>AERVA Reach Command</span>
           </div>
           <h1 className="text-3xl font-black tracking-tight text-white">
             Relay Operator Portal
@@ -154,7 +154,7 @@ export default function RelayOperatorLoginPage() {
             href="/reach"
             className="text-xs font-bold text-gray-400 hover:text-white transition-colors"
           >
-            ← Return to NearER Reach Public Voice SOS
+            ← Return to AERVA Reach Public Voice SOS
           </Link>
         </div>
 
