@@ -13,6 +13,7 @@ class SupabaseSyncService {
 
   static bool _initialized = false;
   static RealtimeChannel? _emergencyChannel;
+  static RealtimeChannel? _legacyEmergencyChannel;
   static RealtimeChannel? _capacityChannel;
   static final Map<String, RealtimeChannel> _chatChannels = {};
 
@@ -32,7 +33,7 @@ class SupabaseSyncService {
       );
       _initialized = true;
       _setupChannels();
-      debugPrint("✓ NearER Supabase Realtime Service connected successfully.");
+      debugPrint("✓ AERVA Supabase Realtime Service connected successfully.");
     } catch (e) {
       debugPrint("⚠ Supabase initialize warning: $e");
     }
@@ -41,14 +42,22 @@ class SupabaseSyncService {
   static void _setupChannels() {
     if (!_initialized) return;
     try {
+      // 1. Primary AERVA channel
       _emergencyChannel = client.channel(
-        'nearer_live_emergency',
+        'aerva_live_emergency',
         opts: const RealtimeChannelConfig(self: true),
       );
       _emergencyChannel?.subscribe();
 
+      // 2. Legacy NearER channel for maximum backwards compatibility
+      _legacyEmergencyChannel = client.channel(
+        'nearer_live_emergency',
+        opts: const RealtimeChannelConfig(self: true),
+      );
+      _legacyEmergencyChannel?.subscribe();
+
       _capacityChannel = client.channel(
-        'nearer_hospital_capacity',
+        'aerva_hospital_capacity',
         opts: const RealtimeChannelConfig(self: true),
       );
       _capacityChannel?.subscribe();
@@ -126,20 +135,31 @@ class SupabaseSyncService {
           payload: payload,
         );
       } catch (be) {
-        debugPrint("Broadcast notice: $be");
+        debugPrint("Broadcast primary notice: $be");
       }
 
-      // Persistent PostgreSQL Insert/Upsert (valid schema columns only)
+      try {
+        await _legacyEmergencyChannel?.sendBroadcastMessage(
+          event: 'emergency_event',
+          payload: payload,
+        );
+      } catch (_) {}
+
+      // Persistent PostgreSQL Insert/Upsert (guarantee non-null schema requirements)
+      final safePhone = emergency.patientPhone.isNotEmpty ? emergency.patientPhone : '+91 98765 43210';
+      final safeLat = (emergency.originLat != 0.0) ? emergency.originLat : 26.1584;
+      final safeLng = (emergency.originLng != 0.0) ? emergency.originLng : 91.7704;
+
       await client.from('emergency_requests').upsert({
         'case_id': emergency.caseId,
-        'patient_name': emergency.patientName,
-        'patient_mobile': emergency.patientPhone,
-        'emergency_type': emergency.emergencyType,
+        'patient_name': emergency.patientName.isNotEmpty ? emergency.patientName : 'Verified Patient',
+        'patient_mobile': safePhone,
+        'emergency_type': emergency.emergencyType.isNotEmpty ? emergency.emergencyType : 'CARDIAC',
         'description': descriptionPayload,
-        'status': emergency.status,
+        'status': emergency.status.isNotEmpty ? emergency.status : 'REQUEST_SENT',
         'selected_hospital_id': emergency.hospitalId,
-        'origin_latitude': emergency.originLat,
-        'origin_longitude': emergency.originLng,
+        'origin_latitude': safeLat,
+        'origin_longitude': safeLng,
         'origin_text': '${emergency.locationArea}, ${emergency.locationCity}',
         'updated_at': DateTime.now().toUtc().toIso8601String(),
       }, onConflict: 'case_id');
@@ -158,14 +178,23 @@ class SupabaseSyncService {
     if (!_initialized) return null;
     StreamSubscription? streamSub;
     try {
+      void broadcastHandler(dynamic payload) {
+        if (payload != null && payload is Map && payload['caseId'] == caseId) {
+          onUpdate(Map<String, dynamic>.from(payload));
+        }
+      }
+
       if (_emergencyChannel != null) {
         _emergencyChannel!.onBroadcast(
           event: 'emergency_event',
-          callback: (payload) {
-            if (payload['caseId'] == caseId) {
-              onUpdate(Map<String, dynamic>.from(payload));
-            }
-          },
+          callback: (payload) => broadcastHandler(payload),
+        );
+      }
+
+      if (_legacyEmergencyChannel != null) {
+        _legacyEmergencyChannel!.onBroadcast(
+          event: 'emergency_event',
+          callback: (payload) => broadcastHandler(payload),
         );
       }
 

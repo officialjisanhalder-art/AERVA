@@ -68,12 +68,24 @@ class RealtimeSyncManager {
     this.isInitialized = true;
 
     try {
-      // 1. Live Emergency Channel
+      // 1. Live Emergency Channels (Support both AERVA & legacy NearER APK broadcasts)
       this.emergencyChannel = supabase.channel("aerva_live_emergency", {
         config: { broadcast: { self: true } },
       });
 
       this.emergencyChannel
+        .on("broadcast", { event: "emergency_event" }, (payload) => {
+          if (payload && payload.payload) {
+            this.emergencyListeners.forEach((fn) => fn(payload.payload));
+          }
+        })
+        .subscribe();
+
+      // Legacy APK channel listener
+      const legacyEmergency = supabase.channel("nearer_live_emergency", {
+        config: { broadcast: { self: true } },
+      });
+      legacyEmergency
         .on("broadcast", { event: "emergency_event" }, (payload) => {
           if (payload && payload.payload) {
             this.emergencyListeners.forEach((fn) => fn(payload.payload));
@@ -87,6 +99,18 @@ class RealtimeSyncManager {
       });
 
       this.capacityChannel
+        .on("broadcast", { event: "capacity_update" }, (payload) => {
+          if (payload && payload.payload) {
+            this.capacityListeners.forEach((fn) => fn(payload.payload));
+          }
+        })
+        .subscribe();
+
+      // Legacy Capacity channel listener
+      const legacyCapacity = supabase.channel("nearer_hospital_capacity", {
+        config: { broadcast: { self: true } },
+      });
+      legacyCapacity
         .on("broadcast", { event: "capacity_update" }, (payload) => {
           if (payload && payload.payload) {
             this.capacityListeners.forEach((fn) => fn(payload.payload));

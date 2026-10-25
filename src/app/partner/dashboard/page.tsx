@@ -182,15 +182,55 @@ export default function PartnerDashboard() {
     }, 2000);
   };
 
-  // Helper: check if case targets THIS hospital (Dedicated hospital leads only)
+  // Helper: check if case targets THIS hospital (Dedicated hospital leads only with full regional alias support)
   const isCaseForThisHospital = (c: EmergencyRequest) => {
-    if (!c.hospitalId) return true; // generic/unassigned emergency enquiry
+    // 1. If set to 'all' or empty, show all facilities (universal triage)
+    if (!hospitalId || hospitalId === "all") return true;
+
+    // 2. Generic unassigned enquiries
+    if (!c.hospitalId) return true;
+
+    // 3. Direct match
     if (c.hospitalId === hospitalId) return true;
-    if ((hospitalId === "h2" || hospitalId === "h2_amri") && (c.hospitalId === "h2" || c.hospitalId === "h2_amri" || c.hospitalId === "amri")) return true;
-    if ((hospitalId === "h1" || hospitalId === "h1_apollo") && (c.hospitalId === "h1" || c.hospitalId === "h1_apollo" || c.hospitalId === "apollo")) return true;
-    if ((hospitalId === "h3" || hospitalId === "h3_fortis") && (c.hospitalId === "h3" || c.hospitalId === "h3_fortis" || c.hospitalId === "fortis")) return true;
+
+    const norm = (str?: string | null) => (str || "").toLowerCase().trim();
+    const cur = norm(hospitalId);
+    const target = norm(c.hospitalId);
+
+    // Apollo Family (Kolkata & Guwahati)
+    const apolloGroup = ["h1", "h1_apollo", "apollo", "apollo_ghy", "h_apollo_guw", "apollo_excelcare"];
+    if (apolloGroup.includes(cur) && apolloGroup.includes(target)) return true;
+
+    // Gauhati Medical College & Hospital (GMCH)
+    const gmchGroup = ["gmch", "h_gmch_guw", "h_gmch", "gauhati"];
+    if (gmchGroup.includes(cur) && gmchGroup.includes(target)) return true;
+
+    // Satribari Christian Hospital
+    const satribariGroup = ["satribari", "h_satribari_guw", "h_satribari"];
+    if (satribariGroup.includes(cur) && satribariGroup.includes(target)) return true;
+
+    // Fortis Hospital Family
+    const fortisGroup = ["h5", "h3", "h3_fortis", "fortis"];
+    if (fortisGroup.includes(cur) && fortisGroup.includes(target)) return true;
+
+    // AMRI Salt Lake Family
+    const amriGroup = ["h2", "h2_amri", "amri"];
+    if (amriGroup.includes(cur) && amriGroup.includes(target)) return true;
+
+    // Marwari & MMC Family
+    if (["marwari_ghy", "marwari"].includes(cur) && ["marwari_ghy", "marwari"].includes(target)) return true;
+    if (["mmc_ghy", "mmc"].includes(cur) && ["mmc_ghy", "mmc"].includes(target)) return true;
+
     return false;
   };
+
+  // Check all active cases across the regional network
+  const allActiveCases = cases.filter(c => 
+    c.caseId && 
+    c.status !== "IDLE" && 
+    c.status !== "CONFIRMED" && 
+    c.status !== "DECLINED"
+  );
 
   // Multi-case handling: filter active emergency queries DEDICATED ONLY to this hospital
   const activeCasesList = cases.filter(c => 
@@ -440,12 +480,27 @@ export default function PartnerDashboard() {
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Active Operational Status Strip */}
       <div className="flex flex-wrap items-center justify-between gap-3 bg-white px-5 py-3 rounded-2xl border border-gray-100 shadow-sm">
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <span className={`w-2.5 h-2.5 rounded-full ${hasIncoming ? 'bg-red-500 animate-ping' : 'bg-emerald-500'}`} />
           <span className="text-xs font-bold text-[#050B18]">
-            {displayCases.length > 0
-              ? `Dedicated Desk: ${currentHospital.name} • ${displayCases.length} Active Lead${displayCases.length === 1 ? '' : 's'} (${displayCases.filter(c => c.status === 'PENDING' || c.status === 'REQUEST_SENT').length} Pending Triage)`
-              : `Dedicated Desk: ${currentHospital.name} • 0 Active Enquiries (Ready for Incoming Emergencies)`}
+            Desk:
+          </span>
+          <select
+            value={hospitalId}
+            onChange={(e) => switchHospital(e.target.value)}
+            className="text-xs font-black bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 rounded-xl px-2.5 py-1 focus:outline-none focus:border-[#0052FF] cursor-pointer"
+          >
+            <option value="all">🌐 All Facilities (Universal Network View)</option>
+            <option value="h_gmch_guw">🏥 GMCH (Guwahati)</option>
+            <option value="h_satribari_guw">🏥 Satribari Christian Hospital (Guwahati)</option>
+            <option value="h_apollo_guw">🏥 Apollo Excelcare (Guwahati)</option>
+            <option value="h1">🏥 Apollo Multispeciality (Kolkata)</option>
+            <option value="h2">🏥 AMRI Salt Lake (Kolkata)</option>
+            <option value="h5">🏥 Fortis Anandapur (Kolkata)</option>
+            <option value="apollo">🏥 Apollo City Hospital (NCR)</option>
+          </select>
+          <span className="text-xs font-bold text-gray-500">
+            • {displayCases.length} Active ({displayCases.filter(c => c.status === 'PENDING' || c.status === 'REQUEST_SENT').length} Pending Triage)
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -488,6 +543,39 @@ export default function PartnerDashboard() {
           )}
         </div>
       </div>
+
+      {/* Regional Facilities Alert Banner */}
+      {allActiveCases.length > 0 && activeCasesList.length === 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 text-amber-900 shadow-sm animate-pulse">
+          <div className="flex items-center gap-2.5">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
+            <div>
+              <div className="text-xs font-black">
+                🚨 {allActiveCases.length} Emergency Case(s) Active in Regional Healthcare Network
+              </div>
+              <div className="text-[11px] font-medium text-amber-800">
+                Incoming request assigned to: <span className="font-bold">{allActiveCases.map(c => c.hospitalId || 'General Triage').join(", ")}</span>. Currently viewing desk: <span className="font-bold">{currentHospital.name}</span>.
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => switchHospital("all")}
+              className="text-xs font-black bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded-xl shadow cursor-pointer transition-colors"
+            >
+              Switch to Universal View
+            </button>
+            {allActiveCases[0].hospitalId && (
+              <button
+                onClick={() => switchHospital(allActiveCases[0].hospitalId!)}
+                className="text-xs font-black bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1.5 rounded-xl shadow-sm cursor-pointer transition-colors"
+              >
+                Switch to {allActiveCases[0].hospitalId} Desk
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Autoplay Unblock / Sound Activator Bar if blocked by browser policy */}
       {audioBlocked && matchesCurrentHospital && isIncoming && !alarmSilenced && (

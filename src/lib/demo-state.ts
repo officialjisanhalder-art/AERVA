@@ -288,9 +288,10 @@ export function useEmergencyState() {
     // Initial fetch
     fetchActiveCases();
 
-    // Fallback Database Polling Syncer (Slowed down to 60s to prevent Supabase egress drain)
-    // Realtime Postgres Changes will handle the instant sync.
-    const pollInterval = setInterval(fetchActiveCases, 60000);
+    // Active Database Polling Syncer (Fast 4s polling for clinical dashboard responsive triage)
+    const pollInterval = setInterval(fetchActiveCases, 4000);
+    const onFocus = () => fetchActiveCases();
+    window.addEventListener("focus", onFocus);
 
     // 2. Supabase Postgres Changes Listener on emergency_requests via singleton
     const unsubDb = realtimeSync.onPostgresEmergencyChanges((row: any) => {
@@ -430,6 +431,7 @@ export function useEmergencyState() {
     return () => {
       clearInterval(pollInterval);
       window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("focus", onFocus);
       listeners.delete(notify);
       casesListeners.delete(notifyCases);
       unsubRealtime();

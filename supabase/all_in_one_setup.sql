@@ -469,12 +469,20 @@ INSERT INTO public.hospitals (
 ) VALUES
     -- Guwahati (Assam) Healthcare Network
     ('h_gmch_guw', 'Gauhati Medical College and Hospital (GMCH)', '+91 361 252 9457', 'er@gmch.assam.gov.in', 'Narakasur Hilltop, Bhangagarh', 'Guwahati', 'Assam', '781032', 26.1558, 91.7695, true, 'verified', 'authorized_hospital', true, true, 'osm_gmch_guw', NOW(), NOW()),
+    ('gmch', 'Gauhati Medical College and Hospital (GMCH)', '+91 361 252 9457', 'er@gmch.assam.gov.in', 'Narakasur Hilltop, Bhangagarh', 'Guwahati', 'Assam', '781032', 26.1558, 91.7695, true, 'verified', 'authorized_hospital', true, true, 'osm_gmch_guw', NOW(), NOW()),
     ('h_satribari_guw', 'Satribari Christian Hospital', '+91 361 260 0300', 'emergency@satribari.org', 'Assam Trunk Road, Paltan Bazaar', 'Guwahati', 'Assam', '781008', 26.1769, 91.7465, true, 'verified', 'authorized_hospital', true, true, 'osm_239459798', NOW(), NOW()),
+    ('satribari', 'Satribari Christian Hospital', '+91 361 260 0300', 'emergency@satribari.org', 'Assam Trunk Road, Paltan Bazaar', 'Guwahati', 'Assam', '781008', 26.1769, 91.7465, true, 'verified', 'authorized_hospital', true, true, 'osm_239459798', NOW(), NOW()),
     ('h_apollo_guw', 'Apollo Excelcare Hospital', '+91 361 234 5555', 'er@apollo-excelcare.com', 'Paschim Boragaon, NH-37 Bypass', 'Guwahati', 'Assam', '781033', 26.1388, 91.7012, true, 'verified', 'authorized_hospital', true, true, 'osm_apollo_guw', NOW(), NOW()),
+    ('apollo_ghy', 'Apollo Excelcare Hospital', '+91 361 234 5555', 'er@apollo-excelcare.com', 'Paschim Boragaon, NH-37 Bypass', 'Guwahati', 'Assam', '781033', 26.1388, 91.7012, true, 'verified', 'authorized_hospital', true, true, 'osm_apollo_guw', NOW(), NOW()),
+    ('marwari_ghy', 'Marwari Hospitals', '+91 361 260 2784', 'info@marwari.org', 'Sati Jaimati Road, Athgaon', 'Guwahati', 'Assam', '781001', 26.1780, 91.7410, false, 'unverified', 'public_discovery', false, false, 'osm_marwari_ghy', NOW(), NOW()),
+    ('mmc_ghy', 'Mahendra Mohan Choudhury Hospital (MMC)', '+91 361 254 3998', 'info@mmc-guwahati.gov.in', 'MG Road, Panbazar', 'Guwahati', 'Assam', '781001', 26.1860, 91.7430, false, 'unverified', 'public_discovery', false, false, 'osm_mmc_ghy', NOW(), NOW()),
+    ('city_care_web', 'City Care Emergency Clinic', '+91 361 245 8899', 'info@citycare.example.org', 'GS Road, Dispur', 'Guwahati', 'Assam', '781005', 26.1430, 91.7910, false, 'unverified', 'web_research', false, false, 'web_city_care', NOW(), NOW()),
 
     -- Kolkata (West Bengal) Healthcare Network
     ('h1', 'Apollo Multispeciality Hospitals', '+91 33 2320 3040', 'er@apollo-kolkata.org', '58 Canal Circular Road, Kadapara, Phool Bagan', 'Kolkata', 'West Bengal', '700054', 22.5694, 88.3986, true, 'verified', 'authorized_hospital', true, true, 'ChIJw87_example_apollo_kol', NOW(), NOW()),
     ('h2', 'AMRI Hospital Salt Lake', '+91 33 2335 7710', 'triage@amri-saltlake.org', 'JC - 16 & 17, Sector III, Salt Lake City', 'Kolkata', 'West Bengal', '700098', 22.5645, 88.4069, true, 'verified', 'authorized_hospital', true, true, 'ChIJe99_example_amri_saltlake', NOW(), NOW()),
+    ('h3', 'Columbia Asia Hospital (Manipal)', '+91 33 6607 0000', 'er@columbia-kolkata.org', 'IB-193, Broadway Rd, Sector III, Salt Lake', 'Kolkata', 'West Bengal', '700098', 22.5683, 88.4087, true, 'verified', 'authorized_hospital', true, true, 'ChIJ_columbia_kol', NOW(), NOW()),
+    ('h4', 'Subodh Mitra Cancer Hospital & Clinic', '+91 33 2337 1212', 'info@subodh-mitra.org', 'Block IB, Sector III, Salt Lake', 'Kolkata', 'West Bengal', '700098', 22.5670, 88.4112, false, 'unverified', 'public_discovery', false, false, 'ChIJ_subodh_kol', NOW(), NOW()),
     ('h5', 'Fortis Hospital Anandapur', '+91 33 6628 4444', 'emergency@fortis-kolkata.org', '730 Anandapur, E.M. Bypass Road', 'Kolkata', 'West Bengal', '700107', 22.5186, 88.4034, true, 'verified', 'authorized_hospital', true, true, 'ChIJb12_example_fortis', NOW(), NOW()),
 
     -- Delhi-NCR National Demo Network
