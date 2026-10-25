@@ -183,21 +183,6 @@ AERVA includes a unified, idempotent SQL script that sets up all 21 tables, view
 
 ---
 
-## ⚙️ Environment Variables
-
-Configure these server-side environment variables in `.env.local` or Render:
-
-| Variable | Description |
-| :--- | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL (`https://yhrcmowjsuagrhxlchvr.supabase.co`) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous public key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (backend administrative operations) |
-| `BROWSER_USE_API_KEY` | Browser Use Cloud API key for autonomous hospital research |
-| `AGENT37_API_KEY` | Agent37 emergency coordination agent API key |
-| `AGENT37_INSTANCE_URL` | Agent37 coordination sandbox endpoint |
-| `NODUS_API_KEY` | Nodus Compute OpenAI-compatible inference key |
-| `ELEVENLABS_API_KEY` | ElevenLabs voice transcription and text-to-speech key |
-| `GOOGLE_PLACES_API_KEY` | Google Places API (New) key for hospital discovery |
 
 ---
 
