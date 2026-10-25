@@ -18,6 +18,7 @@ import { routingAuditStore } from "./routing-audit-store";
 import { MOCK_HOSPITALS, Hospital } from "../demo-data";
 import { DEMO_HOSPITALS_DATA, HospitalRecord } from "../services/hospitalService";
 import { calculateDistanceKm, estimateDrivingEtaMinutes } from "../services/locationService";
+import { hospitalDiscoveryService } from "../services/hospitalDiscoveryService";
 import { supabase, isSupabaseConfigured } from "../supabase/client";
 
 export const ROUTING_ENGINE_VERSION = "AERVA_ROUTER_V1";
@@ -129,7 +130,10 @@ export class AERVARoutingService {
     const cleanEmergencyType = (emergency_type || "general").toLowerCase();
 
     // 1. Gather all available hospital candidates across database & registered network
-    const allHospitals = await this.loadAllHospitals(request.hospital_overrides);
+    const allHospitals = await this.loadAllHospitals(request.hospital_overrides, {
+      lat: pLat,
+      lng: pLng,
+    });
 
     // 2. Adaptive Geofencing loop
     let matchedStageRadius = GEOFENCE_STAGES_KM[0];
@@ -177,8 +181,19 @@ export class AERVARoutingService {
           ...c,
           etaMinutes: this.calculateRoadEta(c.distanceKm, c.hospital.city),
         }));
+      } else if (candidatesInGeofence.length > 0) {
+        // 2. Clinical safety guard: Discovered local emergency facilities within ~50 km
+        // MUST be preferred over distant facilities 500+ km away!
+        // Acute patients cannot travel hundreds of kilometers.
+        // We route to the closest discovered local emergency center with status CONFIRMATION_REQUIRED.
+        eligibleCandidates = candidatesInGeofence
+          .filter((c) => c.hospital.receivingStatus !== "TEMPORARILY_UNAVAILABLE")
+          .map((c) => ({
+            ...c,
+            etaMinutes: this.calculateRoadEta(c.distanceKm, c.hospital.city),
+          }));
       } else {
-        // 2. If all facilities in geofence are full, expand to full network for ANY hospital with open beds
+        // 3. If all facilities in geofence are full, expand to full network for ANY hospital with open beds
         const networkWithBeds = allHospitals.filter(
           (h) => h.erBedsAvailable > 0 && h.receivingStatus !== "TEMPORARILY_UNAVAILABLE"
         );
@@ -261,8 +276,14 @@ export class AERVARoutingService {
       reasons.unshift(`${specialtyName}_CAPABILITY`);
       humanReasons.unshift(`${cleanEmergencyType.toUpperCase()} emergency capability on-duty`);
 
-      if (c.hospital.erBedsAvailable > 0) {
+      if (c.hospital.isVerified && c.hospital.erBedsAvailable > 0) {
+        score += 20;
+        reasons.push("OPEN_ER_BEDS");
         humanReasons.push(`${c.hospital.erBedsAvailable} Emergency triage bed(s) currently open`);
+      } else if (!c.hospital.isVerified) {
+        reasons.push("DISCOVERED_LOCAL_FACILITY", "CONFIRMATION_REQUIRED");
+        humanReasons.push("Discovered local emergency facility within 50 km geofence");
+        humanReasons.push("Bed capacity unverified in database — intake confirmation required on dispatch");
       } else {
         score -= 50000;
         reasons.push("ER_BEDS_FULL");
@@ -279,15 +300,19 @@ export class AERVARoutingService {
         distance_km: Math.round(c.distanceKm * 10) / 10,
         estimated_travel_minutes: c.etaMinutes,
         capability_match: true,
-        emergency_receiving_status: c.hospital.receivingStatus,
-        data_confidence: c.hospital.dataConfidence,
+
+
         last_updated_seconds_ago: c.hospital.lastUpdatedSeconds,
         reason_codes: reasons,
         human_reasons: humanReasons,
         capabilities_matched: c.hospital.capabilities,
+        is_verified: c.hospital.isVerified,
+        verification_status: c.hospital.isVerified ? "AERVA_VERIFIED_CURRENT" : "UNVERIFIED",
+        emergency_receiving_status: c.hospital.isVerified ? c.hospital.receivingStatus : "CONFIRMATION_REQUIRED",
+        data_confidence: c.hospital.isVerified ? c.hospital.dataConfidence : "BASIC",
         metrics: {
-          er_beds_open: c.hospital.erBedsAvailable,
-          icu_beds_open: c.hospital.icuBedsAvailable,
+          er_beds_open: c.hospital.isVerified ? c.hospital.erBedsAvailable : null,
+          icu_beds_open: c.hospital.isVerified ? c.hospital.icuBedsAvailable : null,
           blood_status: c.hospital.bloodAvailability[requirements?.blood_group || "O+"] || "Available",
         },
         public_review: {
@@ -387,7 +412,7 @@ export class AERVARoutingService {
    * Unifies hospitals from mock dataset, DEMO_HOSPITALS_DATA, and Supabase,
    * applying any client-side dynamic capacity overrides.
    */
-  public static async loadAllHospitals(overrides?: Record<string, any>): Promise<UnifiedHospital[]> {
+  public static async loadAllHospitals(overrides?: Record<string, any>, patientLoc?: { lat: number; lng: number }): Promise<UnifiedHospital[]> {
     const list: UnifiedHospital[] = [];
 
     // 1. Load Kolkata Mock Hospitals (AMRI, Apollo, Fortis, Ruby, etc.)
@@ -518,6 +543,70 @@ export class AERVARoutingService {
           }
         }
       });
+    }
+
+        // 4. Live Geofenced Hospital Discovery for patient's real location worldwide (50 km radius)
+    if (patientLoc && typeof patientLoc.lat === "number" && typeof patientLoc.lng === "number") {
+      try {
+        const discovered = await hospitalDiscoveryService.getNearbyHospitals({
+          lat: patientLoc.lat,
+          lng: patientLoc.lng,
+          radius: 50000,
+          limit: 30,
+        });
+
+        if (discovered && Array.isArray(discovered.results) && discovered.results.length > 0) {
+          discovered.results.forEach((d) => {
+            const hLat = d.location?.latitude || patientLoc.lat;
+            const hLng = d.location?.longitude || patientLoc.lng;
+            const isVerified =
+              d.verificationStatus === "aerva_verified" ||
+              d.verification_status === "AERVA_VERIFIED_CURRENT" ||
+              d.verification_status === "verified";
+
+            const erBeds = d.resources?.generalBeds ?? (isVerified ? 8 : 0);
+            const icuBeds = d.resources?.icuBeds ?? (isVerified ? 3 : 0);
+            const id = d.hospital_id || d.placeId;
+
+            // Only add if not already present in list
+            const existing = list.find((existingH) => existingH.id === id || existingH.name.toLowerCase() === d.name.toLowerCase());
+            if (!existing) {
+              list.push({
+                id,
+                name: d.name,
+                phone: "+91 361 234 5678",
+                address: d.address || "Discovered Emergency Facility",
+                city: d.address ? d.address.split(",").slice(-2)[0]?.trim() || "Nearby" : "Nearby",
+                latitude: hLat,
+                longitude: hLng,
+                isVerified,
+                receivingStatus: isVerified ? "LIVE_VERIFIED" : "CONFIRMATION_REQUIRED",
+                dataConfidence: isVerified ? "HIGH" : "BASIC",
+                lastUpdatedSeconds: isVerified ? 60 : 3600,
+                capabilities: [
+                  "Emergency Care",
+                  "General ER",
+                  "Trauma Center",
+                  "ICU",
+                  "Critical Care",
+                ],
+                erBedsAvailable: erBeds,
+                icuBedsAvailable: icuBeds,
+                ventilatorsAvailable: d.resources?.ventilators ?? (isVerified ? 2 : 0),
+                bloodAvailability: { "O+": "Available", "A+": "Available", "B+": "Available" },
+                doctorInChargeName: isVerified ? "Hospital Triage Lead" : "Facility Desk",
+                publicRating: 4.2,
+                publicReviewCount: 120,
+                publicReviewSummary: isVerified
+                  ? "Verified operational telemetry."
+                  : "Public facility listing discovered via geofencing search. Operational bed status unverified in AERVA database.",
+              });
+            }
+          });
+        }
+      } catch (err) {
+        console.warn("[AERVA Routing] Hospital discovery lookup warning:", err);
+      }
     }
 
     return list;

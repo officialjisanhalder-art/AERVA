@@ -14,39 +14,42 @@ export async function GET(req: NextRequest) {
       clientIp.startsWith("10.") ||
       clientIp.startsWith("172.");
 
-    if (!isLocal) {
-      try {
-        const ipRes = await fetch(`https://ipwho.is/${clientIp}`, {
-          signal: AbortSignal.timeout(3000),
-        });
-        if (ipRes.ok) {
-          const data = await ipRes.json();
-          if (data && data.success && data.latitude && data.longitude) {
-            return NextResponse.json({
-              success: true,
-              lat: data.latitude,
-              lng: data.longitude,
-              city: data.city || "Detected City",
-              area: data.region || data.city || "Detected Area",
-              country: data.country || "India",
-              ip: clientIp,
-              is_approximate: true,
-              source: "ipwhois",
-            });
-          }
+    // Query IP geolocation worldwide
+    const ipUrl = isLocal ? "https://ipwho.is/" : `https://ipwho.is/${clientIp}`;
+
+    try {
+      const ipRes = await fetch(ipUrl, {
+        headers: { "User-Agent": "AERVA-Emergency-Coordination/1.0" },
+        signal: AbortSignal.timeout(3500),
+      });
+
+      if (ipRes.ok) {
+        const data = await ipRes.json();
+        if (data && data.success && typeof data.latitude === "number" && typeof data.longitude === "number") {
+          return NextResponse.json({
+            success: true,
+            lat: data.latitude,
+            lng: data.longitude,
+            city: data.city || "Detected City",
+            area: data.region || data.city || "Detected Area",
+            country: data.country || "Detected Country",
+            ip: data.ip || clientIp,
+            is_approximate: true,
+            source: "ipwhois_live",
+          });
         }
-      } catch {
-        // Fall back gracefully
       }
+    } catch (err) {
+      console.warn("[Location IP] Lookup warning:", err);
     }
 
-    // Default development / local fallback
+    // Default global fallback hub (if offline)
     return NextResponse.json({
       success: true,
-      lat: 22.5804,
-      lng: 88.4173,
-      area: "Salt Lake, Sector V",
-      city: "Kolkata",
+      lat: 26.1844,
+      lng: 91.7458,
+      area: "Guwahati Central",
+      city: "Guwahati",
       country: "India",
       ip: clientIp || "127.0.0.1",
       is_approximate: true,
@@ -56,10 +59,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        lat: 22.5804,
-        lng: 88.4173,
-        area: "Salt Lake, Sector V",
-        city: "Kolkata",
+        lat: 26.1844,
+        lng: 91.7458,
+        area: "Guwahati Central",
+        city: "Guwahati",
         country: "India",
         is_approximate: true,
         source: "fallback",

@@ -158,11 +158,13 @@ export const locationService = {
       const res = await fetch("/api/v1/location/ip");
       if (res.ok) {
         const data = await res.json();
+        const lat = typeof data.lat === "number" ? data.lat : 26.1844;
+        const lng = typeof data.lng === "number" ? data.lng : 91.7458;
         return {
-          latitude: data.lat || 22.5804,
-          longitude: data.lng || 88.4173,
-          locality: data.area || "Salt Lake, Sector V",
-          city: data.city || "Kolkata",
+          latitude: lat,
+          longitude: lng,
+          locality: data.area || data.city || "Detected City",
+          city: data.city || "Local",
           accuracy: 5000,
           isApproximate: true,
           source: "ip_approximate",
@@ -174,10 +176,10 @@ export const locationService = {
 
     // Default seed healthcare hub
     return {
-      latitude: 22.5804,
-      longitude: 88.4173,
-      locality: "Salt Lake, Sector V",
-      city: "Kolkata",
+      latitude: 26.1844,
+      longitude: 91.7458,
+      locality: "Guwahati Central",
+      city: "Guwahati",
       accuracy: 10000,
       isApproximate: true,
       source: "fallback_hub",

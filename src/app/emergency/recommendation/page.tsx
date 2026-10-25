@@ -48,8 +48,8 @@ function RecommendationContent() {
     let isCancelled = false;
     setIsLoadingRouting(true);
 
-    const patientLat = state.location?.lat || 22.5726;
-    const patientLng = state.location?.lng || 88.3639;
+    const patientLat = state.location?.lat || 26.1844;
+    const patientLng = state.location?.lng || 91.7458;
 
     let hospital_overrides: any = undefined;
     try {
@@ -107,8 +107,9 @@ function RecommendationContent() {
     if (clientHosp && clientHosp.capacity.erBeds.available <= 0) {
       return false; // Bed is full on client, reject server recommendation!
     }
-    if (rawBestMatchHospital.metrics && rawBestMatchHospital.metrics.er_beds_open <= 0) {
-      return false; // 0 beds reported
+    // Only reject if it is a verified hospital explicitly reporting 0 beds
+    if (rawBestMatchHospital.is_verified && rawBestMatchHospital.metrics && rawBestMatchHospital.metrics.er_beds_open === 0) {
+      return false;
     }
     return true;
   })();
@@ -120,7 +121,7 @@ function RecommendationContent() {
         name: bestMatchHospital.name,
         eta: bestMatchHospital.estimated_travel_minutes,
         distance: bestMatchHospital.distance_km,
-        verified: bestMatchHospital.emergency_receiving_status === "LIVE_VERIFIED",
+        verified: bestMatchHospital.is_verified ?? (bestMatchHospital.emergency_receiving_status === "LIVE_VERIFIED"),
         receivingStatus: bestMatchHospital.emergency_receiving_status,
         dataConfidence: bestMatchHospital.data_confidence,
         lastUpdated: `Telemetry: ${bestMatchHospital.last_updated_seconds_ago || 30}s ago`,
@@ -280,10 +281,15 @@ function RecommendationContent() {
               <span className="text-[10px] font-black uppercase tracking-wider bg-[#0052FF]/10 text-[#0052FF] px-2.5 py-1 rounded-md">
                 {t("rec.bestMatch", lang)}
               </span>
-              {bestMatch.verified && (
+              {bestMatch.verified ? (
                 <span className="flex items-center gap-1 text-[#059669] text-xs font-bold bg-[#059669]/10 px-2 py-1 rounded-full">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   {lang === "hi" ? "लाइव सत्यापित" : "LIVE VERIFIED"}
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 text-amber-700 text-xs font-bold bg-amber-50 border border-amber-200 px-2 py-1 rounded-full">
+                  <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                  {lang === "hi" ? "अप्रमाणित सार्वजनिक सूची" : "UNVERIFIED (DISCOVERY ONLY)"}
                 </span>
               )}
               <span suppressHydrationWarning className="text-xs font-medium text-gray-400 ml-auto flex items-center gap-1">
@@ -330,12 +336,34 @@ function RecommendationContent() {
 
             <div suppressHydrationWarning className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
               <div className="flex items-center gap-2 text-sm font-semibold text-[#050B18]">
-                <CheckCircle2 className="w-4 h-4 text-[#059669]" />
-                {lang === "hi" ? `ER उपलब्ध (${bestMatch.metrics.er_beds_open} बेड)` : `ER Available (${bestMatch.metrics.er_beds_open} beds)`}
+                {bestMatch.verified && bestMatch.metrics.er_beds_open !== null ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-[#059669]" />
+                    {lang === "hi" ? `ER उपलब्ध (${bestMatch.metrics.er_beds_open} बेड)` : `ER Available (${bestMatch.metrics.er_beds_open} beds)`}
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <span className="text-amber-800">
+                      {lang === "hi" ? "ER बेड: अप्रमाणित (पुष्टि आवश्यक)" : "ER Beds: Unverified in DB (Call to confirm)"}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold text-[#050B18]">
-                <CheckCircle2 className="w-4 h-4 text-[#059669]" />
-                {lang === "hi" ? `ICU उपलब्ध (${bestMatch.metrics.icu_beds_open} बेड)` : `ICU Available (${bestMatch.metrics.icu_beds_open} beds)`}
+                {bestMatch.verified && bestMatch.metrics.icu_beds_open !== null ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-[#059669]" />
+                    {lang === "hi" ? `ICU उपलब्ध (${bestMatch.metrics.icu_beds_open} बेड)` : `ICU Available (${bestMatch.metrics.icu_beds_open} beds)`}
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle className="w-4 h-4 text-amber-500" />
+                    <span className="text-amber-800">
+                      {lang === "hi" ? "ICU: अप्रमाणित" : "ICU Beds: Unverified in DB"}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="flex items-center gap-2 text-sm font-semibold text-[#050B18]">
                 <CheckCircle2 className="w-4 h-4 text-[#059669]" />

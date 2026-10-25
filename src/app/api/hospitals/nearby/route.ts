@@ -64,6 +64,7 @@ export async function GET(req: NextRequest) {
       {
         ...discovery,
         results: enrichedResults,
+        hospitals: enrichedResults,
         browser_use_configured: browserUseService.isConfigured(),
       },
       {

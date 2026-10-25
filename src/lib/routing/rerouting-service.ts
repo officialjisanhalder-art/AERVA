@@ -44,7 +44,7 @@ export class AERVAReroutingService {
     const isCurrentUnavailable =
       currentCandidate.emergency_receiving_status === "TEMPORARILY_UNAVAILABLE" ||
       currentCandidate.emergency_receiving_status === "UNKNOWN" ||
-      (currentCandidate.metrics && currentCandidate.metrics.er_beds_open <= 0);
+      (currentCandidate.metrics && currentCandidate.metrics.er_beds_open !== null && currentCandidate.metrics.er_beds_open <= 0);
 
     // 1. Mandatory Reroute Check
     if (isCurrentUnavailable) {

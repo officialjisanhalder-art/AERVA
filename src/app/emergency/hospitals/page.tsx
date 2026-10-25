@@ -24,6 +24,7 @@ import { useEmergencyState, useHospitalData } from "@/lib/demo-state";
 import { AppNavbar } from "@/components/app/AppNavbar";
 import { useLang } from "@/lib/language-context";
 import { t } from "@/lib/i18n";
+import { locationService } from "@/lib/services/locationService";
 
 export default function NearbyHospitalsPage() {
   const router = useRouter();
@@ -38,6 +39,34 @@ export default function NearbyHospitalsPage() {
   const [nearbyList, setNearbyList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedHospitalId, setSelectedHospitalId] = useState<string>("");
+
+  useEffect(() => {
+    if (!state.location || (state.location.lat === 22.5804 && state.location.lng === 88.4173)) {
+      locationService
+        .getCurrentPosition()
+        .then((geo) => {
+          updateState({
+            location: {
+              lat: geo.latitude,
+              lng: geo.longitude,
+              area: geo.locality || "Current Location",
+              city: geo.city || "Nearby Area",
+            },
+          });
+        })
+        .catch(async () => {
+          const ipLoc = await locationService.getIpFallbackLocation();
+          updateState({
+            location: {
+              lat: ipLoc.latitude,
+              lng: ipLoc.longitude,
+              area: ipLoc.locality || "Detected City",
+              city: ipLoc.city || "Local",
+            },
+          });
+        });
+    }
+  }, [state.location, updateState]);
 
   useEffect(() => {
     let isMounted = true;

@@ -80,9 +80,12 @@ export interface RecommendedHospital {
   reason_codes: string[];
   human_reasons: string[];
   capabilities_matched: string[];
+  is_verified?: boolean;
+  verification_status?: string;
+  source?: string;
   metrics: {
-    er_beds_open: number;
-    icu_beds_open: number;
+    er_beds_open: number | null;
+    icu_beds_open: number | null;
     blood_status: string;
   };
   public_review?: {

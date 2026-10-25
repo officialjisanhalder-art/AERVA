@@ -77,6 +77,8 @@ function EmergencyTriageContent() {
   // Collapsible Nearby Hospitals Accordion
   const [showNearbyHospitals, setShowNearbyHospitals] = useState(false);
   const [hospitalViewMode, setHospitalViewMode] = useState<"LIST" | "MAP">("LIST");
+  const [geofencedHospitals, setGeofencedHospitals] = useState<any[]>([]);
+  const [isLoadingGeofenced, setIsLoadingGeofenced] = useState(false);
 
   // Location State & Inline Quick Edit
   const [isLocating, setIsLocating] = useState(false);
@@ -115,6 +117,27 @@ function EmergencyTriageContent() {
     }
   }, [state.patientName, state.patientPhone, state.patientAge, state.patientGender, state.bloodGroup]);
 
+  // Fetch live 50km geofenced hospitals for patient's real location worldwide
+  useEffect(() => {
+    const lat = state.location?.lat;
+    const lng = state.location?.lng;
+    if (typeof lat === "number" && typeof lng === "number") {
+      setIsLoadingGeofenced(true);
+      fetch(`/api/hospitals/nearby?lat=${lat}&lng=${lng}&radius=50000`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data) {
+            const list = data.results || data.hospitals || [];
+            if (Array.isArray(list) && list.length > 0) {
+              setGeofencedHospitals(list);
+            }
+          }
+        })
+        .catch((err) => console.warn("[EmergencyPage] Geofenced load error:", err))
+        .finally(() => setIsLoadingGeofenced(false));
+    }
+  }, [state.location?.lat, state.location?.lng]);
+
   // Auto-detect GPS location silently if not captured yet
   useEffect(() => {
     if (!state.location) {
@@ -135,13 +158,18 @@ function EmergencyTriageContent() {
             },
           });
         })
-        .catch(() => {
+        .catch(async () => {
+          const ipLoc = await locationService.getIpFallbackLocation();
+          const area = ipLoc.locality || "Detected Area";
+          const city = ipLoc.city || "Nearby City";
+          setLocationArea(area);
+          setLocationCity(city);
           updateState({
             location: {
-              lat: 22.5804,
-              lng: 88.4173,
-              area: "Salt Lake, Sector V",
-              city: "Kolkata",
+              lat: ipLoc.latitude,
+              lng: ipLoc.longitude,
+              area,
+              city,
             },
           });
         })
@@ -314,7 +342,50 @@ function EmergencyTriageContent() {
     }
   };
 
-  const totalErBeds = hospitals.reduce((acc, h) => acc + h.capacity.erBeds.available, 0);
+  const activeHospitalsList = geofencedHospitals.length > 0
+    ? geofencedHospitals.map((item) => {
+        const isVerified =
+          item.verification_status === "AERVA_VERIFIED_CURRENT" ||
+          item.verificationStatus === "aerva_verified";
+        const erBeds = item.resources?.generalBeds ?? item.capacity?.er_beds_available ?? null;
+        const icuBeds = item.resources?.icuBeds ?? item.capacity?.icu_beds_available ?? null;
+
+        return {
+          id: item.hospital_id || item.placeId,
+          name: item.name,
+          address: item.address || "Discovered Emergency Facility",
+          distance: item.distance_km ?? 2.5,
+          eta: item.eta_minutes ?? 7,
+          verified: isVerified,
+          verificationStatus: item.verification_status || item.verificationStatus,
+          hasResources: isVerified && item.resources !== null,
+          erBedsAvailable: erBeds,
+          icuBedsAvailable: icuBeds,
+          specialists: isVerified ? ["Emergency Medicine", "Critical Care", "Cardiology"] : ["Discovered ER Center", "Public Listing"],
+          notice: item.notice || "Resource availability unverified or outdated.",
+        };
+      })
+    : hospitals.map((h) => ({
+        id: h.id,
+        name: h.name,
+        address: h.address,
+        distance: h.distance,
+        eta: h.eta,
+        verified: h.verified,
+        verificationStatus: h.verified ? "AERVA_VERIFIED_CURRENT" : "UNVERIFIED",
+        hasResources: true,
+        erBedsAvailable: h.capacity.erBeds.available,
+        icuBedsAvailable: h.capacity.icuBeds.available,
+        specialists: h.specialists,
+        notice: "Hospital-reported availability; call to confirm before travel.",
+      }));
+
+  const verifiedHospitalsCount = activeHospitalsList.filter((h) => h.verified).length;
+  const totalVerifiedErBeds = activeHospitalsList
+    .filter((h) => h.verified && typeof h.erBedsAvailable === "number")
+    .reduce((acc, h) => acc + (h.erBedsAvailable || 0), 0);
+  const nearestHosp = activeHospitalsList[0];
+  const totalErBeds = totalVerifiedErBeds;
 
   return (
     <>
@@ -409,15 +480,22 @@ function EmergencyTriageContent() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-sm font-black text-[#050B18]">
-                    {lang === "hi" ? "निकटवर्ती अस्पताल" : "Nearby Hospitals Discovered"} ({hospitals.length})
+                    {lang === "hi" ? "निकटवर्ती अस्पताल" : "Nearby Hospitals Discovered"} ({activeHospitalsList.length})
                   </span>
-                  <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {totalErBeds} {lang === "hi" ? "बेड उपलब्ध" : "ER Beds Open"}
-                  </span>
+                  {totalVerifiedErBeds > 0 ? (
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {totalVerifiedErBeds} {lang === "hi" ? "सत्यापित बेड" : "ER Beds Verified"}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md flex items-center gap-1">
+                      <AlertTriangle className="w-3 h-3 text-amber-600" />
+                      {lang === "hi" ? "सार्वजनिक सूची (अपुष्ट)" : "50km Geofence • Unverified"}
+                    </span>
+                  )}
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  {lang === "hi" ? "निकटतम:" : "Nearest:"} {hospitals[0]?.name} • {hospitals[0]?.distance} km • ~{hospitals[0]?.eta} mins
+                  {lang === "hi" ? "निकटतम:" : "Nearest:"} {nearestHosp?.name} • {nearestHosp?.distance} km • ~{nearestHosp?.eta} mins
                 </p>
               </div>
             </div>
@@ -483,19 +561,28 @@ function EmergencyTriageContent() {
                   </div>
                 ) : (
                   <div className="space-y-2.5">
-                    {hospitals.map((h) => (
+                    {activeHospitalsList.slice(0, 8).map((h) => (
                       <div 
                         key={h.id} 
                         className="bg-white p-3.5 rounded-2xl border border-gray-200/70 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5"
                       >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-xs sm:text-sm font-black text-[#050B18]">{h.name}</h4>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-xs sm:text-sm font-black text-[#050B18] truncate">{h.name}</h4>
                             <span className="text-[10px] font-bold text-gray-400">({h.distance} km • {h.eta} mins)</span>
+                            {h.verified ? (
+                              <span className="inline-flex items-center gap-0.5 text-[9px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded">
+                                <ShieldCheck className="w-2.5 h-2.5 text-emerald-600" /> VERIFIED
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-0.5 text-[9px] font-black bg-amber-50 text-amber-700 border border-amber-200 px-1.5 py-0.5 rounded">
+                                <AlertTriangle className="w-2.5 h-2.5 text-amber-600" /> UNVERIFIED
+                              </span>
+                            )}
                           </div>
-                          <p className="text-[11px] text-gray-500 mt-0.5">{h.address}</p>
+                          <p className="text-[11px] text-gray-500 mt-0.5 truncate">{h.address}</p>
                           <div className="flex flex-wrap gap-1 mt-1.5">
-                            {h.specialists.slice(0, 3).map((s, idx) => (
+                            {h.specialists.slice(0, 3).map((s: string, idx: number) => (
                               <span key={idx} className="text-[9px] font-bold text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded">
                                 {s}
                               </span>
@@ -503,16 +590,24 @@ function EmergencyTriageContent() {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className={`text-[11px] font-black px-2.5 py-1 rounded-lg ${
-                            h.capacity.erBeds.available > 0 
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
-                              : "bg-red-50 text-red-600 border border-red-200"
-                          }`}>
-                            {h.capacity.erBeds.available > 0 ? `${h.capacity.erBeds.available} ER Beds Free` : "ER Full"}
-                          </span>
-                          <span className="text-[10px] font-bold text-gray-500">
-                            ICU: {h.capacity.icuBeds.available}
-                          </span>
+                          {h.verified && typeof h.erBedsAvailable === "number" ? (
+                            <span className={`text-[11px] font-black px-2.5 py-1 rounded-lg ${
+                              h.erBedsAvailable > 0 
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200" 
+                                : "bg-red-50 text-red-600 border border-red-200"
+                            }`}>
+                              {h.erBedsAvailable > 0 ? `${h.erBedsAvailable} Beds Free` : "ER Full"}
+                            </span>
+                          ) : (
+                            <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-1 rounded-lg">
+                              Bed Telemetry Unverified
+                            </span>
+                          )}
+                          {h.verified && typeof h.icuBedsAvailable === "number" && (
+                            <span className="text-[10px] font-bold text-gray-500">
+                              ICU: {h.icuBedsAvailable}
+                            </span>
+                          )}
                         </div>
                       </div>
                     ))}

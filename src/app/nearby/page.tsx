@@ -139,7 +139,7 @@ export default function NearbyPage() {
   };
 
   useEffect(() => {
-    if (emergencyState.location?.lat && emergencyState.location?.lng) {
+    if (emergencyState.location?.lat && emergencyState.location?.lng && !(emergencyState.location.lat === 22.5804 && emergencyState.location.lng === 88.4173)) {
       setUserLocation({ lat: emergencyState.location.lat, lng: emergencyState.location.lng });
       setLocationLabel(
         `${emergencyState.location.area || "Emergency Pin"}, ${emergencyState.location.city || ""}`
