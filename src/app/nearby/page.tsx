@@ -4,18 +4,31 @@ import { useState, useEffect } from "react";
 import { AppNavbar } from "@/components/app/AppNavbar";
 import { 
   Clock, MapPin, Activity, ShieldCheck, ArrowRight, Loader2, 
-  Star, Phone, ShieldAlert, AlertTriangle, Globe, ExternalLink, Sparkles, CheckCircle2, Search
+  Star, Phone, ShieldAlert, AlertTriangle, Globe, ExternalLink, Sparkles, CheckCircle2, Search,
+  LocateFixed, RefreshCw, Compass
 } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { locationService } from "@/lib/services/locationService";
+import { useEmergencyState } from "@/lib/demo-state";
 
 const CATEGORIES = ["Hospitals", "Pharmacies", "Diagnostics", "Blood Banks", "Ambulances"];
 
 export default function NearbyPage() {
+  const { state: emergencyState } = useEmergencyState();
   const [activeCategory, setActiveCategory] = useState("Hospitals");
   const [hospitals, setHospitals] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [userLocation, setUserLocation] = useState({ lat: 28.4595, lng: 77.0724 }); // Default: Delhi-NCR / Gurgaon
+  const [isLocating, setIsLocating] = useState(false);
+  const [userLocation, setUserLocation] = useState({
+    lat: emergencyState.location?.lat || 22.5804,
+    lng: emergencyState.location?.lng || 88.4173,
+  });
+  const [locationLabel, setLocationLabel] = useState(
+    emergencyState.location?.area
+      ? `${emergencyState.location.area}, ${emergencyState.location.city || ""}`
+      : "Salt Lake, Sector V, Kolkata"
+  );
   const [attribution, setAttribution] = useState("Google Places API (New) & AERVA Verified Registry");
   // Active research tasks tracking map: hospitalId -> { status, taskId, liveUrl, stepCount }
   const [researchState, setResearchState] = useState<Record<string, { status: string; taskId?: string; liveUrl?: string | null }>>({});
@@ -109,18 +122,32 @@ export default function NearbyPage() {
     );
   };
 
-  // Auto-detect user geolocation
-  useEffect(() => {
-    if (typeof navigator !== "undefined" && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        },
-        () => {},
-        { enableHighAccuracy: true, timeout: 5000 }
-      );
+  // Auto-detect user geolocation with multi-tier fallback
+  const handleLocateMe = async (forceHighAccuracy = false) => {
+    setIsLocating(true);
+    try {
+      const geo = await locationService.getCurrentPosition({ forceHighAccuracy });
+      setUserLocation({ lat: geo.latitude, lng: geo.longitude });
+      if (geo.locality || geo.city) {
+        setLocationLabel(`${geo.locality || "Current Location"}, ${geo.city || ""}`);
+      }
+    } catch (err) {
+      console.warn("[Nearby] Geolocation detection error:", err);
+    } finally {
+      setIsLocating(false);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (emergencyState.location?.lat && emergencyState.location?.lng) {
+      setUserLocation({ lat: emergencyState.location.lat, lng: emergencyState.location.lng });
+      setLocationLabel(
+        `${emergencyState.location.area || "Emergency Pin"}, ${emergencyState.location.city || ""}`
+      );
+    } else {
+      handleLocateMe(false);
+    }
+  }, [emergencyState.location]);
 
   useEffect(() => {
     async function fetchNearby() {
@@ -167,32 +194,38 @@ export default function NearbyPage() {
 
       {/* Map & Hospital Listings */}
       <div className="flex-1 relative flex flex-col">
-        {/* Map Header Preview */}
-        <div className="h-44 bg-blue-50 relative overflow-hidden shrink-0 border-b border-blue-100">
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: "radial-gradient(#94a3b8 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
-            }}
+        {/* Map Header Preview with Live Google Maps Embed & GPS Controls */}
+        <div className="h-48 bg-slate-900 relative overflow-hidden shrink-0 border-b border-gray-200">
+          <iframe
+            title="Nearby Hospitals Area Map"
+            src={`https://maps.google.com/maps?q=${userLocation.lat},${userLocation.lng}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            className="w-full h-full border-0 opacity-75"
+            loading="lazy"
           />
 
-          {/* User Location Marker */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-            <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center animate-pulse">
-              <div className="w-4 h-4 bg-[#0052FF] rounded-full border-2 border-white shadow-md" />
-            </div>
-            <span className="text-[10px] font-bold text-blue-900 bg-white/90 px-2 py-0.5 rounded shadow mt-1">
-              Your Location
-            </span>
+          {/* Active Geofence Badge */}
+          <div className="absolute top-3 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] font-bold text-gray-800 shadow-sm flex items-center gap-2 max-w-[65%]">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping shrink-0" />
+            <span className="truncate">{locationLabel}</span>
           </div>
 
-          <div className="absolute top-3 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-lg text-[11px] font-bold text-gray-700 shadow-xs flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-            Google Places (New) Live Geofence
+          {/* Locate Me / GPS Refresh Button */}
+          <button
+            onClick={() => handleLocateMe(true)}
+            disabled={isLocating}
+            title="Lock precise GPS location"
+            className="absolute top-3 right-4 bg-white/95 hover:bg-white text-[#0052FF] backdrop-blur-md px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+          >
+            <LocateFixed className={`w-3.5 h-3.5 ${isLocating ? "animate-spin" : ""}`} />
+            <span>{isLocating ? "Locating..." : "Locate Me"}</span>
+          </button>
+
+          {/* Coordinate Badge */}
+          <div className="absolute bottom-2 left-4 text-[10px] text-gray-800 bg-white/90 px-2 py-0.5 rounded-md backdrop-blur-xs font-mono font-bold shadow-xs">
+            {userLocation.lat.toFixed(4)}°, {userLocation.lng.toFixed(4)}°
           </div>
 
-          <div className="absolute bottom-2 right-4 text-[10px] text-gray-500 font-medium">
+          <div className="absolute bottom-2 right-4 text-[10px] text-gray-700 bg-white/90 px-2 py-0.5 rounded-md backdrop-blur-xs font-medium shadow-xs">
             {attribution}
           </div>
         </div>
@@ -243,7 +276,7 @@ export default function NearbyPage() {
                         <div className="flex items-center gap-3 text-xs font-semibold text-gray-500">
                           <span className="flex items-center gap-1">
                             <MapPin className="w-3.5 h-3.5 text-gray-400" />
-                            {place.distance_km} km • ~{place.eta_minutes} mins
+                            {typeof place.distance_km === "number" ? place.distance_km : (place.distance ?? 1.5)} km • ~{typeof place.eta_minutes === "number" ? place.eta_minutes : 5} mins
                           </span>
                           {place.google_rating && (
                             <span className="flex items-center gap-1 text-amber-500">

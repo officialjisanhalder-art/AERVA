@@ -51,6 +51,12 @@ export interface MergedHospitalResult {
     oxygenSupport: boolean | null | undefined;
   } | null;
   notice: string;
+  // Compatibility aliases for NearER UI & mobile clients
+  verification_status?: string;
+  capacity?: any;
+  distance_km?: number;
+  eta_minutes?: number;
+  hospital_id?: string;
 }
 
 /**
@@ -247,11 +253,36 @@ export class HospitalDiscoveryService {
 
     const results = mergeHospitalResults(places, records, freshnessMinutes);
 
+    // Enrich each result with distance_km and eta_minutes relative to search coordinates
+    const enrichedResults = results.map((h) => {
+      let distance_km = 1.5;
+      let eta_minutes = 5;
+      if (
+        h.location &&
+        typeof h.location.latitude === "number" &&
+        typeof h.location.longitude === "number" &&
+        typeof lat === "number" &&
+        typeof lng === "number"
+      ) {
+        distance_km = calculateDistanceKm(lat, lng, h.location.latitude, h.location.longitude);
+        eta_minutes = estimateDrivingEtaMinutes(distance_km);
+      }
+      return {
+        ...h,
+        hospital_id: h.placeId,
+        distance_km,
+        eta_minutes,
+      };
+    });
+
+    // Sort by distance ascending so closest hospitals appear first
+    enrichedResults.sort((a, b) => (a.distance_km ?? 999) - (b.distance_km ?? 999));
+
     return {
       source: "google_places_and_aerva",
       googleAttributionRequired: true,
-      results,
-      count: results.length,
+      results: enrichedResults,
+      count: enrichedResults.length,
       checkedAt: new Date().toISOString(),
       note: "Google listings do not prove hospital participation, current capacity or clinical suitability.",
     };

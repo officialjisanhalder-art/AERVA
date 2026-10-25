@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { 
   MapPin, 
@@ -50,9 +51,17 @@ export default function NearbyHospitalsPage() {
               <div className="text-sm font-bold text-[#050B18]">{locationLabel}</div>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#059669] bg-green-50 px-2.5 py-1 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            {hospitals.length} {t("hospitals.discovered", lang)}
+          <div className="flex items-center gap-2">
+            <Link
+              href="/emergency/location"
+              className="text-xs font-bold text-[#0052FF] hover:bg-blue-50 px-2.5 py-1 rounded-lg transition-colors border border-blue-100"
+            >
+              Change
+            </Link>
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#059669] bg-green-50 px-2.5 py-1 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              {hospitals.length} {t("hospitals.discovered", lang)}
+            </div>
           </div>
         </div>
 

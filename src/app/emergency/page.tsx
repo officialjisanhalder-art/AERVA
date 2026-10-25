@@ -43,6 +43,7 @@ import {
 import { useLang } from "@/lib/language-context";
 import { t } from "@/lib/i18n";
 import { getStoredPatientProfile } from "@/lib/patient-profile";
+import { locationService } from "@/lib/services/locationService";
 
 const iconMap: Record<string, any> = {
   Activity, Bone, Brain, Droplet, Flame, Wind, HelpCircle
@@ -116,32 +117,37 @@ function EmergencyTriageContent() {
 
   // Auto-detect GPS location silently if not captured yet
   useEffect(() => {
-    if (!state.location && typeof navigator !== "undefined" && navigator.geolocation) {
+    if (!state.location) {
       setIsLocating(true);
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-            const data = await res.json();
-            const area = data.address?.suburb || data.address?.neighbourhood || data.address?.area || "Salt Lake";
-            const city = data.address?.city || data.address?.town || "Kolkata";
-            setLocationArea(area);
-            setLocationCity(city);
-            updateState({ location: { lat, lng, area, city } });
-          } catch {
-            updateState({ location: { lat, lng, area: "Salt Lake", city: "Kolkata" } });
-          } finally {
-            setIsLocating(false);
-          }
-        },
-        () => {
+      locationService
+        .getCurrentPosition({ timeoutMs: 7000 })
+        .then((loc) => {
+          const area = loc.locality || "Salt Lake, Sector V";
+          const city = loc.city || "Kolkata";
+          setLocationArea(area);
+          setLocationCity(city);
+          updateState({
+            location: {
+              lat: loc.latitude,
+              lng: loc.longitude,
+              area,
+              city,
+            },
+          });
+        })
+        .catch(() => {
+          updateState({
+            location: {
+              lat: 22.5804,
+              lng: 88.4173,
+              area: "Salt Lake, Sector V",
+              city: "Kolkata",
+            },
+          });
+        })
+        .finally(() => {
           setIsLocating(false);
-          updateState({ location: { lat: 22.5804, lng: 88.4173, area: "Salt Lake, Sector V", city: "Kolkata" } });
-        },
-        { timeout: 3000 }
-      );
+        });
     }
   }, [state.location, updateState]);
 
