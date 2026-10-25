@@ -219,6 +219,9 @@ function EmergencyTriageContent() {
               setRealTranscript(speechTxt);
             }
           };
+          rec.onerror = (e: any) => {
+            console.warn("Speech recognition notice:", e.error);
+          };
           rec.start();
           recognitionRef.current = rec;
         }
@@ -241,17 +244,20 @@ function EmergencyTriageContent() {
           const response = await fetch("/api/transcribe", { method: "POST", body: formData });
           if (response.ok) {
             const data = await response.json();
-            if (data.transcript && !realTranscript) {
-              setRealTranscript(data.transcript);
+            if (data.transcript) {
+              setRealTranscript((prev) => {
+                if (prev && prev.trim().length > 3 && !prev.includes("Voice brief recorded") && !prev.includes("Emergency brief recorded")) {
+                  return prev;
+                }
+                return data.transcript;
+              });
             }
             setRealSummary(data.summary || null);
-          } else if (!realTranscript) {
-            setRealTranscript("Voice brief recorded. Ready for hospital triage.");
+          } else {
+            setRealTranscript((prev) => prev || "Voice brief recorded. Ready for hospital triage.");
           }
         } catch {
-          if (!realTranscript) {
-            setRealTranscript("Voice brief recorded. Ready for hospital triage.");
-          }
+          setRealTranscript((prev) => prev || "Voice brief recorded. Ready for hospital triage.");
         } finally {
           setRecordingState("RECORDED");
         }

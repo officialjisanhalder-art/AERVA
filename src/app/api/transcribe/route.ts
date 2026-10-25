@@ -33,19 +33,27 @@ export async function POST(req: Request) {
       try {
         const base64Audio = buffer.toString("base64");
         const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-        const response = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
+        
+        // Use gemini-3.8-flash with a strict 7s timeout
+        const geminiPromise = ai.models.generateContent({
+          model: "gemini-3.8-flash",
           contents: [
-            "Transcribe this emergency audio faithfully. Return only the transcript text.",
+            "Transcribe this emergency audio faithfully. Return only the transcript text. Do not add explanations or formatting.",
             { inlineData: { data: base64Audio, mimeType } },
           ],
         });
-        if (response.text) {
+
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Gemini transcribe timeout")), 7000)
+        );
+
+        const response: any = await Promise.race([geminiPromise, timeoutPromise]);
+        if (response?.text) {
           transcript = response.text.trim();
           provider = "GEMINI_FALLBACK";
         }
-      } catch (gErr) {
-        console.warn("[Transcribe Route] Gemini fallback warning:", gErr);
+      } catch (gErr: any) {
+        console.warn("[Transcribe Route] Gemini fallback warning:", gErr?.message || gErr);
       }
     }
 
