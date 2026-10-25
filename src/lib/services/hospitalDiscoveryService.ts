@@ -194,16 +194,17 @@ export class HospitalDiscoveryService {
   }) {
     const lat = params.lat;
     const lng = params.lng;
-    const radius = Math.min(50000, Math.max(100, params.radius ?? 5000));
-    const limit = Math.min(20, Math.max(1, params.limit ?? 20));
+    // 50 km default geofencing range
+    const radius = Math.min(50000, Math.max(100, params.radius ?? 50000));
+    const limit = Math.min(30, Math.max(1, params.limit ?? 20));
     const freshnessMinutes = Math.min(1440, Math.max(1, params.freshnessMinutes ?? 60));
 
     let places: GooglePlaceItem[] = [];
 
-    // Attempt official Google Places API (New) if key configured
+    // 1. Attempt official Google Places API (New) if key configured
     if (this.apiKey) {
       try {
-        const signal = AbortSignal.timeout(10000);
+        const signal = AbortSignal.timeout(6000);
         const googleResponse = await fetch(this.placesEndpoint, {
           method: "POST",
           signal,
@@ -239,9 +240,55 @@ export class HospitalDiscoveryService {
       }
     }
 
-    // Fallback if Google Places API is unconfigured or returned 0 results
+    // 2. Real-time OpenStreetMap Geofence Search (50km radius / bbox) if Google Places unconfigured or empty
     if (places.length === 0) {
-      places = this.getFallbackPlaceItems(lat, lng, radius, limit);
+      try {
+        const deltaLat = Math.min(0.5, radius / 111000);
+        const cosLat = Math.max(0.2, Math.cos((lat * Math.PI) / 180));
+        const deltaLng = Math.min(0.55, radius / (111000 * cosLat));
+        const viewbox = `${lng - deltaLng},${lat + deltaLat},${lng + deltaLng},${lat - deltaLat}`;
+        const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&amenity=hospital&bounded=1&viewbox=${viewbox}&limit=${limit}`;
+
+        const osmRes = await fetch(osmUrl, {
+          headers: { "User-Agent": "AERVA-Hospital-Discovery/1.0 (contact@aerva.app)" },
+          signal: AbortSignal.timeout(4500),
+        });
+
+        if (osmRes.ok) {
+          const osmData = await osmRes.json();
+          if (Array.isArray(osmData) && osmData.length > 0) {
+            places = osmData.map((el: any) => ({
+              id: `osm_${el.place_id || el.osm_id}`,
+              displayName: {
+                text: el.name || (el.display_name ? el.display_name.split(",")[0] : "Hospital"),
+              },
+              formattedAddress: el.display_name || "Discovered Emergency Facility",
+              location: { latitude: parseFloat(el.lat), longitude: parseFloat(el.lon) },
+              googleMapsUri: `https://www.google.com/maps/search/?api=1&query=${el.lat},${el.lon}`,
+            }));
+          }
+        }
+      } catch (osmErr) {
+        console.warn("[HospitalDiscoveryService] OSM Geofencing error:", osmErr);
+      }
+    }
+
+    // 3. Merge authorized seed hospitals if within 50km geofence
+    const seedPlaces = this.getFallbackPlaceItems(lat, lng, radius, limit);
+    for (const seed of seedPlaces) {
+      if (seed.location) {
+        const dist = calculateDistanceKm(lat, lng, seed.location.latitude, seed.location.longitude);
+        if (dist <= 55) {
+          if (!places.some((p) => p.id === seed.id || p.displayName?.text === seed.displayName?.text)) {
+            places.push(seed);
+          }
+        }
+      }
+    }
+
+    // 4. Absolute fallback if still empty (e.g. offline)
+    if (places.length === 0) {
+      places = seedPlaces;
     }
 
     const placeIds = places.map((p) => p.id);
@@ -368,9 +415,12 @@ export class HospitalDiscoveryService {
       }
     }
 
-    // 2. Fallback to authorized seed directory if Supabase is offline or empty
-    if (records.length === 0) {
-      records = this.getFallbackDirectoryRecords(placeIds);
+    // 2. Include authorized seed directory records
+    const seedRecords = this.getFallbackDirectoryRecords(placeIds);
+    for (const s of seedRecords) {
+      if (!records.some((r) => r.google_place_id === s.google_place_id)) {
+        records.push(s);
+      }
     }
 
     // 3. Apply any live runtime overrides (e.g. from dashboard resource update or tests)

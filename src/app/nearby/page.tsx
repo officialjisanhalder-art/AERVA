@@ -153,7 +153,7 @@ export default function NearbyPage() {
     async function fetchNearby() {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/hospitals/nearby?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=20000`);
+        const res = await fetch(`/api/hospitals/nearby?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=50000`);
         const data = await res.json();
         const list = data.results || data.hospitals || [];
         setHospitals(list);
