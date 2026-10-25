@@ -69,7 +69,7 @@ function PassContent() {
 
   // Generate scannable QR data URL for this pass
   useEffect(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva-0cvq.onrender.com";
     const passUrl = `${origin}/pass?caseId=${encodeURIComponent(activeCaseId)}&patient=${encodeURIComponent(patientName)}&blood=${encodeURIComponent(bloodGroup)}&hospital=${encodeURIComponent(hospitalName)}`;
 
     QRCode.toDataURL(passUrl, {

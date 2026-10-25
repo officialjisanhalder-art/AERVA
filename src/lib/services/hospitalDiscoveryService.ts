@@ -265,7 +265,7 @@ export class HospitalDiscoveryService {
         const osmUrl = `https://nominatim.openstreetmap.org/search?format=json&amenity=hospital&bounded=1&viewbox=${viewbox}&limit=${limit}`;
 
         const osmRes = await fetch(osmUrl, {
-          headers: { "User-Agent": "AERVA-Hospital-Discovery/1.0 (contact@aerva.app)" },
+          headers: { "User-Agent": "AERVA-Hospital-Discovery/1.0 (contact@aerva-0cvq.onrender.com)" },
           signal: AbortSignal.timeout(4500),
         });
 

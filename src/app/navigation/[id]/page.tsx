@@ -174,7 +174,7 @@ export default function NavigationPage() {
   };
 
   useEffect(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva-0cvq.onrender.com";
     const passUrl = `${origin}/pass?caseId=${encodeURIComponent(state.caseId || "NR-10482")}&patient=${encodeURIComponent(state.patientName || "Jisan Halder")}&blood=${encodeURIComponent(state.bloodGroup || "O+")}&hospital=${encodeURIComponent(hospital.name)}`;
 
     QRCode.toDataURL(passUrl, {

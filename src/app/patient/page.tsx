@@ -100,7 +100,7 @@ export default function PatientPortalPage() {
   // Generate real verifiable QR code for medical passport
   useEffect(() => {
     if (profile) {
-      const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
+      const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva-0cvq.onrender.com";
       const passportUrl = `${origin}/pass?caseId=${encodeURIComponent(profile.healthId || "HID-9842")}&patient=${encodeURIComponent(profile.fullName || "Patient")}&blood=${encodeURIComponent(profile.bloodGroup || "O+")}&allergies=${encodeURIComponent(profile.allergies.map(a => a.name).join(",") || "None")}`;
 
       QRCode.toDataURL(passportUrl, {

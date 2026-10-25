@@ -235,7 +235,7 @@ class _SplashWelcomeScreenState extends State<SplashWelcomeScreen> {
                   border: Border.all(color: const Color(0xFFE2E8F0)),
                 ),
                 child: QrImageView(
-                  data: "https://nearer.app/pass/${c.caseId}",
+                  data: "https://aerva-0cvq.onrender.com/pass/${c.caseId}",
                   version: QrVersions.auto,
                   size: 180.0,
                 ),

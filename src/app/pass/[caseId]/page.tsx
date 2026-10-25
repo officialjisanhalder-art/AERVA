@@ -59,7 +59,7 @@ export default function CasePassPage({ params }: { params: Promise<{ caseId: str
   }, []);
 
   useEffect(() => {
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://aerva-0cvq.onrender.com";
     const passUrl = `${origin}/pass/${encodeURIComponent(activeCaseId)}`;
 
     QRCode.toDataURL(passUrl, {

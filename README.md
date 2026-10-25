@@ -4,6 +4,7 @@
 
 ![AERVA Full Logo](public/aerva-full-logo.png)
 
+[![Render](https://img.shields.io/badge/Render-Live%20Deploy-46E3B7?style=for-the-badge&logo=render&logoColor=black)](https://aerva-0cvq.onrender.com)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.3.5%20Turbopack-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![Flutter](https://img.shields.io/badge/Flutter-3.41.2%20Android%20APK-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-Realtime%20%26%20Postgres-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
@@ -16,7 +17,7 @@
 **Don't just find the nearest hospital. Find the right one.**  
 AERVA interconnects patients, 108 dispatchers, and hospitals through real-time authorized bed telemetry, autonomous web research verification, multi-agent AI orchestration, and low-latency voice triage.
 
-[Live Web Application](http://localhost:3000) • [Unified Sign-In Portal](http://localhost:3000/login) • [Hospital Partner Desk](http://localhost:3000/partner) • [108 Dispatcher Relay](http://localhost:3000/reach/relay) • [AI Evidence Console](http://localhost:3000/evidence) • [Download Android APK](public/AERVA_Patient_App.apk)
+[🌐 Live Web Application](https://aerva-0cvq.onrender.com) • [🔑 Unified Sign-In Portal](https://aerva-0cvq.onrender.com/login) • [🏥 Hospital Partner Desk](https://aerva-0cvq.onrender.com/partner) • [🚨 108 Dispatcher Relay](https://aerva-0cvq.onrender.com/reach/relay) • [🧠 AI Evidence Console](https://aerva-0cvq.onrender.com/evidence) • [📱 Download Android APK](https://aerva-0cvq.onrender.com/AERVA_Patient_App.apk)
 
 </div>
 
@@ -152,13 +153,13 @@ The AERVA mobile application (`nearer_mobile/`) is a native Flutter Android app 
 
 ### Direct APK Downloads:
 * **Official Release**: [`AERVA_Patient_App.apk`](AERVA_Patient_App.apk) (55.8 MB)
-* **Web Download**: [`public/AERVA_Patient_App.apk`](public/AERVA_Patient_App.apk)
+* **Live Web Download**: [https://aerva-0cvq.onrender.com/AERVA_Patient_App.apk](https://aerva-0cvq.onrender.com/AERVA_Patient_App.apk)
 
 ---
 
 ## 🔑 Portals & Unified Access
 
-Navigate to [`/login`](http://localhost:3000/login) to access the unified role portal:
+Navigate to [`/login`](https://aerva-0cvq.onrender.com/login) to access the unified role portal:
 
 | Role | Route | Purpose | Demo Credentials |
 | :--- | :--- | :--- | :--- |
@@ -202,6 +203,10 @@ Configure these server-side environment variables in `.env.local` or Render:
 ---
 
 ## 🚢 Render Deployment Guide
+
+* **Live Production URL**: [https://aerva-0cvq.onrender.com](https://aerva-0cvq.onrender.com)
+* **Unified Role Sign-In**: [https://aerva-0cvq.onrender.com/login](https://aerva-0cvq.onrender.com/login)
+* **Health Check & Telemetry**: [https://aerva-0cvq.onrender.com/api/health](https://aerva-0cvq.onrender.com/api/health)
 
 1. **Repository**: Connect GitHub repository `officialjisanhalder-art/near-er` (or `officialjisanhalder-art/AERVA`).
 2. **Environment**: Node.js Web Service.

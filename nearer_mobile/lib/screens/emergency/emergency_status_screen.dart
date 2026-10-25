@@ -283,7 +283,7 @@ class _EmergencyStatusScreenState extends State<EmergencyStatusScreen> {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), border: Border.all(color: const Color(0xFFE2E8F0))),
                 child: QrImageView(
-                  data: "https://nearer.app/pass/${_case.caseId}",
+                  data: "https://aerva-0cvq.onrender.com/pass/${_case.caseId}",
                   version: QrVersions.auto,
                   size: 180.0,
                 ),
