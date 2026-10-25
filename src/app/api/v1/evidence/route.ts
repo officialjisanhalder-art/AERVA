@@ -56,6 +56,7 @@ export async function GET(req: NextRequest) {
         agent37_configured: Boolean(process.env.AGENT37_API_KEY),
         google_places_configured: Boolean(process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_MAPS_API_KEY),
         elevenlabs_configured: Boolean(process.env.ELEVENLABS_API_KEY),
+        browser_use_configured: Boolean(process.env.BROWSER_USE_API_KEY),
         adaption_configured: Boolean(process.env.ADAPTION_API_KEY),
         supabase_connected: isSupabaseConfigured,
       },

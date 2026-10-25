@@ -43,7 +43,7 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
               height={22}
               className="h-7 w-auto object-contain"
             />
-            <span className="font-bold text-white tracking-tight">Near<span className="text-[#00B2FF]">ER</span></span>
+            <span className="font-black text-white tracking-tight text-lg">AER<span className="text-[#00B2FF]">VA</span></span>
             <span className="text-[#00B2FF] text-[10px] uppercase font-bold tracking-wider ml-1 bg-white/10 px-1.5 py-0.5 rounded">Portal</span>
           </Link>
         </div>

@@ -23,7 +23,7 @@ export function Footer() {
               height={22}
               className="h-7 w-auto object-contain"
             />
-            <span className="text-white font-bold text-xl tracking-tight">Near<span className="text-[#00B2FF]">ER</span></span>
+            <span className="text-white font-black text-xl tracking-tight">AER<span className="text-[#00B2FF]">VA</span></span>
           </div>
           
           <div className="flex flex-wrap justify-center gap-6 md:gap-8">

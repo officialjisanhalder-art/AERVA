@@ -50,6 +50,37 @@ export class Agent37Coordinator {
     this.instanceUrl = (process.env.AGENT37_INSTANCE_URL || "").replace(/\/$/, "");
   }
 
+  private getApiKey(): string {
+    return this.apiKey || process.env.AGENT37_API_KEY || "";
+  }
+
+  private async getInstanceUrl(): Promise<string> {
+    if (this.instanceUrl) return this.instanceUrl;
+    if (process.env.AGENT37_INSTANCE_URL) {
+      this.instanceUrl = process.env.AGENT37_INSTANCE_URL.replace(/\/$/, "");
+      return this.instanceUrl;
+    }
+    const key = this.getApiKey();
+    if (!key) return "";
+    try {
+      const res = await fetch("https://api.agent37.com/v1/instances", {
+        headers: { Authorization: `Bearer ${key}` },
+        signal: AbortSignal.timeout(4000),
+      });
+      if (res.ok) {
+        const body = await res.json();
+        const active = body?.data?.find((i: any) => i.status === "running" && i.url);
+        if (active?.url) {
+          this.instanceUrl = active.url.replace(/\/$/, "");
+          return this.instanceUrl;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return "";
+  }
+
   /**
    * Run Emergency Coordination Workflow
    */
@@ -169,20 +200,24 @@ export class Agent37Coordinator {
       let agentProvider: Agent37ExecutionResult["agent_provider"] = "AGENT37_BACKEND_HARNESS";
       let summaryText = "";
 
-      if (this.instanceUrl && this.apiKey) {
+      const apiKey = this.getApiKey();
+      const instanceUrl = await this.getInstanceUrl();
+
+      if (instanceUrl && apiKey) {
         try {
-          const remoteResp = await fetch(`${this.instanceUrl}/v1/responses`, {
+          const remoteResp = await fetch(`${instanceUrl}/v1/responses`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "X-Agent37-Key": this.apiKey,
+              "Authorization": `Bearer ${apiKey}`,
+              "X-Agent37-Key": apiKey,
             },
             body: JSON.stringify({
               input: `Coordinate emergency intake for ${params.emergencyType}. Recommended hospital: ${filterResult.bestMatch?.hospital?.name || "None"}. Open ER beds: ${filterResult.bestMatch?.metrics.erBedsOpen ?? 0}.`,
               session_id: sessionId,
               stream: false,
             }),
-            signal: AbortSignal.timeout(5000),
+            signal: AbortSignal.timeout(20000),
           });
           if (remoteResp.ok) {
             const remoteJson = await remoteResp.json();

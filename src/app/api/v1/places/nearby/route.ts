@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { googlePlacesService } from "@/lib/services/googlePlacesService";
+import { browserUseService } from "@/lib/services/browserUseService";
 
 export async function GET(req: NextRequest) {
   try {
@@ -28,12 +29,34 @@ export async function GET(req: NextRequest) {
 
     const discovery = await googlePlacesService.searchNearbyHospitals(lat, lng, radius);
 
+    const enrichedHospitals = await Promise.all(
+      discovery.hospitals.map(async (h) => {
+        const research = await browserUseService.getCachedResearch(h.hospital_id);
+        return {
+          ...h,
+          website_research: research
+            ? {
+                status: research.status,
+                verification_label: research.verification_label,
+                retrieved_at: research.retrieved_at,
+                freshness_status: research.freshness_status,
+                findings: research.findings,
+                source_urls: research.source_urls,
+                disclaimer: research.disclaimer,
+                live_url: research.live_url,
+              }
+            : null,
+        };
+      })
+    );
+
     return NextResponse.json(
       {
         success: true,
         source: discovery.source,
         total: discovery.total,
-        hospitals: discovery.hospitals,
+        hospitals: enrichedHospitals,
+        browser_use_configured: browserUseService.isConfigured(),
         google_attribution: "Data provided by Google Maps Platform & AERVA Healthcare Registry",
         warning: discovery.error || null,
       },
@@ -41,6 +64,7 @@ export async function GET(req: NextRequest) {
         status: 200,
         headers: {
           "Cache-Control": "public, s-maxage=15, stale-while-revalidate=30",
+          "X-AERVA-Browser-Use-Enabled": String(browserUseService.isConfigured()),
         },
       }
     );

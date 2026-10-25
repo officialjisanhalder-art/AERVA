@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { hospitalDiscoveryService } from "@/lib/services/hospitalDiscoveryService";
+import { browserUseService } from "@/lib/services/browserUseService";
 
 const schema = z.object({
   lat: z.coerce.number().min(-90).max(90),
@@ -38,12 +39,41 @@ export async function GET(req: NextRequest) {
       limit,
     });
 
-    return NextResponse.json(discovery, {
-      status: 200,
-      headers: {
-        "Cache-Control": "no-store",
+    const enrichedResults = await Promise.all(
+      (discovery.results || []).map(async (h: any) => {
+        const research = await browserUseService.getCachedResearch(h.placeId);
+        return {
+          ...h,
+          website_research: research
+            ? {
+                status: research.status,
+                verification_label: research.verification_label,
+                retrieved_at: research.retrieved_at,
+                freshness_status: research.freshness_status,
+                findings: research.findings,
+                source_urls: research.source_urls,
+                disclaimer: research.disclaimer,
+                live_url: research.live_url,
+              }
+            : null,
+        };
+      })
+    );
+
+    return NextResponse.json(
+      {
+        ...discovery,
+        results: enrichedResults,
+        browser_use_configured: browserUseService.isConfigured(),
       },
-    });
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store",
+          "X-AERVA-Browser-Use-Enabled": String(browserUseService.isConfigured()),
+        },
+      }
+    );
   } catch (error: any) {
     console.error("[AERVA Discovery API] Error:", error);
     return NextResponse.json(

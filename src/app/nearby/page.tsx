@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { AppNavbar } from "@/components/app/AppNavbar";
-import { Clock, MapPin, Activity, ShieldCheck, ArrowRight, Loader2, Star, Phone, ShieldAlert, AlertTriangle } from "lucide-react";
+import { 
+  Clock, MapPin, Activity, ShieldCheck, ArrowRight, Loader2, 
+  Star, Phone, ShieldAlert, AlertTriangle, Globe, ExternalLink, Sparkles, CheckCircle2, Search
+} from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -14,6 +17,97 @@ export default function NearbyPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [userLocation, setUserLocation] = useState({ lat: 28.4595, lng: 77.0724 }); // Default: Delhi-NCR / Gurgaon
   const [attribution, setAttribution] = useState("Google Places API (New) & AERVA Verified Registry");
+  // Active research tasks tracking map: hospitalId -> { status, taskId, liveUrl, stepCount }
+  const [researchState, setResearchState] = useState<Record<string, { status: string; taskId?: string; liveUrl?: string | null }>>({});
+
+  const handleStartResearch = async (hospitalId: string, hospitalName: string, address?: string) => {
+    setResearchState((prev) => ({
+      ...prev,
+      [hospitalId]: { status: "RUNNING" },
+    }));
+
+    try {
+      const res = await fetch(`/api/hospitals/${hospitalId}/research`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hospitalName, address }),
+      });
+      const data = await res.json();
+      const taskId = data.taskId;
+
+      if (!taskId) {
+        setResearchState((prev) => ({ ...prev, [hospitalId]: { status: "FAILED" } }));
+        return;
+      }
+
+      setResearchState((prev) => ({
+        ...prev,
+        [hospitalId]: { status: data.status || "RUNNING", taskId, liveUrl: data.liveUrl },
+      }));
+
+      // If cached or immediately finished
+      if (data.cached && data.record) {
+        updateHospitalWithResearch(hospitalId, data.record);
+        setResearchState((prev) => ({
+          ...prev,
+          [hospitalId]: { status: "COMPLETED", taskId, liveUrl: data.liveUrl },
+        }));
+        return;
+      }
+
+      // Poll task progress
+      const pollInterval = setInterval(async () => {
+        try {
+          const pollRes = await fetch(`/api/hospitals/${hospitalId}/research/${taskId}`);
+          if (pollRes.ok) {
+            const taskData = await pollRes.json();
+            if (taskData.status === "COMPLETED" || taskData.status === "FAILED") {
+              clearInterval(pollInterval);
+              setResearchState((prev) => ({
+                ...prev,
+                [hospitalId]: { status: taskData.status, taskId, liveUrl: taskData.live_url },
+              }));
+              if (taskData.status === "COMPLETED") {
+                updateHospitalWithResearch(hospitalId, taskData);
+              }
+            }
+          }
+        } catch (pollErr) {
+          console.warn("Polling error:", pollErr);
+        }
+      }, 3000);
+
+      // Timeout safety after 45s
+      setTimeout(() => clearInterval(pollInterval), 45000);
+    } catch (err) {
+      console.error("Research initiation failed:", err);
+      setResearchState((prev) => ({ ...prev, [hospitalId]: { status: "FAILED" } }));
+    }
+  };
+
+  const updateHospitalWithResearch = (hospitalId: string, record: any) => {
+    setHospitals((prev) =>
+      prev.map((h) => {
+        const id = h.hospital_id || h.placeId;
+        if (id === hospitalId) {
+          return {
+            ...h,
+            website_research: {
+              status: record.status,
+              verification_label: record.verification_label,
+              retrieved_at: record.retrieved_at,
+              freshness_status: record.freshness_status,
+              findings: record.findings,
+              source_urls: record.source_urls,
+              disclaimer: record.disclaimer,
+              live_url: record.live_url,
+            },
+          };
+        }
+        return h;
+      })
+    );
+  };
 
   // Auto-detect user geolocation
   useEffect(() => {
@@ -218,6 +312,128 @@ export default function NearbyPage() {
                         </a>
                       </div>
                     )}
+
+                    {/* BROWSER USE CLOUD — Public Website Research & Verification Section */}
+                    {(() => {
+                      const hId = place.hospital_id || place.placeId;
+                      const activeTask = researchState[hId];
+                      const isTaskRunning = activeTask?.status === "RUNNING";
+                      const research = place.website_research;
+                      const hasResearch = Boolean(research && research.status === "COMPLETED");
+
+                      return (
+                        <div className="mt-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs flex flex-col gap-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                              <Globe className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Public Website Information</span>
+                              <span className="text-[10px] font-normal text-slate-400">(Browser Use Cloud)</span>
+                            </div>
+
+                            {/* Status Tag */}
+                            {isTaskRunning ? (
+                              <span className="text-[10px] font-bold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <Loader2 className="w-2.5 h-2.5 animate-spin" /> Autonomous Researching...
+                              </span>
+                            ) : hasResearch ? (
+                              <span className="text-[10px] font-bold text-blue-700 bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <CheckCircle2 className="w-2.5 h-2.5 text-blue-600" /> Website Info Found
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full">
+                                Not Researched
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Extracted Public Findings */}
+                          {hasResearch ? (
+                            <div className="space-y-1.5 pt-1 border-t border-slate-200/60">
+                              <div className="flex flex-wrap gap-1.5 text-[11px]">
+                                {research.findings?.listed_emergency_department && (
+                                  <span className="bg-white border border-slate-200 px-2 py-0.5 rounded font-medium text-slate-700">
+                                    🏥 Listed ER: <strong className="text-emerald-700">Yes</strong>
+                                  </span>
+                                )}
+                                {research.findings?.listed_icu && (
+                                  <span className="bg-white border border-slate-200 px-2 py-0.5 rounded font-medium text-slate-700">
+                                    🛏️ Listed ICU: <strong className="text-emerald-700">Yes</strong>
+                                  </span>
+                                )}
+                                {research.findings?.listed_ambulance && (
+                                  <span className="bg-white border border-slate-200 px-2 py-0.5 rounded font-medium text-slate-700">
+                                    🚑 Listed Ambulance: <strong className="text-emerald-700">Yes</strong>
+                                  </span>
+                                )}
+                                {research.findings?.listed_oxygen && (
+                                  <span className="bg-white border border-slate-200 px-2 py-0.5 rounded font-medium text-slate-700">
+                                    💨 Listed Oxygen: <strong className="text-emerald-700">Yes</strong>
+                                  </span>
+                                )}
+                              </div>
+
+                              <p className="text-[11px] text-slate-600 italic">
+                                {research.findings?.facilities_summary}
+                              </p>
+
+                              {/* Clinical Warning */}
+                              <div className="text-[10px] text-amber-800 bg-amber-50/80 border border-amber-200/60 p-1.5 rounded font-medium">
+                                ⚠️ {research.disclaimer || "Public website information only. NOT confirmed live bed capacity or operational availability."}
+                              </div>
+
+                              <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+                                {research.source_urls && research.source_urls[0] ? (
+                                  <a
+                                    href={research.source_urls[0]}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-blue-600 font-semibold hover:underline flex items-center gap-1"
+                                  >
+                                    Official Source <ExternalLink className="w-2.5 h-2.5" />
+                                  </a>
+                                ) : (
+                                  <span>Source: Public Web Domain</span>
+                                )}
+
+                                {research.live_url && (
+                                  <a
+                                    href={research.live_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-purple-600 font-semibold hover:underline flex items-center gap-1"
+                                  >
+                                    Live Session Viewer <ExternalLink className="w-2.5 h-2.5" />
+                                  </a>
+                                )}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-between pt-1">
+                              <span className="text-[11px] text-slate-500">
+                                Official website facilities unverified. Research public portal via Browser Use Cloud.
+                              </span>
+                              <button
+                                onClick={() => handleStartResearch(hId, place.name, place.address)}
+                                disabled={isTaskRunning}
+                                className="px-2.5 py-1 text-[11px] font-bold text-white bg-slate-900 hover:bg-black rounded-lg transition-colors flex items-center gap-1 cursor-pointer shrink-0 disabled:opacity-50"
+                              >
+                                {isTaskRunning ? (
+                                  <>
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    <span>Researching...</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Sparkles className="w-3 h-3 text-amber-400" />
+                                    <span>Research Website</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
 
                     <div className="mt-3 pt-2.5 border-t border-gray-100 flex items-center justify-between">
                       <span className="text-[11px] text-gray-400 font-medium">

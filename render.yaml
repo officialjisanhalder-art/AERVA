@@ -34,5 +34,7 @@ services:
         sync: false
       - key: ELEVENLABS_API_KEY
         sync: false
+      - key: BROWSER_USE_API_KEY
+        sync: false
       - key: RESOURCE_FRESHNESS_MINUTES
         value: "60"
