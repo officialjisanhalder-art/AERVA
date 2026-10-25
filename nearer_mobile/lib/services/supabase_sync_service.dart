@@ -7,9 +7,9 @@ import '../models/emergency_case.dart';
 import '../models/emergency_visit_history.dart';
 
 class SupabaseSyncService {
-  static const String supabaseUrl = "https://oqjfknreyifhcdkucdnn.supabase.co";
+  static const String supabaseUrl = "https://yhrcmowjsuagrhxlchvr.supabase.co";
   static const String supabaseAnonKey =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xamZrbnJleWlmaGNka3VjZG5uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3ODk5NDIsImV4cCI6MjEwNTM2NTk0Mn0.jEKfQo-q8CbZaQqbG5ZgUdo3J5xfzjh-Rg_OLpiI5g8";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlocmNtb3dqc3VhZ3JoeGxjaHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5MDU4NTUsImV4cCI6MjEwODQ4MTg1NX0.u9kZxfYJGj-5umQ0zMi0b5HUSGompqBvBga5NIpePeY";
 
   static bool _initialized = false;
   static RealtimeChannel? _emergencyChannel;
