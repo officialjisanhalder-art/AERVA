@@ -18,14 +18,20 @@ class HospitalDiscoveryScreen extends StatefulWidget {
 
 class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final List<Hospital> _hospitals = Hospital.getHospitals();
+  late List<Hospital> _hospitals;
   Hospital? _selectedHospital;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _selectedHospital = _hospitals.first;
+    _hospitals = Hospital.getHospitals(
+      originLat: widget.location.lat,
+      originLng: widget.location.lng,
+      geofenceRadiusKm: 50.0,
+      filterByGeofence: false,
+    );
+    _selectedHospital = _hospitals.isNotEmpty ? _hospitals.first : null;
 
     // Realtime Supabase Capacity Listener
     SupabaseSyncService.subscribeToHospitalCapacity((data) {
@@ -118,7 +124,7 @@ class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with 
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      "From: ${widget.location.area}, ${widget.location.city}",
+                      "50km Geofence • ${widget.location.area}, ${widget.location.city}",
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF0F172A)),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -380,8 +386,16 @@ class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with 
                             spacing: 6,
                             runSpacing: 4,
                             children: [
-                              _badge("${_selectedHospital!.erAvailable} ER Beds", const Color(0xFF059669)),
-                              _badge("${_selectedHospital!.icuAvailable} ICU Beds", AppTheme.primary),
+                              if (_selectedHospital!.isAervaVerified) ...[
+                                _badge("${_selectedHospital!.erAvailable} ER Beds", const Color(0xFF059669)),
+                                _badge("${_selectedHospital!.icuAvailable} ICU Beds", AppTheme.primary),
+                              ] else if (_selectedHospital!.isWebsiteFound) ...[
+                                _badge("Website Info Found", const Color(0xFFD97706)),
+                                _badge("Live Beds Unreported", const Color(0xFF64748B)),
+                              ] else ...[
+                                _badge("Unverified Listing", const Color(0xFF64748B)),
+                                _badge("Telemetry Disconnected", const Color(0xFFEF4444)),
+                              ],
                             ],
                           ),
                         ],
@@ -483,7 +497,9 @@ class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with 
                     ),
                     const Text(" • ", style: TextStyle(color: Colors.white38, fontSize: 8)),
                     Text(
-                      "${h.erAvailable} ER beds",
+                      h.isAervaVerified
+                          ? "${h.erAvailable} ER beds"
+                          : (h.isWebsiteFound ? "Web Info" : "Unverified"),
                       style: const TextStyle(color: Colors.white70, fontSize: 8, fontWeight: FontWeight.w600),
                     ),
                   ],
@@ -526,27 +542,72 @@ class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with 
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.verified, size: 12, color: Color(0xFF059669)),
-                          SizedBox(width: 4),
-                          Flexible(
-                            child: Text(
-                              "NearER Verified",
-                              style: TextStyle(color: Color(0xFF059669), fontSize: 10, fontWeight: FontWeight.bold),
-                              overflow: TextOverflow.ellipsis,
+                    child: h.isAervaVerified
+                        ? Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFECFDF5),
+                              borderRadius: BorderRadius.circular(6),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.verified, size: 12, color: Color(0xFF059669)),
+                                SizedBox(width: 4),
+                                Flexible(
+                                  child: Text(
+                                    "AERVA Verified",
+                                    style: TextStyle(color: Color(0xFF059669), fontSize: 10, fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : h.isWebsiteFound
+                            ? Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFBEB),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(color: const Color(0xFFFDE68A)),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.travel_explore, size: 12, color: Color(0xFFD97706)),
+                                    SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        "Website Info Found",
+                                        style: TextStyle(color: Color(0xFFD97706), fontSize: 10, fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF1F5F9),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.help_outline, size: 12, color: Color(0xFF64748B)),
+                                    SizedBox(width: 4),
+                                    Flexible(
+                                      child: Text(
+                                        "Unverified",
+                                        style: TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.bold),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                   ),
                   const SizedBox(width: 8),
                   Container(
@@ -564,15 +625,64 @@ class _HospitalDiscoveryScreenState extends State<HospitalDiscoveryScreen> with 
               Text(h.type, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
               const SizedBox(height: 12),
               // ER and ICU availability row
-              Row(
-                children: [
-                  _statusBox("ER STATUS", "${h.erAvailable} Available", h.erAvailable > 0 ? const Color(0xFF059669) : const Color(0xFF64748B)),
-                  const SizedBox(width: 10),
-                  _statusBox("ICU BEDS", "${h.icuAvailable} Open", h.icuAvailable > 0 ? AppTheme.primary : const Color(0xFF64748B)),
-                  const SizedBox(width: 10),
-                  _statusBox("FRESHNESS", h.lastUpdated, const Color(0xFF64748B)),
-                ],
-              ),
+              if (h.isAervaVerified)
+                Row(
+                  children: [
+                    _statusBox("ER STATUS", "${h.erAvailable} Available", (h.erAvailable ?? 0) > 0 ? const Color(0xFF059669) : const Color(0xFF64748B)),
+                    const SizedBox(width: 10),
+                    _statusBox("ICU BEDS", "${h.icuAvailable} Open", (h.icuAvailable ?? 0) > 0 ? AppTheme.primary : const Color(0xFF64748B)),
+                    const SizedBox(width: 10),
+                    _statusBox("FRESHNESS", h.lastUpdated, const Color(0xFF64748B)),
+                  ],
+                )
+              else if (h.isWebsiteFound)
+                Row(
+                  children: [
+                    _statusBox("PUBLIC WEB", "Facilities Listed", const Color(0xFFD97706)),
+                    const SizedBox(width: 10),
+                    _statusBox("LIVE BEDS", "Unreported", const Color(0xFF64748B)),
+                    const SizedBox(width: 10),
+                    _statusBox("SOURCE", "Browser Use", const Color(0xFF64748B)),
+                  ],
+                )
+              else
+                Row(
+                  children: [
+                    _statusBox("REGISTRY", "Unregistered", const Color(0xFF64748B)),
+                    const SizedBox(width: 10),
+                    _statusBox("LIVE BEDS", "Not Connected", const Color(0xFFEF4444)),
+                    const SizedBox(width: 10),
+                    _statusBox("CONFIDENCE", "Unverified", const Color(0xFF64748B)),
+                  ],
+                ),
+              if (h.isWebsiteFound && h.websiteFacilities.isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBEB),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFFDE68A)),
+                  ),
+                  child: Text(
+                    "Publicly Listed: ${h.websiteFacilities.join(' • ')}\n⚠️ Public website info only. Not live bed availability.",
+                    style: const TextStyle(fontSize: 10, color: Color(0xFF92400E), height: 1.3),
+                  ),
+                ),
+              if (h.isUnverified)
+                Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: const Text(
+                    "⚠️ Unverified hospital listing. Identity and live bed telemetry not confirmed by AERVA.",
+                    style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                  ),
+                ),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

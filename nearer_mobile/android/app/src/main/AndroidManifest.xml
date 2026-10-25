@@ -31,7 +31,7 @@
     </queries>
 
     <application
-        android:label="NearER"
+        android:label="AERVA"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -34,8 +34,8 @@ class I18nService {
 
   static final Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      'app.title': 'NearER',
-      'app.tagline': 'Emergency Care in Minutes, Not Guesswork',
+      'app.title': 'AERVA',
+      'app.tagline': 'Autonomous Emergency Routing & Verification Architecture',
       'welcome.getHelp': 'GET EMERGENCY HELP NOW',
       'welcome.getHelpSubtitle': 'Locate nearest trauma center & lock bed',
       'welcome.nearbyHospitals': 'EXPLORE NEARBY HOSPITALS',
@@ -48,7 +48,7 @@ class I18nService {
 
       // Patient Portal
       'patient.title': 'Patient Health Passport',
-      'patient.healthId': 'NEARER HEALTH ID',
+      'patient.healthId': 'AERVA HEALTH ID',
       'patient.verified': 'Verified',
       'patient.completeness': 'EMERGENCY READY PROFILE',
       'patient.ready': 'Ready',
@@ -107,7 +107,7 @@ class I18nService {
       'emergency.startRoute': 'Start Turn-by-Turn Route',
     },
     'hi': {
-      'app.title': 'नियर-ईआर (NearER)',
+      'app.title': 'अरवा (AERVA)',
       'app.tagline': 'मिनटों में आपातकालीन चिकित्सा, बिना किसी असमंजस के',
       'welcome.getHelp': 'तुरंत आपातकालीन सहायता प्राप्त करें',
       'welcome.getHelpSubtitle': 'निकटतम ट्रॉमा सेंटर खोजें और बेड सुरक्षित करें',
@@ -121,7 +121,7 @@ class I18nService {
 
       // Patient Portal
       'patient.title': 'रोगी स्वास्थ्य पासपोर्ट',
-      'patient.healthId': 'नियर-ईआर स्वास्थ्य पहचान (ID)',
+      'patient.healthId': 'अरवा स्वास्थ्य पहचान (ID)',
       'patient.verified': 'सत्यापित',
       'patient.completeness': 'आपातकालीन तैयारी प्रोफाइल',
       'patient.ready': 'तैयार',

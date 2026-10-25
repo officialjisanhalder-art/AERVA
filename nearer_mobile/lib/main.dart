@@ -8,16 +8,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await I18nService.init();
   await SupabaseSyncService.init();
-  runApp(const NearERApp());
+  runApp(const AERVAApp());
 }
 
-class NearERApp extends StatelessWidget {
-  const NearERApp({super.key});
+class AERVAApp extends StatelessWidget {
+  const AERVAApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'NearER',
+      title: 'AERVA',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const SplashScreen(),

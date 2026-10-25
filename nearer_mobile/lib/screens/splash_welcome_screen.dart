@@ -312,18 +312,26 @@ class _SplashWelcomeScreenState extends State<SplashWelcomeScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset(
-                            'assets/images/nearer_mark.png',
+                            'assets/images/aerva_mark.png',
                             height: 30,
                             fit: BoxFit.contain,
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            "NearER",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              color: AppTheme.darkNavy,
-                              letterSpacing: -0.5,
+                          RichText(
+                            text: const TextSpan(
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                                color: AppTheme.darkNavy,
+                                letterSpacing: -0.5,
+                              ),
+                              children: [
+                                TextSpan(text: "AER"),
+                                TextSpan(
+                                  text: "VA",
+                                  style: TextStyle(color: Color(0xFF0052FF)),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -1082,8 +1090,8 @@ class _SplashWelcomeScreenState extends State<SplashWelcomeScreen> {
                             Expanded(
                               child: Text(
                                 lang == 'hi'
-                                    ? "NearER ALS एम्बुलेंस ट्रैक करें (लाइव रडार)"
-                                    : "Track NearER ALS Ambulance (Live Radar GPS)",
+                                    ? "AERVA ALS एम्बुलेंस ट्रैक करें (लाइव रडार)"
+                                    : "Track AERVA ALS Ambulance (Live Radar GPS)",
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w800,
@@ -1181,8 +1189,8 @@ class _SplashWelcomeScreenState extends State<SplashWelcomeScreen> {
                     const SizedBox(height: 12),
                     Text(
                       lang == 'hi'
-                          ? "NearER लाइव ईआर क्षमता, सर्जिकल उपलब्धता, ट्रॉमा तत्परता और यात्रा समय का मूल्यांकन करके अस्पताल सुझाता है।"
-                          : "NearER intelligently evaluates live ER capacity, surgical capability, stroke/trauma readiness, and travel time before routing.",
+                          ? "AERVA लाइव ईआर क्षमता, सर्जिकल उपलब्धता, ट्रॉमा तत्परता और यात्रा समय का मूल्यांकन करके अस्पताल सुझाता है।"
+                          : "AERVA intelligently evaluates live ER capacity, surgical capability, stroke/trauma readiness, and travel time before routing.",
                       style: const TextStyle(
                         color: Color(0xFFD0E1FD),
                         fontSize: 13,

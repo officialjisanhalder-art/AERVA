@@ -116,7 +116,7 @@ class _DecisionAnalysisScreenState extends State<DecisionAnalysisScreen> {
       doctorInChargeName: hospital.doctorInChargeName,
       doctorInChargeRole: hospital.doctorInChargeRole,
       greenCorridorAlerted: false,
-      erBedsAvailable: (hospital.erAvailable - 1).clamp(0, hospital.erTotal),
+      erBedsAvailable: hospital.erAvailable != null ? (hospital.erAvailable! - 1).clamp(0, hospital.erTotal ?? 99) : 0,
     );
 
     // 1. Save to persistent storage (Guaranteed local offline & online persistence)
@@ -337,9 +337,9 @@ class _DecisionAnalysisScreenState extends State<DecisionAnalysisScreen> {
                     // Metrics
                     Row(
                       children: [
-                        _metricCard("ER BEDS", "${best.erAvailable} Available", const Color(0xFF059669)),
+                        _metricCard("ER BEDS", "${best.erAvailable ?? 0} Available", const Color(0xFF059669)),
                         const SizedBox(width: 8),
-                        _metricCard("ICU BEDS", "${best.icuAvailable} Open", AppTheme.primary),
+                        _metricCard("ICU BEDS", "${best.icuAvailable ?? 0} Open", AppTheme.primary),
                         const SizedBox(width: 8),
                         _metricCard("BLOOD BANK", best.bloodBank['O+'] ?? 'Ready', AppTheme.primary),
                       ],
@@ -506,8 +506,16 @@ class _DecisionAnalysisScreenState extends State<DecisionAnalysisScreen> {
                       runSpacing: 4,
                       children: [
                         Text(
-                          "${alt.erAvailable} ER Beds • ${alt.icuAvailable} ICU",
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF059669)),
+                          alt.isAervaVerified
+                              ? "${alt.erAvailable ?? 0} ER Beds • ${alt.icuAvailable ?? 0} ICU"
+                              : (alt.isWebsiteFound ? "Website Listed (Live beds unreported)" : "Unverified Facility"),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            color: alt.isAervaVerified
+                                ? const Color(0xFF059669)
+                                : (alt.isWebsiteFound ? const Color(0xFFD97706) : const Color(0xFF64748B)),
+                          ),
                         ),
                         TextButton(
                           onPressed: () => _sendEmergencyRequest(alt),
