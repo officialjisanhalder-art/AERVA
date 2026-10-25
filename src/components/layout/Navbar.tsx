@@ -100,6 +100,12 @@ export function Navbar() {
             >
               {t("nav.patientPassport", lang)}
             </Link>
+            <Link
+              href="/login"
+              className="text-xs font-bold text-gray-700 hover:text-[#0052FF] px-3.5 py-2 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50/80 transition-all shadow-2xs"
+            >
+              Sign In
+            </Link>
             <Link 
               href="/emergency"
               className="bg-[#0052FF] text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-600 transition-all shadow-md shadow-blue-500/20"
@@ -169,7 +175,14 @@ export function Navbar() {
                   {t(link.key, lang)}
                 </a>
               ))}
-              <div className="mt-4 pt-4 border-t border-gray-100">
+              <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                <Link 
+                  href="/login" 
+                  onClick={() => setMobileOpen(false)}
+                  className="w-full block text-center border border-gray-200 text-gray-800 py-3 rounded-2xl font-bold hover:bg-gray-50 transition-colors text-sm"
+                >
+                  Sign In (Hospital / Dispatcher / Patient)
+                </Link>
                 <Link 
                   href="/emergency" 
                   onClick={() => setMobileOpen(false)}

@@ -64,8 +64,8 @@ export function AppNavbar({ title, backTo }: { title?: string; backTo?: string }
         </button>
 
         <Link 
-          href="/patient" 
-          title="Patient Health Passport"
+          href="/login" 
+          title="Account / Portal Sign In"
           className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-700 hover:text-[#0052FF] hover:border-[#0052FF]/30 hover:bg-blue-50 transition-all shadow-2xs"
         >
           <User className="w-4 h-4" />
